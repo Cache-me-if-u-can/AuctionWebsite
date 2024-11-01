@@ -62,10 +62,10 @@
   --golden-glow: #f3ed80;
   --white: #fffefe;
 
-  --parallax-speed-1: 25s;
-  --parallax-speed-2: 20s;
+  --parallax-speed-1: 20s;
+  --parallax-speed-2: 25s;
   --parallax-speed-3: 30s;
-  --parallax-row-font-size: 8rem;
+  --parallax-row-font-size: 3rem;
   --parallax-row-font-weight: 650;
 }
 
@@ -242,29 +242,32 @@ main {
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: calc(var(--parallax-row-font-size) / 2);
+  /* align-items: center; */
+  justify-content: center;
+  /* gap: calc(var(--parallax-row-font-size) / 2); */
   overflow: hidden;
   /* z-index: -1; */
 }
 
 .parallax-row {
+  display: inline-block;
   white-space: nowrap;
   font-size: var(--parallax-row-font-size);
   font-weight: var(--parallax-row-font-weight);
   opacity: 0.5;
-  color: var(--light-blue);
+  color: var(--periwinkle);
 }
 
 .row-1 {
-  animation: scroll-left-right var(--parallax-speed-1) linear infinite;
+  animation: scroll-right-left var(--parallax-speed-1) linear infinite;
 }
 
 .row-2 {
-  animation: scroll-right-left var(--parallax-speed-2) linear infinite;
+  animation: scroll-left-right var(--parallax-speed-2) linear infinite;
 }
 
 .row-3 {
-  animation: scroll-left-right var(--parallax-speed-3) linear infinite;
+  animation: scroll-right-left var(--parallax-speed-3) linear infinite;
 }
 
 @keyframes scroll-left-right {
@@ -284,8 +287,6 @@ main {
     transform: translateX(-100%);
   }
 }
-
-/* ------------------------------------------------------------ */
 
 .form-log-in,
 .form-register {
@@ -430,8 +431,6 @@ main {
   text-decoration: underline;
 }
 
-/* ------------------------------------------------------------ */
-
 footer {
   width: 100svw;
   display: flex;
@@ -443,7 +442,7 @@ footer {
 
 footer div {
   width: fit-content;
-  color: var(--periwinkle);
+  color: var(--light-blue);
 }
 
 /* @media (max-width: 768px) { */
