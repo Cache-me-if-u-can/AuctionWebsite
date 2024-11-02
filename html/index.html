@@ -112,61 +112,63 @@
 
       <div class="form-log-in">
         <div class="input-field">
-          <div class="label">Email</div>
-          <div class="input">
-            <div class="value">youremail@domain.com</div>
-          </div>
+          <label for="email" class="label">Email</label>
+          <input
+            type="email"
+            id="email"
+            class="input"
+            placeholder="youremail@domain.com"
+            required
+          />
         </div>
         <div class="input-field">
-          <div class="label">Password</div>
-          <div class="input">
-            <div class="value">your-$tr0ng_p4$$w0rd</div>
-          </div>
+          <label for="password" class="label">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="input"
+            placeholder="your-$tr0ng_p4$$w0rd"
+            required
+          />
         </div>
         <div class="button-group">
-          <div class="form-button">
-            <div class="form-button2">Sign In</div>
-          </div>
+          <button type="submit" class="form-button">
+            <span class="form-button2">Sign In</span>
+          </button>
         </div>
         <div class="text-link">
-          <div class="text-link2">Forgot password?</div>
+          <a href="#" class="text-link2">Forgot password?</a>
         </div>
       </div>
 
       <!-- <div class="form-register">
         <div class="input-field">
-          <div class="label">Email</div>
-          <div class="input">
-            <div class="value">youremail@domain.com</div>
-          </div>
+          <label for="email" class="label">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="input"
+            placeholder="youremail@domain.com"
+            required
+          />
         </div>
         <div class="input-field">
-          <div class="label">Password</div>
-          <div class="input">
-            <div class="value">your-$tr0ng_p4$$w0rd</div>
-          </div>
+          <label for="password" class="label">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="input"
+            placeholder="your-$tr0ng_p4$$w0rd"
+            required
+          />
         </div>
         <div class="checkbox-field">
           <div class="checkbox-and-label">
-            <div class="checkbox">
-              <svg
-                class="check"
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M13.3333 4L6 11.3333L2.66667 8"
-                  stroke="#F5F5F5"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </div>
-            <div class="label">Label</div>
+            <input type="checkbox" class="checkbox" id="checkbox" />
+            <label for="checkbox" class="label">Label</label>
           </div>
           <div class="description-row">
             <div class="space"></div>
@@ -174,9 +176,9 @@
           </div>
         </div>
         <div class="button-group">
-          <div class="form-button">
-            <div class="form-button2">Register</div>
-          </div>
+          <button type="submit" class="form-button">
+            <span class="form-button2">Sign In</span>
+          </button>
         </div>
       </div> -->
     </main>

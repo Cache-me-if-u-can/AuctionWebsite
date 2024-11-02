@@ -27,7 +27,7 @@
 
   /* Header Styling */
   --header-bg-color: #8ba9ec;
-  --header-padding: 1rem 7.5rem;
+  --header-padding: 1.5rem 8rem;
 
   --slide-menu-holder-width: 100svw;
   --slide-menu-width: fit-content;
@@ -57,9 +57,11 @@
   --golden-glow: #f3ed80;
   --white: #fffefe;
 
-  --scroller-mask: 90deg, transparent, white 20%, white 80%, transparent;
+  --scroller-mask: 90deg, transparent, white 30%, white 70%, transparent;
   --parallax-row-font-size: 3rem;
   --parallax-row-font-weight: 650;
+
+  --checkbox-size: 16px;
 }
 
 * {
@@ -230,6 +232,7 @@ main {
 }
 
 .background-parallax {
+  user-select: none;
   position: absolute;
   width: 100svw;
   height: 100%;
@@ -249,7 +252,7 @@ main {
 .tag-list li {
   font-size: var(--parallax-row-font-size);
   font-weight: var(--parallax-row-font-weight);
-  opacity: 0.5;
+  /* opacity: 0.5; */
   color: var(--periwinkle);
 }
 
@@ -327,7 +330,8 @@ main {
 .label {
   color: var(--sds-color-text-default);
   text-align: left;
-  width: 100%;
+  /* width: 100%; */
+  flex: 1;
 }
 
 /* Input */
@@ -358,13 +362,42 @@ main {
 }
 
 .checkbox {
+  appearance: none;
   background: var(--sds-color-background-brand);
   border-radius: var(--sds-size-radius-checkbox);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  width: var(--checkbox-size);
+  height: var(--checkbox-size);
+
+  cursor: pointer;
+  position: relative;
+  outline: none;
+  /* border: 1px solid transparent; */
+}
+
+.checkbox::after {
+  content: "";
+  width: calc(var(--checkbox-size) / 4);
+  height: calc(var(--checkbox-size) / 2);
+  border-right: 2px solid var(--sds-color-text-on-brand);
+  border-bottom: 2px solid var(--sds-color-text-on-brand);
+  transform: rotate(45deg);
+  bottom: calc(var(--checkbox-size) / 4);
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* When Checked */
+.checkbox:checked {
+  background: var(--sds-color-background-brand);
+  border: 1px solid var(--sds-color-border-brand);
+}
+
+.checkbox:checked::after {
+  opacity: 1;
 }
 
 /* Descriptions */
@@ -389,6 +422,7 @@ main {
 
 /* Button */
 .form-button {
+  cursor: pointer;
   /* background: var(--sds-color-background-brand); */
   background: var(--periwinkle);
   border-radius: var(--sds-size-radius-small);
