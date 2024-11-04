@@ -28,6 +28,8 @@
   /* Header Styling */
   --header-bg-color: #8ba9ec;
   --header-padding: 1.5rem 8rem;
+  --header-padding-tablet: 1.25rem 3rem;
+  --header-padding-mobile: 1rem 2rem;
 
   --slide-menu-holder-width: 100svw;
   --slide-menu-width: fit-content;
@@ -62,6 +64,8 @@
   --parallax-row-font-weight: 650;
 
   --checkbox-size: 16px;
+
+  --nav-text-size: 1.5rem;
 }
 
 * {
@@ -72,7 +76,7 @@
 
 html,
 body {
-  width: 100svw;
+  max-width: 100svw;
   min-height: 100svh;
   font-family: var(--font-family);
   background-color: var(--background-color);
@@ -91,19 +95,56 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  max-width: 100%;
   /* position: relative; */
 }
 
 .logo {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: var(--font-weight-semibold);
+}
+
+.logo strong {
+  font-weight: inherit;
+  color: var(--periwinkle);
 }
 
 nav {
   display: flex;
   gap: var(--gap-large);
   align-items: center;
+  width: fit-content;
+}
+
+.nav-link {
+  position: relative;
+  width: fit-content;
+  text-decoration: none;
+  color: var(--color-text-default);
+  font-size: var(--nav-text-size);
+  padding: 0.5rem;
+  border-radius: var(--border-radius-small);
+  color: rgb(50, 50, 50);
+}
+
+.nav-link:hover {
+  color: black;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  background-color: var(--periwinkle);
+  height: 3px;
+  width: 0%;
+  left: 50%;
+  bottom: 0.5rem;
+  transition: linear 0.15s;
+}
+
+.nav-link:hover::after {
+  left: 0;
+  width: 100%;
 }
 
 .auth-buttons {
@@ -117,13 +158,19 @@ nav {
   /* border-width: var(--border-width); */
   border-width: 0;
   padding: var(--padding);
-  width: 5.2rem;
+  /* width: 5.2rem; */
+  width: fit-content;
   overflow: hidden;
-  font-size: var(--font-size-base);
+  font-size: var(--nav-text-size);
   font-weight: var(--font-weight-regular);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: linear 0.1s;
+}
+
+.button:hover {
+  transform: translateY(-10%);
 }
 
 .sign-in {
@@ -134,8 +181,6 @@ nav {
 }
 
 .register {
-  /* background: var(--color-bg-brand-default); */
-  /* border-color: var(--color-border-brand-default); */
   background: var(--periwinkle);
   color: var(--color-text-brand-on-brand);
 }
@@ -143,19 +188,6 @@ nav {
 .menu-icon {
   display: none;
   cursor: pointer;
-}
-
-.nav-link {
-  text-decoration: none;
-  color: var(--color-text-default);
-  font-size: var(--font-size-base);
-  padding: 0.5rem;
-  border-radius: var(--border-radius-small);
-}
-
-.nav-link:hover {
-  color: var(--color-bg-brand-default);
-  background-color: rgba(0, 0, 0, 0.25);
 }
 
 .slide-menu-holder {
@@ -191,7 +223,8 @@ nav {
 .slide-nav-link,
 .slide-button {
   text-decoration: none;
-  font-size: var(--font-size-base);
+  /* font-size: var(--font-size-base); */
+  font-size: var(--nav-text-size);
   padding: var(--padding) 0;
   color: var(--color-text-default);
   background: none;
@@ -202,22 +235,8 @@ nav {
   text-align: left;
 }
 
-.slide-button.register {
-  color: var(--color-text-brand-on-brand);
-  background-color: var(--color-bg-brand-default);
-  padding: var(--padding);
-  border-radius: var(--border-radius-small);
-}
-
-.slide-button.sign-in {
-  color: var(--color-text-default);
-  background-color: var(--color-bg-neutral-tertiary);
-  padding: var(--padding);
-  border-radius: var(--border-radius-small);
-}
-
 main {
-  width: 100svw;
+  max-width: 100svw;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -308,13 +327,32 @@ main {
   /* border: 1px solid var(--sds-color-border-default); */
   border: 0;
   padding: var(--sds-size-space-large);
+  display: none;
+  flex-direction: column;
+  gap: var(--sds-size-space-large);
+  align-items: flex-start;
+  min-width: 300px;
+  width: fit-content;
+  /* width: 50rem; */
+  margin: 5rem 0 5rem 0;
+}
+
+.form-log-in.active,
+.form-register.active {
+  display: flex;
+}
+
+.userFields {
+  display: none;
+  /* display: flex; */
+  width: 100%;
+}
+
+.userFields.active {
   display: flex;
   flex-direction: column;
   gap: var(--sds-size-space-large);
   align-items: flex-start;
-  min-width: 320px;
-  width: fit-content;
-  margin: 5rem 0 5rem 0;
 }
 
 /* Input Field */
@@ -339,7 +377,7 @@ main {
   background: var(--sds-color-background-default);
   border-radius: var(--sds-size-radius-small);
   border: 1px solid var(--sds-color-border-default);
-  padding: var(--sds-size-space-medium) var(--sds-size-space-large);
+  padding: var(--sds-size-space-medium);
   display: flex;
   align-items: center;
   width: 100%;
@@ -433,12 +471,13 @@ main {
   align-items: center;
   justify-content: center;
   flex: 1;
+  color: var(--sds-color-text-on-brand);
 }
 
 /* Button Text */
-.form-button2 {
+/* .form-button2 {
   color: var(--sds-color-text-on-brand);
-}
+} */
 
 /* Link */
 .text-link {
@@ -449,13 +488,12 @@ main {
 
 /* Link Text */
 .text-link2 {
-  /* color: var(--sds-color-text-default); */
   color: var(--dark-periwinkle);
   text-decoration: underline;
 }
 
 footer {
-  width: 100svw;
+  max-width: 100svw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -468,11 +506,12 @@ footer div {
   color: var(--light-blue);
 }
 
-/* @media (max-width: 768px) { */
-@media (max-width: 768px) and (orientation: portrait),
-  (max-height: 768px) and (orientation: landscape) {
+/* @media (max-width: 2560px) {} ??? */
+/* @media (max-width: 1440px) {} ??? */
+
+@media (max-width: 1000px) {
   header {
-    padding: 1rem 3rem;
+    padding: var(--header-padding-tablet);
     justify-content: space-between;
   }
 
@@ -484,17 +523,15 @@ footer div {
     display: block;
     cursor: pointer;
   }
+
+  .slide-menu .auth-buttons {
+    padding: var(--padding) 0 0 0;
+  }
 }
 
-@media (max-width: 480px) and (orientation: portrait),
-  (max-height: 480px) and (orientation: landscape) {
+@media (max-width: 480px) {
   header {
-    padding: 1rem;
-  }
-
-  .button {
-    width: 3.75rem;
-    padding: 0.25rem;
+    padding: var(--header-padding-mobile);
   }
 
   nav {
@@ -503,18 +540,25 @@ footer div {
   }
 
   .auth-buttons {
-    margin-top: var(--padding);
+    padding: 0 !important;
+    flex-direction: column;
+    gap: 0;
   }
 
-  /* ----------------------------------------------- */
-  .form-log-in,
-  .form-register {
-    padding: var(--sds-size-space-large);
+  .slide-menu .button {
+    padding: 0.5rem 1 rem;
+    margin: var(--padding) 0;
   }
 
   .input,
   .button-group,
   .text-link {
     width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 2rem;
   }
 }
