@@ -1,0 +1,57 @@
+:root {
+  --scroller-mask: 90deg, transparent, white 30%, white 70%, transparent;
+  --parallax-row-font-size: 3rem;
+  --parallax-row-font-weight: 650;
+}
+
+.tag_list {
+  list-style: none;
+}
+
+.tag_list li {
+  font-size: var(--parallax-row-font-size);
+  font-weight: var(--parallax-row-font-weight);
+  color: var(--periwinkle);
+}
+
+.scroller {
+  max-width: 100%;
+  overflow: hidden;
+  -webkit-mask: linear-gradient(var(--scroller-mask));
+  mask: linear-gradient(var(--scroller-mask));
+}
+
+.scroller_inner {
+  width: max-content;
+  display: flex;
+  flex-direction: row;
+  animation: scroll var(--_animation-duration, 180s)
+    var(--_animation-direction, forwards) linear infinite;
+}
+
+.text_content {
+  gap: 1rem;
+  padding-right: 1rem;
+}
+
+.scroller[data-direction="left"] {
+  --_animation-direction: forwards;
+}
+
+.scroller[data-direction="right"] {
+  --_animation-direction: reverse;
+}
+
+.scroller[data-speed="fast"] {
+  --_animation-duration: 120s;
+}
+
+.scroller[data-speed="slow"] {
+  --_animation-duration: 240s;
+}
+
+@keyframes scroll {
+  to {
+    transform: translate(-50%);
+  }
+}

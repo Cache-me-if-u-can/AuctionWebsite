@@ -1,0 +1,98 @@
+.main {
+  max-width: 100svw;
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background: var(--dark-periwinkle);
+  position: relative;
+}
+
+.form_register {
+  z-index: 1;
+  background: var(--white);
+  border-radius: var(--sds-size-radius-small);
+  border: 0;
+  padding: var(--sds-size-space-large);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sds-size-space-large);
+  align-items: flex-start;
+  min-width: 320px;
+  width: fit-content;
+  margin: 5rem 0 5rem 0;
+}
+
+.userFields {
+  display: none;
+}
+
+.userFields.active {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sds-size-space-large);
+  align-items: flex-start;
+}
+
+.input_field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sds-size-space-small);
+  width: 100%;
+}
+
+.label {
+  color: var(--sds-color-text-default);
+  text-align: left;
+  flex: 1;
+}
+
+.input {
+  background: var(--sds-color-background-default);
+  border-radius: var(--sds-size-radius-small);
+  border: 1px solid var(--sds-color-border-default);
+  padding: var(--sds-size-space-medium);
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 240px;
+}
+
+.value {
+  color: var(--sds-color-text-tertiary);
+  flex: 1;
+}
+
+.button_group {
+  display: flex;
+  flex-direction: row;
+  gap: var(--sds-size-space-large);
+  width: 100%;
+}
+
+.form_button {
+  cursor: pointer;
+  background: var(--periwinkle);
+  border-radius: var(--sds-size-radius-small);
+  border: 0;
+  padding: var(--sds-size-space-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: var(--sds-color-text-on-brand);
+}
+
+@media (max-width: 320px) {
+  .form_log_in,
+  .form_register {
+    min-width: 300px;
+  }
+}
