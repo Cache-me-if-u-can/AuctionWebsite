@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gavel.xyz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/explore.css" />
+  </head>
+
+  <body>
+    <header>
+      <div class="logo">
+        <img alt="Logo" class="logo-img" src="/imgs/image.png" />
+        <div class="logo-text">GAVEL<strong>.XYZ</strong></div>
+      </div>
+
+      <nav>
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="browse-charities.html" class="nav-link">Charities</a>
+
+        <div class="auth-buttons">
+          <button class="button log-in" onclick="toggleLogInRegister('logIn')">
+            Log in
+          </button>
+          <button
+            class="button register"
+            onclick="toggleLogInRegister('register')"
+          >
+            Register
+          </button>
+        </div>
+      </nav>
+
+      <svg
+        class="menu-icon"
+        viewBox="0 0 64 48"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 24H56M8 12H56M8 36H56"
+          stroke="#2C2C2C"
+          stroke-width="4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </header>
+
+    <div class="slide-menu-holder">
+      <div class="slide-menu">
+        <a href="#" class="slide-nav-link">Home</a>
+        <a href="#" class="slide-nav-link"> Charities </a>
+        <div class="auth-buttons">
+          <button class="button log-in" onclick="toggleLogInRegister('logIn')">
+            Log in
+          </button>
+          <button
+            class="button register"
+            onclick="toggleLogInRegister('register')"
+          >
+            Register
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <main class="charities-body">
+      <div class="charity-entry">
+        <img src="https://clipground.com/images/placeholder-logo-5.png" alt="logo" class="logo">
+        <div class="charity-details">
+          <h1 class="charity-name">NAME</h1>
+          <p class="charity-location">Country, City</p>
+          <p class="charity-description">We are a charity. We do nice things for people. Please give us money or the 
+          people will suffer. This is placeholder text. I'll just add some extra text here because I am fairly certain
+          a description would be at least a paragraph long and I can't be bothered thinking up more stuff that sounds legit
+          so there you have it.</p>
+        </div>
+      </div>
+      <div class="charity-entry-right">
+
+        <div class="charity-details">
+          <h1 class="charity-name-right">NAME OF CHARITY</h1>
+          <p class="charity-location-right">Country, City</p>
+          <p class="charity-description">We are a charity. We do nice things for people. Please give us money or the 
+          people will suffer. This is placeholder text. I'll just add some extra text here because I am fairly certain
+          a description would be at least a paragraph long and I can't be bothered thinking up more stuff that sounds legit
+          so there you have it.</p>
+        </div>
+        <img src="https://clipground.com/images/placeholder-logo-5.png" alt="logo" class="logo">
+      </div>
+    </main>
+
+    <footer>
+      <div>©GAVEL.XYZ all rights reserved 2024</div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+  </body>
+</html>
