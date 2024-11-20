@@ -1,0 +1,109 @@
+:root {
+  --background-gradient: linear-gradient(to bottom, #140c40, #3a1c71); 
+  --periwinkle: #4760ff; 
+  --light-blue: #e8ecf9; 
+  --golden-glow: #f3ed80; 
+  --accent: #f3ed80;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background: var(--background-gradient);
+  color: var(--light-blue);
+}
+
+#quiz-container {
+  width: 90%;
+  max-width: 500px;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+  background-color: var(--periwinkle);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+  color: var(--golden-glow);
+}
+
+#progress-bar-container {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+#progress-bar {
+  width: 0;
+  height: 10px;
+  background-color: var(--golden-glow);
+  transition: width 0.5s;
+}
+
+#question-container h2 {
+  color: var(--light-blue);
+}
+
+#options-container button {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  font-size: 1rem;
+  background-color: var(--light-blue);
+  color: var(--background-gradient);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#options-container button:hover {
+  background-color: var(--golden-glow);
+  color: black;
+}
+
+#timer {
+  margin-top: 10px;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+#next-button {
+  margin-top: 15px;
+  padding: 12px;
+  background-color: var(--golden-glow);
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#result-container {
+  margin-top: 20px;
+  font-size: 1.5em;
+  color: var(--golden-glow);
+}
+
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background-color: var(--golden-glow);
+  animation: fall 1.5s infinite ease-in-out;
+  top: -50px;
+}
+
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(100vh) rotate(360deg); }
+}
