@@ -1,10 +1,77 @@
 import React from "react";
+import { useState } from "react";
 import styles from "./LogIn.module.css";
 import Header from "../../components/Header/Header";
 import BackgroundParallax from "../../components/BackgroundParallax/BackgroundParallax";
 import Footer from "../../components/Footer/Footer";
+import { useUser } from "../../context/UserProvider";
 
-function LogIn() {
+export default function LogIn() {
+  const { logIn } = useUser();
+
+  const [formData, setFormData] = useState({
+    userEmail: "",
+    userPassword: "",
+    rememberMe: false,
+  });
+
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+    let processedValue = value;
+
+    if (name === "userEmail") {
+      // Allow only valid email characters
+      processedValue = value.replace(/[^a-zA-Z0-9@._-]/g, "");
+    }
+    if (name === "userPassword") {
+      // Allow all characters except spaces
+      processedValue = value.replace(/\s/g, "");
+    }
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: processedValue,
+    }));
+
+    setErrors((prevErrors) => {
+      const { [name]: _, ...remainingErrors } = prevErrors;
+      return remainingErrors;
+    });
+  };
+
+  const validateForm = () => {
+    let newErrors: { [key: string]: string } = {};
+
+    if (!formData.userEmail) newErrors.userEmail = "Email is required";
+    if (!formData.userPassword) {
+      newErrors.userPassword = "Password is required";
+    } else if (formData.userPassword.length < 8) {
+      newErrors.userPassword = "Password is too short";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (validateForm()) {
+      // Submit form or perform any action
+      console.log("Form submitted successfully:", JSON.stringify(formData));
+
+      try {
+        await logIn(formData.userEmail, formData.userPassword);
+        console.log("Logged in!");
+      } catch (error) {
+        console.error("Login failed:", error);
+      }
+    }
+  };
+
   return (
     <>
       <Header />
@@ -12,47 +79,75 @@ function LogIn() {
       <main className={styles.main}>
         <BackgroundParallax />
 
-        <div id="form-log-in" className={styles.form_log_in}>
+        <form
+          id="form-log-in"
+          className={styles.form_log_in}
+          onSubmit={handleSubmit}
+        >
           <div className={styles.input_field}>
-            <label htmlFor="email" className={styles.label}>
+            <label htmlFor="userEmail" className={styles.label}>
               Email
             </label>
-            <input
-              type="email"
-              id="email"
-              className={styles.input}
-              placeholder="youremail@domain.com"
-              required
-            />
+            <div className={styles.inputContainer}>
+              <input
+                type="email"
+                id="userEmail"
+                name="userEmail"
+                className={styles.input}
+                placeholder="youremail@domain.com"
+                value={formData.userEmail}
+                onChange={handleInputChange}
+              />
+              {errors.userEmail && (
+                <div className={styles.errorContainer}>
+                  <div className={styles.error}>{errors.userEmail}</div>
+                </div>
+              )}
+            </div>
           </div>
           <div className={styles.input_field}>
-            <label htmlFor="password" className={styles.label}>
+            <label htmlFor="userPassword" className={styles.label}>
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className={styles.input}
-              placeholder="your-$tr0ng_p4$$w0rd"
-              required
-            />
+            <div className={styles.inputContainer}>
+              <input
+                type="password"
+                id="userPassword"
+                name="userPassword"
+                className={styles.input}
+                placeholder="your-$tr0ng_p4$$w0rd"
+                value={formData.userPassword}
+                onChange={handleInputChange}
+              />
+              {errors.userPassword && (
+                <div className={styles.errorContainer}>
+                  <div className={styles.error}>{errors.userPassword}</div>
+                </div>
+              )}
+            </div>
           </div>
           <div className={styles.input_field}>
             <div className={styles.checkbox_and_label}>
               <input
                 type="checkbox"
+                id="rememberMeCheckBox"
+                name="rememberMeCheckBox"
                 className={styles.checkbox}
-                id="checkbox"
+                onChange={(event) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    rememberMe: event.target.checked,
+                  }))
+                }
               />
               <label htmlFor="checkbox" className={styles.label}>
-                Label
+                Remember me
               </label>
             </div>
-            <div className={styles.description_row}>
+            {/* <div className={styles.description_row}>
               <div className={styles.space}></div>
               <div className={styles.description}>Description</div>
-            </div>
+            </div> */}
           </div>
           <div className={styles.button_group}>
             <button type="submit" className={styles.form_button}>
@@ -62,12 +157,10 @@ function LogIn() {
           <div className={styles.text_link}>
             <a href="#">Forgot password?</a>
           </div>
-        </div>
+        </form>
       </main>
 
       <Footer />
     </>
   );
 }
-
-export default LogIn;

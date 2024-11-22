@@ -1,19 +1,29 @@
 import hashlib
 
+
 class Customer(object):
-    def __init__(self, _id, name, surname, dateOfBirth, email,phoneNum, password, imageFile, address, hash_password=True):
-        self.__id = _id  
+
+    def __init__(
+        self,
+        name,
+        surname,
+        dateOfBirth,
+        email,
+        phoneNum,
+        password,
+        imageFile,
+        address,
+        _id=0,
+    ):
+        self.__id = _id
         self.__name = name
         self.__surname = surname
-        self.__dateOfBirth= dateOfBirth
+        self.__dateOfBirth = dateOfBirth
         self.__email = email
         self.__phoneNum = phoneNum
-        self.__imageFile= imageFile
-        self.__address= address
-        if hash_password:
-            self.__password = self._passwordHashing(password)
-        else:
-            self.__password = password 
+        self.__imageFile = imageFile
+        self.__address = address
+        self.__password = self._passwordHashing(password)
 
     def _passwordHashing(self, password):
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
@@ -87,5 +97,5 @@ class Customer(object):
     def password(self, password):
         self.__password = self._passwordHashing(password)
 
-    def change_password(self, new_password):   # make private ? 
+    def change_password(self, new_password):  # make private ?
         self.__password = self._passwordHashing(new_password)

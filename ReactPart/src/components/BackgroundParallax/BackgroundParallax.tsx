@@ -4,9 +4,9 @@ import Scroller from "../Scroller/Scroller";
 
 export default function BackgroundParallax() {
   const firstRow = [
+    "Sawasdee",
     "Hello",
     "Привіт",
-    "Sawasdee",
     "Kia ora",
     "Kamusta",
     "こんにちは",
@@ -16,12 +16,14 @@ export default function BackgroundParallax() {
     "Shwmae",
     "Mingalaba",
     "Γειά",
+    "Bula",
   ];
 
   const secondRow = [
     "Salute",
     "Hujambo",
     "สวัสดี",
+    "Hello",
     "Hola",
     "Bonjour",
     "Hallo",
@@ -43,6 +45,7 @@ export default function BackgroundParallax() {
     "Halo",
     "Aloha",
     "Coucou",
+    "Hello",
     "Shalom",
     "Salut",
     "Ahoj",

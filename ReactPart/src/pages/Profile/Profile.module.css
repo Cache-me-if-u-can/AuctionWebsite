@@ -1,0 +1,69 @@
+.main {
+  max-width: 100svw;
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background: var(--dark-periwinkle);
+  position: relative;
+
+  gap: 1rem;
+}
+
+.user_info_container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  margin: auto 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.user_info_header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.user_info_header img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.user_info_details {
+  margin-top: 16px;
+}
+
+.user_info_details p {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.signOut_button {
+  cursor: pointer;
+  background: var(--periwinkle);
+  border-radius: var(--sds-size-radius-small);
+  border: 0;
+  padding: var(--sds-size-space-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sds-color-text-on-brand);
+  height: fit-content;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 480px) {
+  .password {
+    display: none;
+  }
+}

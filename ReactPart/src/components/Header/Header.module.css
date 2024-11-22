@@ -34,6 +34,10 @@
   height: 3.5rem;
 }
 
+.loader {
+  height: 3.5rem;
+}
+
 .nav {
   display: flex;
   gap: var(--gap-large);
@@ -104,6 +108,23 @@
   color: var(--color-text-brand-on-brand);
 }
 
+.account {
+  display: flex;
+  background: var(--periwinkle);
+  color: white;
+  align-items: center;
+  justify-content: center;
+}
+
+.account svg {
+  margin-right: 0.25rem;
+}
+
+.account path {
+  fill: white;
+  stroke: white;
+}
+
 .menu_icon {
   display: none;
   cursor: pointer;
@@ -148,6 +169,10 @@
     height: 3rem;
   }
 
+  .loader {
+    height: 3rem;
+  }
+
   .auth_buttons {
     padding: 0 !important;
     flex-direction: column;
@@ -163,5 +188,9 @@
   .logo_text {
     margin-left: 0;
     font-size: 2rem;
+  }
+
+  .loader {
+    height: 2.7rem;
   }
 }

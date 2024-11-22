@@ -27,3 +27,5 @@ dist-ssr
 .vscode/
 bin/
 env/
+venv/
+__pycache__/

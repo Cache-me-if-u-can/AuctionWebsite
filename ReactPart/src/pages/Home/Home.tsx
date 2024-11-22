@@ -4,7 +4,7 @@ import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import BackgroundParallax from "../../components/BackgroundParallax/BackgroundParallax";
 
-function Home() {
+export default function Home() {
   return (
     <>
       <Header />
@@ -17,5 +17,3 @@ function Home() {
     </>
   );
 }
-
-export default Home;

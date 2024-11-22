@@ -74,6 +74,23 @@
   color: var(--color-text-brand-on-brand);
 }
 
+.account {
+  display: flex;
+  background: var(--periwinkle);
+  color: white;
+  align-items: center;
+  justify-content: center;
+}
+
+.account svg {
+  margin-right: 0.25rem;
+}
+
+.account path {
+  fill: white;
+  stroke: white;
+}
+
 @media (max-width: 480px) {
   .auth_buttons {
     padding: 0 !important;

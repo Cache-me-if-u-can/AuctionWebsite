@@ -42,6 +42,11 @@
   flex: 1;
 }
 
+.inputContainer {
+  width: 100%;
+  min-width: 240px;
+}
+
 .input {
   background: var(--sds-color-background-default);
   border-radius: var(--sds-size-radius-small);
@@ -50,7 +55,25 @@
   display: flex;
   align-items: center;
   width: 100%;
-  min-width: 240px;
+}
+
+.errorContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.error {
+  margin-top: calc(var(--sds-size-space-small) / 4);
+  color: red;
+  width: fit-content;
+  padding: calc(var(--sds-size-space-small) / 8)
+    calc(var(--sds-size-space-medium) / 2);
+  position: absolute;
+  background-color: rgb(255, 211, 211);
+  font-size: small;
+  border-radius: var(--sds-size-radius-small);
+  border: 1px solid red;
 }
 
 .button_group {
