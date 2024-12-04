@@ -729,7 +729,7 @@ footer div {
   justify-content: space-evenly;
   color: #333;
   padding: 20px;
-  //*border: 1px solid #ccc;*/
+  /*border: 1px solid #ccc;*/
   border-radius: 4px;
 }
 .input-field .warning-text {
