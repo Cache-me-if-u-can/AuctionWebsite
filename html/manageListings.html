@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gavel.xyz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styleManageListings.css" />
+  </head>
+
+  <body>
+    <header>
+      <div class="logo">
+        <img alt="Logo" class="logo-img" src="/imgs/image.png" />
+        <div class="logo-text">GAVEL<strong>.XYZ</strong></div>
+      </div>
+
+      <nav>
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="browse-charities.html" class="nav-link">Charities</a>
+
+        <div class="auth-buttons">
+          <button class="button log-in" onclick="toggleLogInRegister('logIn')">
+            Log in
+          </button>
+          <button
+            class="button register"
+            onclick="toggleLogInRegister('register')"
+          >
+            Register
+          </button>
+        </div>
+      </nav>
+
+      <svg
+        class="menu-icon"
+        viewBox="0 0 64 48"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 24H56M8 12H56M8 36H56"
+          stroke="#2C2C2C"
+          stroke-width="4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </header>
+
+    <div class="slide-menu-holder">
+      <div class="slide-menu">
+        <a href="#" class="slide-nav-link">Home</a>
+        <a href="#" class="slide-nav-link"> Charities </a>
+        <div class="auth-buttons">
+          <button class="button log-in" onclick="toggleLogInRegister('logIn')">
+            Log in
+          </button>
+          <button
+            class="button register"
+            onclick="toggleLogInRegister('register')"
+          >
+            Register
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <div class="banner-conatainer">
+        <img class="banner-image" src="../imgs/artwork2.png" alt="Banner" />
+      </div>
+    </main>
+    <div class="container">
+      <!-- Sidebar for filters -->
+      <div class="sidebar">
+        <h2>Filters</h2>
+        
+        <div class="filter-group">
+          <label for="category-filter">Category</label>
+          <select id="category-filter">
+            <option value="all">All</option>
+            <option value="electronics">Electronics</option>
+            <option value="furniture">Furniture</option>
+            <option value="art">Art</option>
+          </select>
+        </div>
+  
+        <div class="filter-group">
+          <label>Status</label>
+          <label><input type="checkbox" value="live" class="condition-filter"> Live</label>
+          <label><input type="checkbox" value="complete" class="condition-filter"> Complete</label>
+          <label><input type="checkbox" value="hidden" class="condition-filter"> Hidden</label>
+        </div>
+        
+        <div class="filter-group">
+          <label for="charity-filter">Charity</label>
+          <select id="charity-filter">
+            <option value="all">All</option>
+            <option value="goodwill">Goodwill</option>
+            <option value="mentalhealthaberdeen">Mental Health Aberdeen</option>
+            <option value="salvationarmy">Salvation Army</option>
+          </select>
+        </div>
+      </div>
+      <div class="main-content" id="listing-container">
+        <!-- Dropdown to choose view mode -->
+        <div class="view-toggle">
+          <label for="view-select">Display as:</label>
+          <select id="view-select">
+            <option value="list">List View</option>
+            <option value="grid">Grid View</option>
+          </select>
+        </div>
+        <div class="addListing">
+          <a href="#" id="addListingButton"> + Add Listing</a>
+        </div>
+        
+        <!-- Overlay Form -->
+        <div id="overlayForm" class="overlay">
+          <div class="overlay-content">
+            <span class="close-button" id="closeButton">&times;</span>
+            <h2>Add New Listing</h2>
+            <form id="addListingForm">
+              <label for="title">Title:</label>
+              <input type="text" id="title" name="title" required>
+              
+              <label for="charity">Charity:</label>
+              <input type="text" id="charity" name="charity" required>
+              
+              <label for="status">Status:</label>
+              <select id="status" name="status" required>
+                <option value="live">Live/In Progress</option>
+                <option value="complete">Complete</option>
+                <option value="hidden">Hidden</option>
+              </select>
+              
+              <label for="category">Category:</label>
+              <input type="text" id="category" name="category" required>
+              
+              <label for="auctionDue">Auction Ends:</label>
+              <input type="datetime-local" id="auctionDue" name="auctionDue" required>
+              
+              <label for="bid">Starting Bid:</label>
+              <input type="number" id="bid" name="bid" required>
+
+              <label for="image">Image:</label>
+              <input type="file" id="image" name="image">
+              
+              <button type="submit">Add Listing</button>
+            </form>
+          </div>
+        </div>
+
+
+        <!-- Single container for all listings -->
+        <div id="listings-container" class="list-view">
+          <!-- Listing 1 -->
+          <div class="listing" data-category="furniture" data-condition="live" data-charity="mentalhealthaberdeen">
+            <img src="../imgs/sofa.png" alt="Sofa" class="listing-image" >
+            <div class="listing-content">
+              <h3>2 Seater Sofa</h3>
+              <p>Charity: Mental Health Aberdeen</p>
+              <p class="status">Status: Live/In Progress</p>
+              <p>Category: Furniture</p>
+              <div class="auction-details">
+                <p>Auction Ends: 3 days 6 hours</p>
+                <h1 class="bid">Current bid: £210</h1>
+              </div>
+            </div>
+            <div class="managementTools">
+              <a class="editListing">Edit</a>
+              <a class="deleteListing">Delete</a>
+              <a class="exportMailList">Export Mailing list</a>
+              <a class="viewBidders">View Bidders</a>
+              <a class="viewBids">View Bids</a>
+            </div>
+          </div>
+      
+          <!-- Listing 2 -->
+          <div class="listing" data-category="art" data-condition="live" data-charity="mentalhealthaberdeen">
+            <img src="../imgs/art.png" alt="Art piece" class="listing-image">
+            <div class="listing-content">
+              <h3>Modern Art</h3>
+              <p>Charity: Mental Health Aberdeen</p>
+              <p class="status">Status: Live/In Progress</p>
+              <p>Category: Art</p>
+              <div class="auction-details">
+                <p>Auction Ends: 14 days 3 hours</p>
+                <h1 class="bid">Current bid: £780.00</h1>
+              </div>
+            </div>
+            <div class="managementTools">
+              <a class="editListing">Edit</a>
+              <a class="deleteListing">Delete</a>
+              <a class="exportMailList">Export Mailing list</a>
+              <a class="viewBidders">View Bidders</a>
+              <a class="viewBids">View Bids</a>
+            </div>
+          </div>
+      
+          <!-- Listing 3 -->
+          <div class="listing" data-category="vehicle" data-condition="complete" data-charity="mentalhealthaberdeen">
+            <img src="../imgs/car.png" alt="Car" class="listing-image">
+            <div class="listing-content">
+              <h3>New Car</h3>
+              <p>Charity: Mental Health Aberdeen</p>
+              <p class="status">Status: Complete</p>
+              <p>Category: Vehicle</p>
+              <div class="auction-details">
+                <p>Auction Ends: N/A</p>
+                <h1 class="bid">Closing bid: £210</h1>
+              </div>
+            </div>
+            <div class="managementTools">
+              <a class="editListing">Edit</a>
+              <a class="deleteListing">Delete</a>
+              <a class="exportMailList">Export Mailing list</a>
+              <a class="viewBidders">View Bidders</a>
+              <a class="viewBids">View Bids</a>
+            </div>
+          </div>
+        </div> <!-- End of #listings-container -->
+      </div> <!-- End of .main-content -->
+    </div>
+      <footer>
+        <div>©GAVEL.XYZ all rights reserved 2024</div>
+      </footer>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const categoryFilter = document.getElementById('category-filter');
+          const conditionFilters = document.querySelectorAll('.condition-filter');
+          const charityFilter = document.getElementById('charity-filter');
+          const listings = document.querySelectorAll('.listing');
+          const viewSelect = document.getElementById('view-select');
+          const listingsContainer = document.getElementById('listings-container');
+          const statusElements = document.querySelectorAll('.status');
+          const bidElements = document.querySelectorAll('.bid');
+          const addListingButton = document.getElementById('addListingButton');
+          const overlayForm = document.getElementById('overlayForm');
+          const closeButton = document.getElementById('closeButton');
+          const addListingForm = document.getElementById('addListingForm');
+      
+          function updateListings() {
+            const selectedCategory = categoryFilter.value;
+            const selectedConditions = Array.from(conditionFilters)
+              .filter(input => input.checked)
+              .map(input => input.value);
+            const selectedCharity = charityFilter.value;
+      
+            listings.forEach(listing => {
+              const listingCategory = listing.getAttribute('data-category');
+              const listingCondition = listing.getAttribute('data-condition');
+              const listingCharity = listing.getAttribute('data-charity').toLowerCase();
+      
+              const categoryMatch = selectedCategory === 'all' || listingCategory === selectedCategory;
+              const conditionMatch = selectedConditions.length === 0 || selectedConditions.includes(listingCondition);
+              const charityMatch = selectedCharity === 'all' || listingCharity === selectedCharity;
+      
+              if (categoryMatch && conditionMatch && charityMatch) {
+                listing.style.display = 'flex';
+              } else {
+                listing.style.display = 'none';
+              }
+            });
+          }
+      
+          function updateViewMode() {
+            if (viewSelect.value === 'grid') {
+              listingsContainer.classList.add('grid-view');
+              listingsContainer.classList.remove('list-view');
+            } else {
+              listingsContainer.classList.add('list-view');
+              listingsContainer.classList.remove('grid-view');
+            }
+          }
+      
+          function updateStatusAndBids() {
+            statusElements.forEach(function(statusElement) {
+              const statusText = statusElement.textContent.trim().toLowerCase();
+      
+              if (statusText.includes('live') || statusText.includes('in progress')) {
+                statusElement.style.color = 'green';
+              } else if (statusText.includes('complete')) {
+                statusElement.style.color = 'red';
+              }
+            });
+      
+            bidElements.forEach(function(bidElement) {
+              const bidText = bidElement.textContent.trim().toLowerCase();
+      
+              if (bidText.includes('current bid')) {
+                bidElement.style.color = 'green';
+              } else if (bidText.includes('closing bid')) {
+                bidElement.style.color = 'red';
+              }
+            });
+          }
+      
+          function addNewListing(event) {
+            event.preventDefault();
+      
+            const title = document.getElementById('title').value;
+            const charity = document.getElementById('charity').value;
+            const status = document.getElementById('status').value;
+            const category = document.getElementById('category').value;
+            const auctionDue = document.getElementById('auctionDue').value;
+            const bid = document.getElementById('bid').value;
+      
+            const newListing = document.createElement('div');
+            newListing.classList.add('listing');
+            newListing.setAttribute('data-category', category.toLowerCase());
+            newListing.setAttribute('data-condition', status.toLowerCase());
+            newListing.setAttribute('data-charity', charity.toLowerCase());
+      
+            newListing.innerHTML = `
+              <img src="../imgs/default.png" alt="${title}" class="listing-image">
+              <div class="listing-content">
+                <h3>${title}</h3>
+                <p>Charity: ${charity}</p>
+                <p class="status">Status: ${status}</p>
+                <p>Category: ${category}</p>
+                <div class="auction-details">
+                  <p>Auction Ends: ${auctionDue}</p>
+                  <h1 class="bid">Current bid: £${bid}</h1>
+                </div>
+              </div>
+              <div class="managementTools">
+                <a class="editListing">Edit</a>
+                <a class="deleteListing">Delete</a>
+                <a class="exportMailList">Export Mailing list</a>
+                <a class="viewBidders">View Bidders</a>
+                <a class="viewBids">View Bids</a>
+              </div>
+            `;
+      
+            listingsContainer.appendChild(newListing);
+            overlayForm.style.display = 'none';
+            addListingForm.reset();
+            updateStatusAndBids(); // Update the status and bid colors for the new listing
+          }
+      
+          // Initial updates
+          updateListings();
+          updateViewMode();
+          updateStatusAndBids();
+      
+          // Event listeners
+          categoryFilter.addEventListener('change', updateListings);
+          conditionFilters.forEach(filter => filter.addEventListener('change', updateListings));
+          charityFilter.addEventListener('change', updateListings);
+          viewSelect.addEventListener('change', updateViewMode);
+          addListingButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            overlayForm.style.display = 'block';
+          });
+          closeButton.addEventListener('click', function() {
+            overlayForm.style.display = 'none';
+          });
+          window.addEventListener('click', function(event) {
+            if (event.target === overlayForm) {
+              overlayForm.style.display = 'none';
+            }
+          });
+          addListingForm.addEventListener('submit', addNewListing);
+        });
+      </script>
+  </body>
+</html>

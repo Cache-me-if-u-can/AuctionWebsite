@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gavel.xyz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styleMonoListing.css" />
+  </head>
+
+  <body>
+    <header>
+      <div class="logo">
+        <img alt="Logo" class="logo-img" src="/imgs/image.png" />
+        <div class="logo-text">GAVEL<strong>.XYZ</strong></div>
+      </div>
+
+      <nav>
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="browse-charities.html" class="nav-link">Charities</a>
+
+        <div class="auth-buttons">
+          <button class="button log-in" onclick="toggleLogInRegister('logIn')">
+            Log in
+          </button>
+          <button
+            class="button register"
+            onclick="toggleLogInRegister('register')">
+            Register
+          </button>
+        </div>
+      </nav>
+
+      <svg
+        class="menu-icon"
+        viewBox="0 0 64 48"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 24H56M8 12H56M8 36H56"
+          stroke="#2C2C2C"
+          stroke-width="4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </header>
+
+    <div class="slide-menu-holder">
+      <div class="slide-menu">
+        <a href="#" class="slide-nav-link">Home</a>
+        <a href="#" class="slide-nav-link"> Charities </a>
+        <div class="auth-buttons">
+          <button class="button log-in" onclick="toggleLogInRegister('logIn')">
+            Log in
+          </button>
+          <button
+            class="button register"
+            onclick="toggleLogInRegister('register')"
+          >
+            Register
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <div class="banner-conatainer">
+        <img class="banner-image" src="../imgs/artwork2.png" alt="Banner" />
+    </div>
+    </main>
+    <div class="main-content" id="listing-container">
+    <div class="auction-container">
+      <img class="auction-image" src="../imgs/art.png" alt="Artwork" />
+      <div class="auctionListing-details">
+        <h3>Auction Item Title</h3>
+        <h2>Charity name</h2>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec
+          odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla
+          quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent
+          mauris. Fusce nec tellus sed augue semper porta. Mauris massa.
+          Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad
+          litora torquent per conubia nostra, per inceptos himenaeos. Curabitur
+        </p>
+        <div class="bidding-details">
+          <div class="bidValues">
+            <h3 class="sBid">Starting Bid: $50</h3>
+            <h3 class="cBid">Current Bid: $100</h3>
+            <h3 class="buyNow">Buy Now: $500</h3>
+          </div>
+          <div class="input-field">
+            <label for="maxBid">Enter your max bid:</label>
+            <input type="number" id="maxBid" name="maxBid"/>
+            <p id="warning" class="warning-text" style="display: none;">Your bid must be higher than the current bid.</p>
+            <button class="bid-button" onclick="checkBid()">Place Bid</button> 
+          </div>
+          
+          <div class="additionalDetails">
+            <h4 class="activeBidders">People bidding on this item: 3</h4>
+            <h4 class="timeTillEnd">Ends in: 3 days</h4>
+          </div>
+          
+        
+        </div>
+      </div>
+    </div>
+    <div class="bidderLeaderboard">
+      <h3>Leaderboard</h3>
+      <div class="bidder">
+        <h4>1. John Doe</h4>
+        <h4>$100</h4>
+      </div>
+      <div class="bidder">
+        <h4>2. Jane Doe</h4>
+        <h4>$90</h4>
+      </div>
+      <div class="bidder">
+        <h4>3. John Smith</h4>
+        <h4>$80</h4>
+      </div>
+    </div>
+    </div>
+
+    <footer>
+      <div>©GAVEL.XYZ all rights reserved 2024</div>
+    </footer>
+
+    <script>
+      function checkBid() {
+    const currentBid = 100; // Replace with the actual current bid value
+    const maxBidInput = document.getElementById('maxBid');
+    const warningText = document.getElementById('warning');
+
+    if (parseFloat(maxBidInput.value) <= currentBid) {
+      warningText.style.display = 'block';
+    } else {
+      warningText.style.display = 'none';
+      // Proceed with the bid submission
+      alert('Bid placed successfully!');
+    }
+  }
+    </script>
+  </body>
+</html>
