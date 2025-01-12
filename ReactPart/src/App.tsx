@@ -5,6 +5,7 @@ import LogIn from "./pages/LogIn/LogIn";
 import Register from "./pages/Register/Register";
 import Profile from "./pages/Profile/Profile";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import Charities from "./pages/Charities/Charities";
 import { UserProvider } from "./context/UserProvider";
 
 const App: React.FC = () => {
@@ -35,7 +36,18 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
-          <Route path="/Charities" element={<Home />} />
+          <Route
+            path="/Charities"
+            element={
+              <ProtectedRoute
+                needToBeLoggedIn={false}
+                redirectPath={"/Charities"}
+              >
+                <Charities />
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/Profile"
             element={
