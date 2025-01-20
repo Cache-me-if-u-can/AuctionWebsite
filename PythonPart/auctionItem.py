@@ -1,11 +1,25 @@
 class AuctionItem(object):
-    def __init__(self, _id, title, description, startingPrice, currentPrice, imageFile, auctionEndDate, categoryId, charityId, status):
+    def __init__(
+        self, 
+        title, 
+        description, 
+        startingPrice, 
+        currentPrice, 
+        fileName,
+        imageData,
+        auctionEndDate, 
+        categoryId, 
+        charityId, 
+        status,
+        _id=0,
+        ):
         self.__id = _id
         self.__title = title
         self.__description = description
         self.__startingPrice= startingPrice
         self.__currentPrice= currentPrice
-        self.__imageFile = imageFile
+        self.__fileName = fileName
+        self.__imageData= imageData
         self.__auctionEndDate= auctionEndDate
         self.__categoryId= categoryId
         self.__charityId= charityId
@@ -49,12 +63,20 @@ class AuctionItem(object):
         self.__currentPrice = currentPrice
 
     @property
-    def imageFile(self):
-        return self.__imageFile
+    def fileName(self):
+        return self.__fileName
 
-    @imageFile.setter
-    def imageFile(self, imageFile):
-        self.__imageFile = imageFile
+    @fileName.setter
+    def fileName(self, fileName):
+        self.__fileName = fileName
+    
+    @property
+    def imageData(self):
+        return self.__imageData
+    
+    @imageData.setter
+    def imageData(self, imageData):
+        self.__imageData = imageData
 
     @property
     def auctionEndDate(self):
