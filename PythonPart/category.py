@@ -6,3 +6,13 @@ class Category(object):
     @property
     def id(self):
         return self.__categoryId
+    
+    @property
+    def categoryName(self):
+        return self.__categoryName
+    
+    @categoryName.setter
+    def categoryName(self, categoryName):
+        self.__categoryName = categoryName
+    
+
