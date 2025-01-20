@@ -25,11 +25,11 @@ class Review(object):
         self.__customerId = customerId
 
     @property
-    def serviceId(self):
+    def auctionItemId(self):
         return self.__auctionId
 
-    @serviceId.setter
-    def serviceId(self, auctionId):
+    @auctionItemId.setter
+    def auctionItemId(self, auctionId):
         self.__auctionId = auctionId
 
     @property
