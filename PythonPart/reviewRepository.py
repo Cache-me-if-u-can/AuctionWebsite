@@ -9,7 +9,7 @@ class ReviewRepository:
 
     # get all reviews about auction item 
     def getListOfAuctionItemReviews(self, auctionId):
-        auctionItem_reviews = self.coll.find({'auctionId': ObjectId(auctionId)})
+        auctionItem_reviews = self.coll.find({'auctionItemId': ObjectId(auctionId)})
         
         list_reviews=[]
         for review in auctionItem_reviews:
