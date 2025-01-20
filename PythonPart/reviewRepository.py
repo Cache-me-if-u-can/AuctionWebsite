@@ -15,7 +15,7 @@ class ReviewRepository:
         for review in auctionItem_reviews:
             _id=review["_id"]
             customerId=review["customerId"]
-            auctionId= review["auctionId"]
+            auctionId= review["auctionItemId"]
             comment = review["comment"]
             review_date= review["review_date"]
             
