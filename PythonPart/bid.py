@@ -12,11 +12,11 @@ class Bid(object):
         return self.__id
 
     @property
-    def auctionId(self):
+    def auctionItemId(self):
         return self.__auctionId
 
-    @auctionId.setter
-    def auctionId(self, auctionId):
+    @auctionItemId.setter
+    def auctionItemId(self, auctionId):
         self.__auctionId = auctionId
 
     @property

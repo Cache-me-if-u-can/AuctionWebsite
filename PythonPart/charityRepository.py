@@ -1,6 +1,7 @@
 from charity import *
 from bson.objectid import ObjectId
 import hashlib
+import base64
 
 
 class CharityRepository:
@@ -18,9 +19,12 @@ class CharityRepository:
             phoneNum = charity["phoneNum"]
             password = charity["password"]
             imageFile = charity["imageFile"]
+            fileName=imageFile["fileName"]
+            imageData=base64.b64decode(imageFile["imageData"])
             address = charity["address"]
+            description = charity["description"]
             web_charity = Charity(
-                name, email, phoneNum, password, imageFile, address, _id=_id
+                name, email, phoneNum, password, fileName, imageData, address, description, _id=_id
             )
             list_charities.append(web_charity)
         return list_charities
@@ -67,13 +71,19 @@ class CharityRepository:
         if self.charityExist(charity.email):
             return None
 
+        imageFile = {
+            "fileName": charity.fileName,
+            "imageData": charity.imageData
+        }
+
         new_charity = {
             "name": charity.name,
             "email": charity.email,
             "phoneNum": charity.phoneNum,
             "password": charity.password,
-            "imageFile": charity.imageFile,
+            "imageFile": imageFile,
             "address": charity.address,
+            "description": charity.description,
         }
         result = self.coll.insert_one(new_charity)
         return result.inserted_id
@@ -87,6 +97,11 @@ class CharityRepository:
 
     # update charity`s data using ID
     def updateCharity(self, charity, charity_id):
+        imageFile = {
+            "fileName": charity.fileName,
+            "imageData": charity.imageData
+        }
+
         result = self.coll.update_one(
             {"_id": ObjectId(charity_id)},
             {
@@ -95,8 +110,9 @@ class CharityRepository:
                     "email": charity.email,
                     "phoneNum": charity.phoneNum,
                     "password": charity.password,
-                    "imageFile": charity.imageFile,
+                    "imageFile": imageFile,
                     "address": charity.address,
+                    "description": charity.description,
                 }
             },
         )

@@ -1,4 +1,5 @@
 import hashlib
+import base64
 
 
 class Charity(object):
@@ -8,16 +9,20 @@ class Charity(object):
         email,
         phoneNum,
         password,
-        imageFile,
+        fileName,
+        imageData,
         address,
+        description,
         _id=0,
     ):
         self.__id = _id
         self.__name = name
         self.__email = email
         self.__phoneNum = phoneNum
-        self.__imageFile = imageFile
+        self.__fileName = fileName
+        self.__imageData= imageData
         self.__address = address
+        self.__description = description
         self.__password = self._passwordHashing(password)
 
     def _passwordHashing(self, password):
@@ -53,12 +58,20 @@ class Charity(object):
         self.__phoneNum = phoneNum
 
     @property
-    def imageFile(self):
-        return self.__imageFile
+    def fileName(self):
+        return self.__fileName
 
-    @imageFile.setter
-    def imageFile(self, imageFile):
-        self.__imageFile = imageFile
+    @fileName.setter
+    def fileName(self, fileName):
+        self.__fileName = fileName
+    
+    @property
+    def imageData(self):
+        return self.__imageData
+    
+    @imageData.setter
+    def imageData(self, imageData):
+        self.__imageData = imageData
 
     @property
     def address(self):
@@ -67,14 +80,25 @@ class Charity(object):
     @address.setter
     def address(self, address):
         self.__address = address
-
+    
+    @property
+    def description(self):
+        return self.__description
+    
+    @description.setter
+    def description(self, description):
+        self.__description = description
+    
     @property
     def password(self):
         return self.__password
-
+    
     @password.setter
     def password(self, password):
         self.__password = self._passwordHashing(password)
 
     def change_password(self, new_password):  # make private?
         self.__password = self._passwordHashing(new_password)
+
+    
+
