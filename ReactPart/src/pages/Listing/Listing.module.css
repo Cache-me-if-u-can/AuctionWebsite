@@ -1,0 +1,215 @@
+.auction_container {
+  display: flex; /* Set the container to flex */
+  align-items: flex-start; /* Align items to the start */
+  gap: 50px; /* Add some space between the image and details */
+  padding: 5%; /* Add padding around the container */
+  border-bottom: 1px solid #ccc; /* Add a border to separate listings from list of betters*/
+}
+
+.auction_image {
+  max-width: 100%; /* Adjust the width as needed */
+  height: auto;
+  width: 650px;
+  border: #333 2px solid; /* Add a border around the container */
+}
+
+.auctionListing_details {
+  flex: 1; /* Allow the details to take up the remaining space */
+}
+.auctionListing_details h3 {
+  margin: 0; /* Remove default margin */
+  color: var(--dark-periwinkle); /* Set the color to the brand color */
+}
+.auctionListing_details h2 {
+  margin: 0; /* Remove default margin */
+  color: var(--periwinkle); /* Set the color to a dark grey */
+  opacity: 0.8; /* Reduce the opacity to make it less prominent */
+}
+.auctionListing_details p {
+  margin: 0; /* Remove default margin */
+  color: #333; /* Set the color to a dark grey */
+}
+/* Main Content Area */
+.main_content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+.bid_button {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  width: 15ch;
+  margin-bottom: 10px;
+}
+
+.bid_button:hover {
+  background-color: #0056b3;
+}
+.bidderLeaderboard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.bidderLeaderboard h3 {
+  margin: 0;
+}
+.bidder {
+  display: flex;
+  justify-content: space-between;
+}
+.input_field {
+  display: flex;
+  align-self: center;
+  background: var(--sds-color-background-default);
+  padding: var(--sds-size-space-medium);
+  display: flex;
+  align-items: center;
+  width: 25%;
+  min-width: 240px;
+}
+.bidding_details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+}
+.buyNow {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  width: 15ch;
+}
+.cBid {
+  padding: 8px 12px;
+  background-color: #28a746b4;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  width: 15ch;
+}
+
+.sBid {
+  padding: 8px 12px;
+  background-color: #28a746b4;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  width: 15ch;
+}
+
+.activeBidders {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.timeTillEnd {
+  display: flex;
+  justify-content: space-between;
+  color: #333;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.bidValues {
+  display: flex;
+  justify-content: space-evenly;
+  color: #333;
+  padding: 20px;
+  /*border: 1px solid #ccc;*/
+  border-radius: 4px;
+}
+.input_field .warning_text {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
+/* Responsive styles */
+
+@media (max-width: 768px) {
+  .auctionListing_details {
+    flex-direction: auto; /* Allow the details to take up the remaining space */
+  }
+  .auction_container {
+    flex-direction: column; /* Change the direction of the container */
+    align-items: center; /* Center items in the container */
+  }
+  .auction_image {
+    width: 100%; /* Adjust the width as needed */
+    height: auto;
+    border: #333 2px solid; /* Add a border around the container */
+  }
+  .auctionListing_details {
+    max-width: 100%; /* Set a max width for the details */
+  }
+  .auctionListing_details h3 {
+    margin: 3%; /* Remove default margin */
+    color: var(--dark-periwinkle); /* Set the color to the brand color */
+  }
+  .auctionListing_details h2 {
+    margin: 3%; /* Remove default margin */
+    color: var(--periwinkle); /* Set the color to a dark grey */
+    opacity: 0.8; /* Reduce the opacity to make it less prominent */
+  }
+  .auctionListing_details p {
+    margin: 3%; /* Remove default margin */
+    color: #333; /* Set the color to a dark grey */
+  }
+  /* Main Content Area */
+  .main_content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .bid_button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+    width: 15ch;
+    margin-bottom: 10px;
+  }
+
+  .bid_button:hover {
+    background-color: #0056b3;
+  }
+  .bidderLeaderboard {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+}
