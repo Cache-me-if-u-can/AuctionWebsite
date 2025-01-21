@@ -1,6 +1,7 @@
 from customer import *
 from bson.objectid import ObjectId
 import hashlib
+import base64
 
 
 class CustomerRepository:
@@ -20,6 +21,8 @@ class CustomerRepository:
             phoneNum = customer["phoneNum"]
             password = customer["password"]
             imageFile = customer["imageFile"]
+            fileName=imageFile["fileName"]
+            imageData=base64.b64decode(imageFile["imageData"])
             address = customer["address"]
             web_customer = Customer(
                 name,
@@ -28,7 +31,8 @@ class CustomerRepository:
                 email,
                 phoneNum,
                 password,
-                imageFile,
+                fileName,
+                imageData,
                 address,
                 _id=_id,
             )
@@ -76,6 +80,12 @@ class CustomerRepository:
     def createCustomer(self, customer):
         if self.customerExist(customer.email):
             return None
+        
+        
+        imageFile = {
+            "fileName": customer.fileName,
+            "imageData": customer.imageData
+        }
 
         new_customer = {
             "name": customer.name,
@@ -84,7 +94,7 @@ class CustomerRepository:
             "email": customer.email,
             "phoneNum": customer.phoneNum,
             "password": customer.password,
-            "imageFile": customer.imageFile,
+            "imageFile": imageFile,
             "address": customer.address,
         }
         result = self.coll.insert_one(new_customer)
@@ -99,6 +109,10 @@ class CustomerRepository:
 
     # update customers`s data using ID
     def updateCustomer(self, customer, customer_id):
+        imageFile = {
+            "fileName": customer.fileName,
+            "imageData": customer.imageData
+        }
         result = self.coll.update_one(
             {"_id": ObjectId(customer_id)},
             {
@@ -109,7 +123,7 @@ class CustomerRepository:
                     "email": customer.email,
                     "phoneNum": customer.phoneNum,
                     "password": customer.password,
-                    "imageFile": customer.imageFile,
+                    "imageFile": imageFile,
                     "address": customer.address,
                 }
             },

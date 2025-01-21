@@ -1,25 +1,24 @@
- /* Banner Container for spacing */
- .bannerContainer {
-    width: 100%;          /* Full width of the viewport */
-    overflow:scroll;     /* Hides any overflow if the image ratio is different */
-    margin-bottom: 20px;  /* Space below banner for readability */
+/* Banner Container for spacing */
+.bannerContainer {
+  width: 100%; /* Full width of the viewport */
+  overflow: scroll; /* Hides any overflow if the image ratio is different */
+  margin-bottom: 20px; /* Space below banner for readability */
+}
+
+/* Responsive Banner Image */
+.bannerImage {
+  width: 100%; /* Scales image to fit container width */
+  height: auto; /* Keeps aspect ratio */
+  max-height: 400px; /* Optional: limits height on larger screens */
+  object-fit: fill; /* Crops image gracefully if necessary */
+}
+@media (max-width: 768px) {
+  .bannerContainer {
+    margin-bottom: 10px; /* Reduces space below banner on smaller screens */
+    max-height: 200px; /* Optional: limits height on smaller screens */
   }
-  
-  /* Responsive Banner Image */
+
   .bannerImage {
-    width: 100%;          /* Scales image to fit container width */
-    height: auto;         /* Keeps aspect ratio */
-    max-height: 400px;    /* Optional: limits height on larger screens */
-    object-fit:fill;    /* Crops image gracefully if necessary */
+    max-height: 200px; /* Reduces height on smaller screens */
   }
-  @media (max-width: 768px) {
-    .bannerContainer {
-      margin-bottom: 10px; /* Reduces space below banner on smaller screens */
-      max-height: 200px; /* Optional: limits height on smaller screens */
-    }
-    
-    .bannerImage {
-      max-height: 200px; /* Reduces height on smaller screens */
-    }
-  }
-  
+}
