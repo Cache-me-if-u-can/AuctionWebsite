@@ -12,6 +12,7 @@ class AuctionItem(object):
         charityId, 
         status,
         _id=0,
+        
         ):
         self.__id = _id
         self.__title = title
