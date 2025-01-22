@@ -11,22 +11,33 @@ class CharityRepository:
     # get list of all charities from database
     def getListOfCharities(self):
         all_charities = self.coll.find()
+        # list_charities = []
+        # for charity in all_charities:
+        #     _id = charity["_id"]
+        #     name = charity["name"]
+        #     email = charity["email"]
+        #     phoneNum = charity["phoneNum"]
+        #     password = charity["password"]
+        #     imageData = charity["imageData"]
+        #     address = charity["address"]
+        #     description = charity["description"]
+        #     web_charity = Charity(
+        #         name,
+        #         email,
+        #         phoneNum,
+        #         password,
+        #         imageData,
+        #         address,
+        #         description,
+        #         _id=_id,
+        #     )
+        #     list_charities.append(web_charity)
+        # return list_charities
         list_charities = []
         for charity in all_charities:
-            _id = charity["_id"]
-            name = charity["name"]
-            email = charity["email"]
-            phoneNum = charity["phoneNum"]
-            password = charity["password"]
-            imageFile = charity["imageFile"]
-            fileName=imageFile["fileName"]
-            imageData=base64.b64decode(imageFile["imageData"])
-            address = charity["address"]
-            description = charity["description"]
-            web_charity = Charity(
-                name, email, phoneNum, password, fileName, imageData, address, description, _id=_id
-            )
-            list_charities.append(web_charity)
+            charity_el = charity
+            charity_el["_id"] = str(charity["_id"])
+            list_charities.append(charity_el)
         return list_charities
 
     # check whether a charity with such an e-mail exists
@@ -71,17 +82,12 @@ class CharityRepository:
         if self.charityExist(charity.email):
             return None
 
-        imageFile = {
-            "fileName": charity.fileName,
-            "imageData": charity.imageData
-        }
-
         new_charity = {
             "name": charity.name,
             "email": charity.email,
             "phoneNum": charity.phoneNum,
             "password": charity.password,
-            "imageFile": imageFile,
+            "imageData": charity.imageData,
             "address": charity.address,
             "description": charity.description,
         }
@@ -97,11 +103,6 @@ class CharityRepository:
 
     # update charity`s data using ID
     def updateCharity(self, charity, charity_id):
-        imageFile = {
-            "fileName": charity.fileName,
-            "imageData": charity.imageData
-        }
-
         result = self.coll.update_one(
             {"_id": ObjectId(charity_id)},
             {
@@ -110,7 +111,7 @@ class CharityRepository:
                     "email": charity.email,
                     "phoneNum": charity.phoneNum,
                     "password": charity.password,
-                    "imageFile": imageFile,
+                    "imageData": charity.imageData,
                     "address": charity.address,
                     "description": charity.description,
                 }

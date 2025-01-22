@@ -3,24 +3,23 @@ import base64
 
 
 class Charity(object):
+
     def __init__(
         self,
         name,
         email,
         phoneNum,
         password,
-        fileName,
         imageData,
         address,
-        description,
+        description="Default description placeholder that charity will change in the profile later on",
         _id=0,
     ):
         self.__id = _id
         self.__name = name
         self.__email = email
         self.__phoneNum = phoneNum
-        self.__fileName = fileName
-        self.__imageData= imageData
+        self.__imageData = imageData
         self.__address = address
         self.__description = description
         self.__password = self._passwordHashing(password)
@@ -58,17 +57,9 @@ class Charity(object):
         self.__phoneNum = phoneNum
 
     @property
-    def fileName(self):
-        return self.__fileName
-
-    @fileName.setter
-    def fileName(self, fileName):
-        self.__fileName = fileName
-    
-    @property
     def imageData(self):
         return self.__imageData
-    
+
     @imageData.setter
     def imageData(self, imageData):
         self.__imageData = imageData
@@ -80,25 +71,22 @@ class Charity(object):
     @address.setter
     def address(self, address):
         self.__address = address
-    
+
     @property
     def description(self):
         return self.__description
-    
+
     @description.setter
     def description(self, description):
         self.__description = description
-    
+
     @property
     def password(self):
         return self.__password
-    
+
     @password.setter
     def password(self, password):
         self.__password = self._passwordHashing(password)
 
     def change_password(self, new_password):  # make private?
         self.__password = self._passwordHashing(new_password)
-
-    
-

@@ -37,26 +37,8 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/Charities"
-            element={
-              <ProtectedRoute
-                needToBeLoggedIn={false}
-                redirectPath={"/Charities"}
-              >
-                <Charities />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/Listing"
-            element={
-              <ProtectedRoute needToBeLoggedIn={false} redirectPath={"/LogIn"}>
-                <Listing />
-              </ProtectedRoute>
-            }
-          />
-
+          <Route path="/Charities" element={<Charities />} />
+          <Route path="/Listing" element={<Listing />} />
           <Route
             path="/Profile"
             element={

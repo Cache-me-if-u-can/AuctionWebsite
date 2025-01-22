@@ -21,10 +21,12 @@ export default function Profile() {
 
     charityId: "",
     charityName: "",
+    charityDescription: "",
     charityPhone: "",
     charityAddress: "",
     charityEmail: "",
     charityPassword: "",
+    charityImage: "",
   });
 
   //TODO: maybe implement placeholder while user info in fetching
@@ -60,10 +62,12 @@ export default function Profile() {
 
             ["charityId"]: result._id,
             ["charityName"]: result.name,
+            ["charityDescription"]: result.description,
             ["charityPhone"]: result.phoneNum,
             ["charityAddress"]: result.address,
             ["charityEmail"]: result.email,
             ["charityPassword"]: result.password,
+            ["charityImage"]: result.imageData,
           }));
         }
       } else if (response.status === 401) {
@@ -87,7 +91,7 @@ export default function Profile() {
         <div className={styles.user_info_container}>
           <div className={styles.user_info_header}>
             <img
-              src={"https://via.placeholder.com/80"}
+              src={formData.charityImage}
               alt={`${formData.userType} image`}
             />
             <h2>
@@ -135,6 +139,9 @@ export default function Profile() {
                 </p>
                 <p>
                   <strong>Email:</strong> {formData.charityEmail}
+                </p>
+                <p>
+                  <strong>Description:</strong> {formData.charityDescription}
                 </p>
                 <p className="password">
                   <strong>Password:</strong> {formData.charityPassword}

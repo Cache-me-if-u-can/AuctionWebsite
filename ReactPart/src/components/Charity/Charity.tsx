@@ -1,12 +1,11 @@
 import React from "react";
-import styles from "./Charities.module.css";
+import styles from "./Charity.module.css";
 
 interface CharityProps {
   name: string;
   location: string;
   description: string;
   logo: string;
-  index: number;
 }
 
 const Charity: React.FC<CharityProps> = ({
@@ -14,16 +13,11 @@ const Charity: React.FC<CharityProps> = ({
   location,
   description,
   logo,
-  index,
 }) => {
   return (
-    <div
-      className={`${styles.charity_entry} ${index % 2 === 0 ? styles.leftAligned : styles.rightAligned}`}
-    >
+    <div className={styles.charity_entry}>
       <img src={logo} alt="logo" className={styles.logo} />
-      <div
-        className={`${styles.charity_details} ${index % 2 === 0 ? styles.leftText : styles.rightText}`}
-      >
+      <div className={styles.charity_details}>
         <h1 className={styles.charity_name}>{name}</h1>
         <p className={styles.charity_location}>{location}</p>
         <p className={styles.charity_description}>{description}</p>

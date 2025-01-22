@@ -78,13 +78,17 @@ def customerRegistration():
 def charityRegistration():
     try:
         content = request.json
+        print(content)
         charity = Charity(
             name=content["userName"],
             email=content["userEmail"],
             password=content["userPassword"],
             phoneNum=content["userPhone"],
             address=content["userAddress"],
-            imageFile="-",
+            imageData=content["imageData"],
+            # fileName="sfd",
+            # imageData="",
+            # imageFile="-",
         )
         newId = charityConnection.createCharity(charity)
         if newId == None:
@@ -185,33 +189,22 @@ def getUserData():
 
     if current_user["userType"] == "customer":
         existCustomer = customerConnection.getCustomerById(current_user["id"])
-        response = {
-            "_id": str(existCustomer["_id"]),
-            "name": existCustomer["name"],
-            "surname": existCustomer["surname"],
-            "dateOfBirth": existCustomer["dateOfBirth"],
-            "email": existCustomer["email"],
-            "phoneNum": existCustomer["phoneNum"],
-            "password": existCustomer["password"],
-            "imageFile": existCustomer["imageFile"],
-            "address": existCustomer["address"],
-        }
+        response = existCustomer
+        response["_id"] = str(existCustomer["_id"])
 
     if current_user["userType"] == "charity":
         existCharity = charityConnection.getCharityById(current_user["id"])
-        response = {
-            "_id": str(existCharity["_id"]),
-            "name": existCharity["name"],
-            "email": existCharity["email"],
-            "phoneNum": existCharity["phoneNum"],
-            "password": existCharity["password"],
-            "imageFile": existCharity["imageFile"],
-            "address": existCharity["address"],
-        }
+        response = existCharity
+        response["_id"] = str(existCharity["_id"])
 
     response["userType"] = current_user["userType"]
 
     return jsonify(response)
+
+
+@app.route("/getCharitiesList", methods=["GET"])
+def getCharitiesList():
+    return charityConnection.getListOfCharities()
 
 
 if __name__ == "__main__":

@@ -27,6 +27,7 @@ export default function Register() {
     charityEmail: "",
     charityPassword: "",
     charityRepeatPassword: "",
+    charityImage: "",
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -72,6 +73,53 @@ export default function Register() {
       const { [name]: _, ...remainingErrors } = prevErrors; // Exclude the current field's error
       return remainingErrors;
     });
+  };
+
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      setFormData((prevData) => ({
+        ...prevData,
+        charityImage: "",
+      }));
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        charityImage: "Image is required",
+      }));
+      return;
+    }
+
+    setErrors((prevErrors) => {
+      const { charityImage, ...remainingErrors } = prevErrors;
+      return remainingErrors;
+    });
+
+    try {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("Canvas context not available");
+
+      const img = new Image();
+      img.onload = () => {
+        canvas.width = 64;
+        canvas.height = 64;
+        ctx.drawImage(img, 0, 0, 64, 64);
+        const base64Image = canvas.toDataURL("image/png");
+
+        console.log(base64Image);
+
+        setFormData((prevData) => ({
+          ...prevData,
+          charityImage: base64Image,
+        }));
+      };
+      img.src = URL.createObjectURL(file);
+      console.log(img);
+    } catch (error) {
+      console.error("Failed to process image:", error);
+    }
   };
 
   // Validation method
@@ -130,6 +178,7 @@ export default function Register() {
       if (formData.charityPassword !== formData.charityRepeatPassword) {
         newErrors.charityRepeatPassword = "Passwords do not match";
       }
+      if (!formData.charityImage) newErrors.charityImage = "Image is required";
     }
 
     setErrors(newErrors);
@@ -164,6 +213,7 @@ export default function Register() {
           userAddress: formData.charityAddress,
           userEmail: formData.charityEmail,
           userPassword: formData.charityPassword,
+          imageData: formData.charityImage,
         };
         userEmail = formData.charityEmail;
         userPassword = formData.charityPassword;
@@ -536,6 +586,23 @@ export default function Register() {
                     </div>
                   )}
                 </div>
+              </div>
+              <div className={styles.input_field}>
+                <label htmlFor="charityImage" className={styles.label}>
+                  Upload Charity Logo
+                </label>
+                <input
+                  type="file"
+                  id="charityImage"
+                  name="charityImage"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+                {errors.charityImage && (
+                  <div className={styles.errorContainer}>
+                    <div className={styles.error}>{errors.charityImage}</div>
+                  </div>
+                )}
               </div>
             </div>
           )}
