@@ -86,9 +86,6 @@ def charityRegistration():
             phoneNum=content["userPhone"],
             address=content["userAddress"],
             imageData=content["imageData"],
-            # fileName="sfd",
-            # imageData="",
-            # imageFile="-",
         )
         newId = charityConnection.createCharity(charity)
         if newId == None:
