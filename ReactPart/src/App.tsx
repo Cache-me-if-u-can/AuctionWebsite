@@ -7,7 +7,9 @@ import Profile from "./pages/Profile/Profile";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Charities from "./pages/Charities/Charities";
 import Listing from "./pages/Listing/Listing";
+import ManageListings from "./pages/ManageListings/ManageListings";
 import { UserProvider } from "./context/UserProvider";
+
 
 const App: React.FC = () => {
   return (
@@ -39,6 +41,16 @@ const App: React.FC = () => {
           />
           <Route path="/Charities" element={<Charities />} />
           <Route path="/Listing" element={<Listing />} />
+          {/* <Route
+            path="/ManageListings"
+            element={
+              <ProtectedRoute needToBeLoggedIn={true} redirectPath={"/LogIn"}>
+                <ManageListings />
+              </ProtectedRoute>
+            }
+          /> */}
+          <Route path="/ManageListings" element={<ManageListings />}/>
+          
           <Route
             path="/Profile"
             element={

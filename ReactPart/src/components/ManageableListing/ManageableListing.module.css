@@ -1,0 +1,207 @@
+/* Individual listing styling for both views */
+.listView .listing {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    align-items: flex-start;
+    display: flex; /* Flex container */
+    flex-direction: row; /* Stack content vertically */
+    justify-content: space-between; /* Space out content */
+    overflow: hidden; /* Hide overflow content */
+  }
+  
+  /* Fixed sizes for list view */
+  .listView .listing {
+    width: 100%; /* Full width in list view */
+    height: auto; /* Auto height in list view */
+  }
+
+    /* Grid View Layout */
+  .gridView {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 80px;
+  }
+  /* Adjust listing image for grid view */
+  .gridView .listingImage {
+    width: 100%; /* Full width of the grid cell */
+    height: auto;
+    margin-right: 0; /* Remove margin in grid */
+  }
+  
+  /* Fixed sizes for grid view */
+  .gridView .listing {
+    width: 350px; /* Fixed width */
+    height: auto; /* Fixed height */
+    padding: 15px; /* Ensure padding inside listing */
+    box-sizing: border-box; /* Include padding in width/height */
+    display: flex; /* Stack items in grid view */
+    flex-direction: column; /* Stack content vertically */
+    align-items: flex-start; /* Center items vertically */
+  }
+  
+  .gridView .listingContent {
+    margin-top: 10px;
+  }
+  
+    .listingImage {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      object-fit: cover;
+      margin-right: 0;
+      
+    }
+  
+    .listingContent {
+      max-width: calc(100% - 100px);
+    }
+  
+    .listing h3 {
+      margin-top: 0;
+      color: #333;
+      font-size: 18px;
+    }
+  
+    .listing p {
+      color: #666;
+      margin-top: 5px;
+    }
+  
+    .auctionDetails {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+    
+    .auctionDetails p {
+      align-self: start;
+      color: #000000;
+      margin-top: 5%;
+    }
+    .auctionDetails h1 {
+      align-self: flex-start;
+        color: #43c00e;
+        margin-top: 5%;
+      font-size: 80%;
+    }
+  /* Listing Styling */
+  .listing {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    flex-wrap: wrap; /* Allows content to wrap on small screens */
+  }
+  
+  .listingImage {
+    width: 125px;
+    height: 90px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 15px;
+  }
+  
+  .listingContent {
+    max-width: calc(75% - 100px);
+    flex: 1;
+  }
+  
+  .listing h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 18px;
+  }
+  
+  .listing p {
+    color: #666;
+    margin-top: 5px;
+  }
+  
+  .auctionDetails {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    width: 100%; /* Ensure this spans full width on small screens */
+    flex-wrap: wrap;
+  }
+
+  .addListing {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center; /* Center the content within the button */
+    align-self: flex-end; /* Align the button to the end of the flex container */
+    margin-top: 10px;
+    width: 25%;
+    margin-left: auto; /* Push the button to the right */
+  }
+  
+  .addListing a {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px; /* Space between links */
+    border-radius: 4px;
+  }
+  .addListing a:hover {
+    background-color: #0056b3;
+  }
+  .managementTools {
+    display: flex;
+    flex-direction: column; /* Arrange links in a column */
+    margin-left: 20px; /* Space between content and management tools */
+    align-self: flex-end; /* Align to the end of the flex container */
+    margin-left: auto; /* Push the links to the right */
+    max-width: 25%; /* Limit width of management tools */
+  }
+  .gridView .managementTools {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 0.5fr));
+    margin: auto;
+    gap: 5px;
+    align-self: center;
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+
+  }
+  .gridView .managementTools a {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px; /* Space between links */
+    border-radius: 4px;
+    position: center;
+  }
+  
+  .managementTools a {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px; /* Space between links */
+    border-radius: 4px;
+  }
+  
+  .managementTools a:hover {
+    background-color: #0056b3;
+  }
