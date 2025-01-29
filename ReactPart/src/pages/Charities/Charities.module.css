@@ -8,12 +8,20 @@
   flex-direction: row;
   justify-content: left;
   text-align: left;
-  background: linear-gradient(to right, #007bff, #004080);
+  background: linear-gradient(
+    to right,
+    var(--periwinkle),
+    var(--dark-periwinkle)
+  );
 }
 
 .charityList > :nth-child(even) {
   flex-direction: row-reverse;
   justify-content: right;
   text-align: right;
-  background: linear-gradient(to left, #007bff, #004080);
+  background: linear-gradient(
+    to left,
+    var(--periwinkle),
+    var(--dark-periwinkle)
+  );
 }

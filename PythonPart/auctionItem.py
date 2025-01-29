@@ -1,32 +1,27 @@
 class AuctionItem(object):
     def __init__(
-        self, 
-        title, 
-        description, 
-        startingPrice, 
-        currentPrice, 
-        fileName,
-        imageData,
-        auctionEndDate, 
-        categoryId, 
-        charityId, 
+        self,
+        title,
+        description,
+        startingPrice,
+        currentPrice,
+        image,
+        auctionEndDate,
+        categoryId,
+        charityId,
         status,
         _id=0,
-
-        
-        ):
+    ):
         self.__id = _id
         self.__title = title
         self.__description = description
-        self.__startingPrice= startingPrice
-        self.__currentPrice= currentPrice
-        self.__fileName = fileName
-        self.__imageData= imageData
-        self.__auctionEndDate= auctionEndDate
-        self.__categoryId= categoryId
-        self.__charityId= charityId
-        self.__status= status
-
+        self.__startingPrice = startingPrice
+        self.__currentPrice = currentPrice
+        self.__image = image
+        self.__auctionEndDate = auctionEndDate
+        self.__categoryId = categoryId
+        self.__charityId = charityId
+        self.__status = status
 
     @property
     def id(self):
@@ -65,20 +60,12 @@ class AuctionItem(object):
         self.__currentPrice = currentPrice
 
     @property
-    def fileName(self):
-        return self.__fileName
+    def image(self):
+        return self.__image
 
-    @fileName.setter
-    def fileName(self, fileName):
-        self.__fileName = fileName
-    
-    @property
-    def imageData(self):
-        return self.__imageData
-    
-    @imageData.setter
-    def imageData(self, imageData):
-        self.__imageData = imageData
+    @image.setter
+    def image(self, image):
+        self.__image = image
 
     @property
     def auctionEndDate(self):
@@ -111,6 +98,3 @@ class AuctionItem(object):
     @status.setter
     def status(self, status):
         self.__status = status
-
-    
-    

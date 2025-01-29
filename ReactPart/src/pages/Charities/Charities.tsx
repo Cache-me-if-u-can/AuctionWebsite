@@ -34,7 +34,7 @@ export default function Charities() {
           address: charity.address,
           email: charity.email,
           password: charity.password,
-          image: charity.imageData,
+          image: charity.image,
         }));
         setCharityData(formattedData);
         console.log(formattedData);

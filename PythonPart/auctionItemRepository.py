@@ -18,19 +18,25 @@ class AuctionItemRepository:
             description = auctionItem["description"]
             startingPrice = auctionItem["startingPrice"]
             currentPrice = auctionItem["currentPrice"]
-            imageFile = auctionItem["imageFile"]
-            fileName=imageFile["fileName"]
-            imageData=base64.b64decode(imageFile["imageData"])
+            image = auctionItem["image"]
             auctionEndDate = auctionItem["auctionEndDate"]
             categoryId = auctionItem["categoryId"]
-            charityId= auctionItem["charityId"]
+            charityId = auctionItem["charityId"]
             status = auctionItem["status"]
             web_auctionItem = AuctionItem(
-                title,description, startingPrice, currentPrice, fileName, imageData, auctionEndDate, categoryId, charityId, status, _id=_id
+                title,
+                description,
+                startingPrice,
+                currentPrice,
+                image,
+                auctionEndDate,
+                categoryId,
+                charityId,
+                status,
+                _id=_id,
             )
             list_auctionItems.append(web_auctionItem)
         return list_auctionItems
-
 
     # find  auction item data by title
     def getAuctionItemByTitle(self, title):
@@ -55,22 +61,16 @@ class AuctionItemRepository:
     # create auctionItem and add to database
     def createAuctionItem(self, auctionItem):
         #  check is auction item exists by tittle ?
-
-        imageFile = {
-            "fileName": auctionItem.fileName,
-            "imageData": auctionItem.imageData
-        }
-
         new_auctionItem = {
             "title": auctionItem.title,
             "description": auctionItem.description,
             "startingPrice": auctionItem.startingPrice,
             "currentPrice": auctionItem.currentPrice,
-            "imageFile": imageFile,
+            "image": auctionItem.image,
             "auctionEndDate": auctionItem.auctionEndDate,
             "categoryId": auctionItem.categoryId,
             "charityId": auctionItem.charityId,
-            "status": auctionItem.status
+            "status": auctionItem.status,
         }
         result = self.coll.insert_one(new_auctionItem)
         return result.inserted_id
@@ -84,11 +84,6 @@ class AuctionItemRepository:
 
     # update auction item's data using ID
     def updateAuctionItem(self, auctionItem, auctionItem_id):
-        imageFile = {
-            "fileName": auctionItem.fileName,
-            "imageData": auctionItem.imageData
-        }
-
         result = self.coll.update_one(
             {"_id": ObjectId(auctionItem_id)},
             {
@@ -97,11 +92,11 @@ class AuctionItemRepository:
                     "description": auctionItem.description,
                     "startingPrice": auctionItem.startingPrice,
                     "currentPrice": auctionItem.currentPrice,
-                    "imageFile": imageFile,
+                    "image": auctionItem.image,
                     "auctionEndDate": auctionItem.auctionEndDate,
                     "categoryId": auctionItem.categoryId,
                     "charityId": auctionItem.charityId,
-                    "status": auctionItem.status
+                    "status": auctionItem.status,
                 }
             },
         )

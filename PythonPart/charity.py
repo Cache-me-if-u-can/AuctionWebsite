@@ -10,7 +10,7 @@ class Charity(object):
         email,
         phoneNum,
         password,
-        imageData,
+        image,
         address,
         description="Default description placeholder that charity will change in the profile later on",
         _id=0,
@@ -19,7 +19,7 @@ class Charity(object):
         self.__name = name
         self.__email = email
         self.__phoneNum = phoneNum
-        self.__imageData = imageData
+        self.__image = image
         self.__address = address
         self.__description = description
         self.__password = self._passwordHashing(password)
@@ -57,12 +57,12 @@ class Charity(object):
         self.__phoneNum = phoneNum
 
     @property
-    def imageData(self):
-        return self.__imageData
+    def image(self):
+        return self.__image
 
-    @imageData.setter
-    def imageData(self, imageData):
-        self.__imageData = imageData
+    @image.setter
+    def image(self, image):
+        self.__image = image
 
     @property
     def address(self):

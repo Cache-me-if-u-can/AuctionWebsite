@@ -11,8 +11,7 @@ class Customer(object):
         email,
         phoneNum,
         password,
-        fileName,
-        imageData,
+        image,
         address,
         _id=0,
     ):
@@ -22,8 +21,7 @@ class Customer(object):
         self.__dateOfBirth = dateOfBirth
         self.__email = email
         self.__phoneNum = phoneNum
-        self.__fileName = fileName
-        self.__imageData= imageData
+        self.__image = image
         self.__address = address
         self.__password = self._passwordHashing(password)
 
@@ -76,20 +74,12 @@ class Customer(object):
         self.__phoneNum = phoneNum
 
     @property
-    def fileName(self):
-        return self.__fileName
-    
-    @fileName.setter
-    def fileName(self, fileName):
-        self.__fileName = fileName
-    
-    @property
-    def imageData(self):
-        return self.__imageData
-    
-    @imageData.setter
-    def imageData(self, imageData):
-        self.__imageData= imageData
+    def image(self):
+        return self.__image
+
+    @image.setter
+    def image(self, image):
+        self.__image = image
 
     @property
     def address(self):

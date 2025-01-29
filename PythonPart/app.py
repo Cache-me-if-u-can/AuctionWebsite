@@ -60,7 +60,7 @@ def customerRegistration():
             password=content["userPassword"],
             phoneNum=content["userPhone"],
             address=content["userAddress"],
-            imageFile="-",
+            image="-",
         )
         newId = customerConnection.createCustomer(customer)
         if newId == None:
@@ -85,7 +85,7 @@ def charityRegistration():
             password=content["userPassword"],
             phoneNum=content["userPhone"],
             address=content["userAddress"],
-            imageData=content["imageData"],
+            image=content["image"],
         )
         newId = charityConnection.createCharity(charity)
         if newId == None:
