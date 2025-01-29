@@ -5,7 +5,7 @@ import Footer from "../../components/Footer/Footer";
 import { useUser } from "../../context/UserProvider";
 
 export default function Profile() {
-  const { signOut } = useUser();
+  const { signOut, getCsrfToken } = useUser();
 
   const [formData, setFormData] = useState({
     userType: "",
@@ -17,7 +17,7 @@ export default function Profile() {
     customerEmail: "",
     customerPhone: "",
     customerPassword: "",
-    // TODO: customerImage
+    customerImage: "",
     customerAddress: "",
 
     charityId: "",
@@ -60,7 +60,7 @@ export default function Profile() {
             customerEmail: result.email,
             customerPhone: result.phoneNum,
             customerPassword: result.password,
-            // TODO: customerImage: result.image,
+            customerImage: result.image,
             customerAddress: result.address,
           }));
         }
@@ -250,37 +250,94 @@ export default function Profile() {
       setEditProfileMode(false);
       if (formData.userType === "customer") {
         changes = {
-          // customerImage: formData.customerImage,
+          customerImage: formData.customerImage,
+          customerId: formData.customerId,
           customerName: formData.customerName,
           customerLastName: formData.customerLastName,
           customerDOB: formData.customerDOB,
           customerEmail: formData.customerEmail,
           customerPhone: formData.customerPhone,
           customerAddress: formData.customerAddress,
+          customerPassword: formData.customerPassword,
         };
       }
       if (formData.userType === "charity") {
         changes = {
           charityImage: formData.charityImage,
+          charityId: formData.charityId,
           charityName: formData.charityName,
           charityEmail: formData.charityEmail,
           charityPhone: formData.charityPhone,
           charityAddress: formData.charityAddress,
           charityDescription: formData.charityDescription,
+          charityPassword: formData.charityPassword,
         };
       }
       console.log(changes);
+      console.log(getCsrfToken());
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8080/${
+            formData.userType === "customer"
+              ? "updateCustomerProfile"
+              : "updateCharityProfile"
+          }`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-TOKEN": getCsrfToken() || "",
+            },
+            body: JSON.stringify(changes),
+            credentials: "include",
+          }
+        );
+
+        if (!response.ok) {
+          const error = await response.json();
+          alert(error.message);
+          throw new Error(`Failed to update ${formData.userType} details`);
+        }
+
+        jwtLogIn();
+      } catch (error) {
+        console.error("Profile update error:", error);
+        throw error;
+      }
     }
     if (editPasswordMode && validatePassword()) {
       setEditPasswordMode(false);
       changes = {
         newPassword: formData.newPassword,
       };
-      if (formData.userType === "customer") {
-        //TODO: customer url to update profile
-      }
-      if (formData.userType === "charity") {
-        //TODO: charity url to update profile
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8080/${
+            formData.userType === "customer"
+              ? "updateCustomerPassword"
+              : "updateCharityPassword"
+          }`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-TOKEN": getCsrfToken() || "",
+            },
+            body: JSON.stringify(changes),
+            credentials: "include",
+          }
+        );
+
+        if (!response.ok) {
+          const error = await response.json();
+          alert(error.message);
+          throw new Error(`Failed to update ${formData.userType} details`);
+        }
+
+        jwtLogIn();
+      } catch (error) {
+        console.error("Password update error:", error);
+        throw error;
       }
       console.log(changes);
     }

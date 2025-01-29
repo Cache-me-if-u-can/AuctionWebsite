@@ -73,12 +73,62 @@ def customerRegistration():
         return jsonify({"message": "It is not possible to create a new customer"}), 404
 
 
+@app.route("/updateCustomerProfile", methods=["POST"])
+@jwt_required()
+def updateCustomerProfile():
+    content = request.json
+    status = customerConnection.updateCustomer(
+        Customer(
+            name=content["customerName"],
+            surname=content["customerLastName"],
+            dateOfBirth=content["customerDOB"],
+            email=content["customerEmail"],
+            phoneNum=content["customerPhone"],
+            password=content["customerPassword"],
+            image=content["customerImage"],
+            address=content["customerAddress"],
+            _id=content["customerId"],
+            hashed_password=True,
+        ),
+        content["customerId"],
+    )
+    if status:
+        return jsonify({"message": "Customer profile updated"}), 200
+    return jsonify({"message": "Failed to updated customer profile"}), 404
+
+
+@app.route("/updateCustomerPassword", methods=["POST"])
+@jwt_required()
+def updateCustomerPassword():
+    content = request.json
+    current_user = get_jwt_identity()
+    existCustomer = customerConnection.getCustomerById(current_user["id"])
+    customer = existCustomer
+    customer["_id"] = str(existCustomer["_id"])
+    status = customerConnection.updateCustomer(
+        Customer(
+            name=customer["name"],
+            surname=customer["surname"],
+            dateOfBirth=customer["dateOfBirth"],
+            email=customer["email"],
+            phoneNum=customer["phoneNum"],
+            password=content["newPassword"],
+            image=customer["image"],
+            address=customer["address"],
+            _id=customer["_id"],
+        ),
+        customer["_id"],
+    )
+    if status:
+        return jsonify({"message": "Customer password updated"}), 200
+    return jsonify({"message": "Failed to updated customer password"}), 404
+
+
 # server function for charity registration
 @app.route("/charityRegistration", methods=["POST"])
 def charityRegistration():
     try:
         content = request.json
-        print(content)
         charity = Charity(
             name=content["userName"],
             email=content["userEmail"],
@@ -96,6 +146,55 @@ def charityRegistration():
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"message": "It is not possible to create a new charity"}), 404
+
+
+@app.route("/updateCharityProfile", methods=["POST"])
+@jwt_required()
+def updateCharityProfile():
+    content = request.json
+    status = charityConnection.updateCharity(
+        Charity(
+            name=content["charityName"],
+            email=content["charityEmail"],
+            phoneNum=content["charityPhone"],
+            password=content["charityPassword"],
+            image=content["charityImage"],
+            address=content["charityAddress"],
+            description=content["charityDescription"],
+            _id=content["charityId"],
+            hashed_password=True,
+        ),
+        content["charityId"],
+    )
+    if status:
+        return jsonify({"message": "Charity profile updated"}), 200
+    return jsonify({"message": "Failed to updated charity profile"}), 404
+
+
+@app.route("/updateCharityPassword", methods=["POST"])
+@jwt_required()
+def updateCharityPassword():
+    content = request.json
+    current_user = get_jwt_identity()
+    existCharity = charityConnection.getCharityById(current_user["id"])
+    charity = existCharity
+    charity["_id"] = str(existCharity["_id"])
+    status = charityConnection.updateCharity(
+        Charity(
+            name=charity["name"],
+            email=charity["email"],
+            phoneNum=charity["phoneNum"],
+            password=content["newPassword"],
+            image=charity["image"],
+            address=charity["address"],
+            description=charity["description"],
+            _id=charity["_id"],
+        ),
+        charity["_id"],
+    )
+    if status:
+        return jsonify({"message": "Charity password updated"}), 200
+    return jsonify({"message": "Failed to updated charity password"}), 404
 
 
 # server function for customer sign in

@@ -14,6 +14,7 @@ class Charity(object):
         address,
         description="Default description placeholder that charity will change in the profile later on",
         _id=0,
+        hashed_password=False,
     ):
         self.__id = _id
         self.__name = name
@@ -22,7 +23,10 @@ class Charity(object):
         self.__image = image
         self.__address = address
         self.__description = description
-        self.__password = self._passwordHashing(password)
+        if not hashed_password:
+            self.__password = self._passwordHashing(password)
+        else:
+            self.__password = password
 
     def _passwordHashing(self, password):
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
