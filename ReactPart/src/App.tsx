@@ -8,6 +8,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import Charities from "./pages/Charities/Charities";
 import Listing from "./pages/Listing/Listing";
 import ManageListings from "./pages/ManageListings/ManageListings";
+import SearchAuctions from "./pages/SearchAuctions/SearchAuctions";
 import { UserProvider } from "./context/UserProvider";
 
 
@@ -40,6 +41,7 @@ const App: React.FC = () => {
             }
           />
           <Route path="/Charities" element={<Charities />} />
+          <Route path="/SearchAuctions" element={<SearchAuctions/> } />
           <Route path="/Listing" element={<Listing />} />
           {/* <Route
             path="/ManageListings"

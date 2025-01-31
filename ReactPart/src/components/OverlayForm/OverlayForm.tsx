@@ -1,24 +1,14 @@
 import React, { useState } from 'react';
 import styles from './OverlayForm.module.css';
-
+import { AuctionItem } from '../../types/AuctionItem/AuctionItem';
 interface OverlayFormProps {
   onClose: () => void;
-  onSubmit: (listing: ListingData) => void;
+  onSubmit: (listing: AuctionItem) => void;
 }
 
-interface ListingData {
-  title: string;
-  charity: string;
-  description: string;
-  status: string;
-  category: string;
-  auctionDue: string;
-  bid: number;
-  image: File | null;
-}
 
 const OverlayForm: React.FC<OverlayFormProps> = ({ onClose, onSubmit }) => {
-  const [formData, setFormData] = useState<ListingData>({
+  const [formData, setFormData] = useState<Omit<AuctionItem, 'id'>>({
     title: '',
     charity: '',
     description: '',
@@ -39,7 +29,7 @@ const OverlayForm: React.FC<OverlayFormProps> = ({ onClose, onSubmit }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    onSubmit({...formData, id: Date.now().toString()});
     onClose();
     // Optionally reset the form
     setFormData({

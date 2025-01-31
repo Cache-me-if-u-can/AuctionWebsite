@@ -1,0 +1,107 @@
+/* Common listing styles */
+.listing {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 25px;
+  margin-bottom: 15px;
+  overflow: hidden; /* Hide overflow content */
+  width: 100%; /* Full width */
+}
+.listingContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-left: 15px;
+}
+
+/* List View Layout */
+.listItem {
+  display: flex; /* Flex container */
+  flex-direction: column; /* Stack content vertically */
+  justify-content: space-between; /* Space out content */
+  width: 90%; /* Full width in list view */
+  height: auto; /* Auto height in list view */
+  max-height: fit-content;
+}
+
+/* Grid View Layout */
+.gridItem {
+  display: grid; /* Grid container */
+  width: 350px; /* Fixed width */
+  height: auto; /* Fixed height */
+  padding: 5px; /* Ensure padding inside listing */
+  box-sizing: border-box; /* Include padding in width/height */
+  align-items: center; /* Center items vertically */
+}
+
+/* Adjust listing image for grid view */
+.gridItem .listingImage {
+  width: 100%; /* Full width of the grid cell */
+  height: auto;
+  margin-right: 0; /* Remove margin in grid */
+}
+
+.listingImage {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-right: 0;
+}
+
+.listingContent {
+  max-width: calc(100% - 100px);
+}
+
+.listing h3 {
+  margin-top: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.listing p {
+  color: #666;
+  margin-top: 5px;
+}
+
+.auctionDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.auctionDetails p {
+  color: #000000;
+  margin-top: 5%;
+}
+
+.auctionDetails h1 {
+  color: #43c00e;
+  margin-top: 5%;
+  font-size: 12px;
+}
+
+/* Bid button styling */
+.bidButton {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  width: 50%; /* Full width of the container */
+  height: auto; /* Auto height */
+  text-align: center;
+  margin-top: 10px;
+  box-sizing: border-box; /* Include padding in width */
+}
+
+.bidButton:hover {
+  background-color: #0056b3;
+}
