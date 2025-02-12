@@ -3,7 +3,7 @@
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 5px;
-  padding: 25px;
+  padding: 15px;
   margin-bottom: 15px;
   overflow: hidden; /* Hide overflow content */
   width: 100%; /* Full width */
@@ -20,7 +20,7 @@
   display: flex; /* Flex container */
   flex-direction: column; /* Stack content vertically */
   justify-content: space-between; /* Space out content */
-  width: 90%; /* Full width in list view */
+  width: 100%; /* Full width in list view */
   height: auto; /* Auto height in list view */
   max-height: fit-content;
 }
@@ -95,7 +95,7 @@
   border-radius: 4px;
   text-decoration: none;
   font-weight: bold;
-  width: 50%; /* Full width of the container */
+  width: 100%; /* Full width of the container */
   height: auto; /* Auto height */
   text-align: center;
   margin-top: 10px;

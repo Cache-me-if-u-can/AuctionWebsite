@@ -35,7 +35,7 @@ export default function Header() {
           <Link to="/Charities" className={styles.nav_link}>
             Charities
           </Link>
-          <Link to="/Listing" className={styles.nav_link}>
+          <Link to="/SearchAuctions" className={styles.nav_link}>
             Auctions
           </Link>
 

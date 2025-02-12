@@ -6,6 +6,7 @@ class AuctionItem(object):
         startingPrice,
         currentPrice,
         image,
+        auctionStartDate,
         auctionEndDate,
         categoryId,
         charityId,
@@ -18,6 +19,7 @@ class AuctionItem(object):
         self.__startingPrice = startingPrice
         self.__currentPrice = currentPrice
         self.__image = image
+        self.__auctionStartDate = auctionStartDate
         self.__auctionEndDate = auctionEndDate
         self.__categoryId = categoryId
         self.__charityId = charityId
@@ -66,6 +68,13 @@ class AuctionItem(object):
     @image.setter
     def image(self, image):
         self.__image = image
+    
+    @property
+    def auctionStartDate(self):
+        return self.__auctionStartDate
+    @auctionStartDate.setter
+    def auctionStartDate(self, auctionStartDate):
+        self.__auctionStartDate = auctionStartDate
 
     @property
     def auctionEndDate(self):
