@@ -3,6 +3,7 @@ import styles from "./Home.module.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import BackgroundParallax from "../../components/BackgroundParallax/BackgroundParallax";
+import Quiz from "../../components/Quiz/Quiz";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <BackgroundParallax />
+        <Quiz />
       </main>
 
       <Footer />
