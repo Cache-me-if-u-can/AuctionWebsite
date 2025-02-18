@@ -28,7 +28,7 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
   };
 
   return (
-    <div className={view === 'grid' ? styles.gridItem : styles.listItem}>
+    <div className={view === 'grid' ? styles.gridView : styles.listView}>
       <img src={imageUrl} alt={title} className={styles.image} />
       <div className={styles.details}>
         <h3>{title}</h3>

@@ -13,11 +13,32 @@
   width: 100%; /* Full width in list view */
   height: auto; /* Auto height in list view */
 }
+.listView .listing {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 15px;
+  display: flex; /* Flex container */
+  flex-direction: row; /* Stack content horizontally */
+  justify-content: space-between; /* Space out content */
+  overflow: hidden; /* Hide overflow content */
+  align-items: flex-start; /* Align items to the top */
+  width: 100%; /* Full width in list view */
+  height: auto; /* Auto height in list view */
+}
+.listView .managementTools {
+  display: flex;
+  flex-direction: column; /* Arrange links in a column */
+  margin-left: 20px; /* Space between content and management tools */
+  align-self: flex-end; /* Align to the start of the flex container */
+  max-width: 150px; /* Limit width of management tools */
+}
 
 /* Grid View Layout */
 .gridView {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(350px));
   gap: 20px;
 }
 
@@ -30,6 +51,8 @@
   flex-direction: column; /* Stack content vertically */
   align-items: center; /* Center items horizontally */
   justify-content: flex-start; /* Align items to the top */
+  border:1px solid #ddd;
+  border-radius: 5px;
 }
 
 .gridView .listingImage {
@@ -138,6 +161,10 @@
 .addListing a:hover {
   background-color: #0056b3;
 }
+.managementTools .deleteListing {
+  background-color :red;
+
+}
 
 .managementTools {
   display: flex;
@@ -151,11 +178,16 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2 columns grid */
   gap: 5px;
+  width: 120px; /* Limit width of management tools */
   align-self: center;
   max-width: 100%;
   flex-wrap: wrap;
   justify-content: center;
 }
+.gridView .managementTools .exportMailList {
+  grid-column: span 2; /* Span 2 columns */
+}
+
 
 .managementTools a {
   padding: 8px 12px;
