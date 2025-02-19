@@ -9,38 +9,18 @@ export default function SearchAuctionsContent() {
   const [auctions, setAuctions] = useState<AuctionItem[]>([]);
 
   useEffect(() => {
-    // Mock data for testing
-    const mockData: AuctionItem[] = [
-      {
-        id: '1',
-        title: 'Vintage Clock',
-        charity: 'Charity A',
-        description: 'A beautiful vintage clock.',
-        status: 'live',
-        category: 'Antiques',
-        auctionDue: '2023-12-31T23:59:59',
-        bid: 100,
-        image: null,
-      },
-      {
-        id: '2',
-        title: 'Painting',
-        charity: 'Charity B',
-        description: 'A stunning painting.',
-        status: 'live',
-        category: 'Art',
-        auctionDue: '2023-12-31T23:59:59',
-        bid: 200,
-        image: null,
-      },
-    ];
-
-    // Simulate fetching data from the backend API
     const fetchAuctions = async () => {
       try {
-        // Simulate a delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setAuctions(mockData);
+        const response = await fetch('http://127.0.0.1:8080/getAuctionItems', {
+          method: 'GET',
+        });
+
+        if (response.ok) {
+          const result: AuctionItem[] = await response.json();
+          setAuctions(result);
+        } else {
+          console.error(`Unexpected error: ${response.statusText}`);
+        }
       } catch (error) {
         console.error('Error fetching auctions:', error);
       }
@@ -58,7 +38,7 @@ export default function SearchAuctionsContent() {
       <ViewToggle view={view} onViewChange={handleViewChange} />
       <div className={view === 'grid' ? styles.gridView : styles.listView}>
         {auctions.map((auction) => (
-          <AuctionListing key={auction.id} view={view} {...auction} />
+          <AuctionListing key={auction._id} view={view} {...auction} />
         ))}
       </div>
     </div>

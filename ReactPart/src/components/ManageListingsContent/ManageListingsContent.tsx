@@ -1,50 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ViewToggle from './../ViewToggle/ViewToggle';
 import AddListingButton from './../AddListingButton/AddListingButton';
 import OverlayForm from './../OverlayForm/OverlayForm';
 import ManageableListing from '../ManageableListing/ManageableListing';
 import styles from './ManageListingsContent.module.css';
-
-interface ListingData {
-    title: string;
-    charity: string;
-    description: string;
-    status: string;
-    category: string;
-    auctionDue: string;
-    bid: number;
-    image: File | null;
-  }
+import { AuctionItem } from '../../types/AuctionItem/AuctionItem';
 
 const ManageListingsContent: React.FC = () => {
-    const [view, setView] = useState('list');
-    const [isOverlayVisible, setOverlayVisible] = useState(false);
-    const [listings, setListings] = useState<ListingData[]>([]);
+  const [view, setView] = useState('list');
+  const [isOverlayVisible, setOverlayVisible] = useState(false);
+  const [listings, setListings] = useState<AuctionItem[]>([]);
 
-    const handleViewChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-      setView(event.target.value);
+  useEffect(() => {
+    const fetchAuctionItems = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8080/getCharityAuctionItems', {
+          method: 'GET',
+          credentials: 'include', // Include cookies for JWT authentication
+        });
+
+        if (response.ok) {
+          const result: AuctionItem[] = await response.json();
+          setListings(result);
+        } else {
+          console.error(`Unexpected error: ${response.statusText}`);
+        }
+      } catch (error) {
+        console.error('Error fetching auction items:', error);
+      }
     };
-  
-    const toggleOverlay = () => {
-      setOverlayVisible(!isOverlayVisible);
-    };
-    const handleAddListing = (newListing: ListingData) => {
-        setListings((prevListings) => [...prevListings, newListing]);
-        };
-  
-    return (
-      
-      <div className={styles.mainContent} id="listing_container">
+
+    fetchAuctionItems();
+  }, []);
+
+  const handleViewChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setView(event.target.value);
+  };
+
+  const toggleOverlay = () => {
+    setOverlayVisible(!isOverlayVisible);
+  };
+
+  const handleAddListing = (newListing: AuctionItem) => {
+    setListings((prevListings) => [...prevListings, newListing]);
+  };
+
+  return (
+    <div className={styles.mainContent} id="listing_container">
       <ViewToggle view={view} onViewChange={handleViewChange} />
       <AddListingButton onClick={toggleOverlay} />
       {isOverlayVisible && <OverlayForm onClose={toggleOverlay} onSubmit={handleAddListing} />}
       <div id={styles.listings_container} className={view === 'grid' ? styles.gridView : styles.listView}>
-        {listings.map((listing, index) => (
-          <ManageableListing key={index} view={view} {...listing} />
+        {listings.map((listing) => (
+          <ManageableListing key={listing._id} view={view} {...listing} />
         ))}
       </div>
     </div>
-    );
-  };
-  
-  export default ManageListingsContent;
+  );
+};
+
+export default ManageListingsContent;

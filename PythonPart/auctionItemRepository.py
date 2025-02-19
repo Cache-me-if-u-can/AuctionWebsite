@@ -3,11 +3,30 @@ from bson.objectid import ObjectId
 import hashlib
 import base64
 
-
 class AuctionItemRepository:
     def __init__(self, db):
         self.coll = db.auctionItem
 
+    # get list of all auction items from database
+    def getListOfAuctionItems(self):
+        all_auctionItems = self.coll.find()
+        list_auctionItems = []
+        for auctionItem in all_auctionItems:
+            auctionItem['_id'] = str(auctionItem['_id'])  # Convert ObjectId to string
+            list_auctionItems.append(auctionItem)
+        return list_auctionItems
+
+
+     # get list of auction items by charity ID
+    def getAuctionItemsByCharityId(self, charity_id):
+        query = {"charityId": charity_id}
+        auction_items = self.coll.find(query)
+        list_auction_items = []
+        for auction_item in auction_items:
+            auction_item['_id'] = str(auction_item['_id'])  # Convert ObjectId to string
+            list_auction_items.append(auction_item)
+        return list_auction_items
+    '''
     # get list of all auction items from database
     def getListOfAuctionItems(self):
         all_auctionItems = self.coll.find()
@@ -37,8 +56,9 @@ class AuctionItemRepository:
             )
             list_auctionItems.append(web_auctionItem)
         return list_auctionItems
+    '''
 
-    # find  auction item data by title
+    # find auction item data by title
     def getAuctionItemByTitle(self, title):
         query = {"title": title}
         auctionItem = self.coll.find_one(query)
@@ -60,13 +80,14 @@ class AuctionItemRepository:
 
     # create auctionItem and add to database
     def createAuctionItem(self, auctionItem):
-        #  check is auction item exists by tittle ?
+        # check if auction item exists by title
         new_auctionItem = {
             "title": auctionItem.title,
             "description": auctionItem.description,
             "startingPrice": auctionItem.startingPrice,
             "currentPrice": auctionItem.currentPrice,
             "image": auctionItem.image,
+            "auctionStartDate": auctionItem.auctionStartDate,
             "auctionEndDate": auctionItem.auctionEndDate,
             "categoryId": auctionItem.categoryId,
             "charityId": auctionItem.charityId,
@@ -75,7 +96,7 @@ class AuctionItemRepository:
         result = self.coll.insert_one(new_auctionItem)
         return result.inserted_id
 
-    # delete auction item  by ID
+    # delete auction item by ID
     def deleteAuctionItemByID(self, auctionItem_id):
         result = self.coll.delete_one({"_id": ObjectId(auctionItem_id)})
         if result.deleted_count > 0:

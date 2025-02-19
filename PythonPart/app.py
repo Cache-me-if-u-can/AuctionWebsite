@@ -20,6 +20,7 @@ from datetime import datetime, timezone, timedelta
 from bdConnection import *
 from charity import *
 from charityRepository import *
+from auctionItemRepository import *
 import datetime
 
 app = Flask(__name__)
@@ -303,5 +304,60 @@ def getCharitiesList():
     return charityConnection.getListOfCharities()
 
 
+# Initialize the AuctionItemRepository
+auctionItemConnection = AuctionItemRepository(db)
+#Get Auction Items
+@app.route("/getAuctionItems", methods=["GET"])
+def getAuctionItems():
+    try:
+        auction_items = auctionItemConnection.getListOfAuctionItems()
+        return jsonify(auction_items), 200
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"message": "Unable to fetch auction items"}), 500
+#Create Auction Item
+@app.route("/createAuctionItem", methods=["POST"])
+def createAuctionItem():
+    try:
+        content = request.json
+        auctionItem = AuctionItem(
+            title=content["title"],
+            description=content["description"],
+            startingPrice=content["startingPrice"],
+            currentPrice=content["startingPrice"],
+            image=content["image"],
+            auctionStartDate= content["auctionStartDate"],
+            auctionEndDate=content["auctionEndDate"],
+            categoryId=content["categoryId"],
+            charityId=content["charityId"],
+            status="active",
+        )
+        newId = auctionItemConnection.createAuctionItem(auctionItem)
+        if newId == None:
+            return jsonify({"message": "Auction item with that title exists"}), 404
+        else:
+            response = make_response(jsonify({"message": "Auction item created"}), 200)
+            return response
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"message": "It is not possible to create a new auction item"}), 404
+ #Get Auction items by CharityId 
+ # This function will allow user to see their own listings to manage them
+@app.route("/getCharityAuctionItems", methods=["GET"])
+@jwt_required()
+def getCharityAuctionItems():
+    try:
+        current_user = get_jwt_identity()
+        if current_user["userType"] != "charity":
+            return jsonify({"message": "Access forbidden: Only charity users can access this route"}), 403
+
+        charity_id = current_user["id"]
+        auction_items = auctionItemConnection.getAuctionItemsByCharityId(charity_id)
+        return jsonify(auction_items), 200
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"message": "Unable to fetch auction items"}), 500   
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)
+
