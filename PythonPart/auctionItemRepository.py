@@ -13,6 +13,8 @@ class AuctionItemRepository:
         list_auctionItems = []
         for auctionItem in all_auctionItems:
             auctionItem['_id'] = str(auctionItem['_id'])  # Convert ObjectId to string
+            auctionItem['charityId'] = str(auctionItem['charityId'])
+            auctionItem['categoryId'] = str(auctionItem['categoryId'])
             list_auctionItems.append(auctionItem)
         return list_auctionItems
 
