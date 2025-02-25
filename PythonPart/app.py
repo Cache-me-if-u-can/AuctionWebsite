@@ -21,7 +21,11 @@ from bdConnection import *
 from charity import *
 from charityRepository import *
 from auctionItemRepository import *
+from quizRepository import *
+from questionRepository import *
+from answerRepository import *
 import datetime
+from pprint import pprint
 
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = "thisisthesecretkey"  # change , make more secure
@@ -46,6 +50,10 @@ CORS(
 
 customerConnection = CustomerRepository(db)
 charityConnection = CharityRepository(db)
+
+quizConnection = QuizRepository(db)
+questionConnection = QuestionRepository(db)
+answerConnection = AnswerRepository(db)
 
 
 # server function for customer registration
@@ -304,9 +312,33 @@ def getCharitiesList():
     return charityConnection.getListOfCharities()
 
 
+@app.route("/getQuiz", methods=["GET"])
+def getQuiz():
+    response = []
+    quiz = quizConnection.getQuizById("67be43ebe8bfbd867e188cfa")
+    questions = questionConnection.getListOfQuizQuestions(quizId=str(quiz["_id"]))
+    # print(quiz)
+    for question in questions:
+        # print(question)
+        questionJson = {"question": question["text"]}
+        questionAnswers = answerConnection.getListOfQuestionAnswers(
+            questionId=str(question["_id"])
+        )
+        questionJson["answers"] = []
+        for answer in questionAnswers:
+            # print(answer)
+            questionJson["answers"].append(
+                {"text": answer["text"], "correct": answer["correct"]}
+            )
+        response.append(questionJson)
+    return response
+
+
 # Initialize the AuctionItemRepository
 auctionItemConnection = AuctionItemRepository(db)
-#Get Auction Items
+
+
+# Get Auction Items
 @app.route("/getAuctionItems", methods=["GET"])
 def getAuctionItems():
     try:
@@ -315,7 +347,9 @@ def getAuctionItems():
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"message": "Unable to fetch auction items"}), 500
-#Create Auction Item
+
+
+# Create Auction Item
 @app.route("/createAuctionItem", methods=["POST"])
 def createAuctionItem():
     try:
@@ -326,7 +360,7 @@ def createAuctionItem():
             startingPrice=content["startingPrice"],
             currentPrice=content["startingPrice"],
             image=content["image"],
-            auctionStartDate= content["auctionStartDate"],
+            auctionStartDate=content["auctionStartDate"],
             auctionEndDate=content["auctionEndDate"],
             categoryId=content["categoryId"],
             charityId=content["charityId"],
@@ -340,24 +374,36 @@ def createAuctionItem():
             return response
     except Exception as e:
         print(f"Error: {e}")
-        return jsonify({"message": "It is not possible to create a new auction item"}), 404
- #Get Auction items by CharityId 
- # This function will allow user to see their own listings to manage them
+        return (
+            jsonify({"message": "It is not possible to create a new auction item"}),
+            404,
+        )
+
+
+# Get Auction items by CharityId
+# This function will allow user to see their own listings to manage them
 @app.route("/getCharityAuctionItems", methods=["GET"])
 @jwt_required()
 def getCharityAuctionItems():
     try:
         current_user = get_jwt_identity()
         if current_user["userType"] != "charity":
-            return jsonify({"message": "Access forbidden: Only charity users can access this route"}), 403
+            return (
+                jsonify(
+                    {
+                        "message": "Access forbidden: Only charity users can access this route"
+                    }
+                ),
+                403,
+            )
 
         charity_id = current_user["id"]
         auction_items = auctionItemConnection.getAuctionItemsByCharityId(charity_id)
         return jsonify(auction_items), 200
     except Exception as e:
         print(f"Error: {e}")
-        return jsonify({"message": "Unable to fetch auction items"}), 500   
+        return jsonify({"message": "Unable to fetch auction items"}), 500
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)
-

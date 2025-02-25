@@ -10,75 +10,28 @@ interface Answer {
 }
 
 interface QuestionData {
-  id: string;
   question: string;
   answers: Answer[];
 }
 
 export default function Quiz() {
-  const [questions, setQuestions] = useState<QuestionData[]>([
-    {
-      id: "1",
-      question: "What is the capital of France?",
-      answers: [
-        { text: "Berlin", correct: false },
-        { text: "Madrid", correct: false },
-        { text: "Paris", correct: true },
-        { text: "Rome", correct: false },
-      ],
-    },
-    {
-      id: "2",
-      question: "Which planet is known as the Red Planet?",
-      answers: [
-        { text: "Earth", correct: false },
-        { text: "Mars", correct: true },
-        { text: "Jupiter", correct: false },
-        { text: "Venus", correct: false },
-      ],
-    },
-    {
-      id: "3",
-      question: "What is the largest ocean on Earth?",
-      answers: [
-        { text: "Atlantic Ocean", correct: false },
-        { text: "Indian Ocean", correct: false },
-        { text: "Pacific Ocean", correct: true },
-        { text: "Arctic Ocean", correct: false },
-      ],
-    },
-    {
-      id: "4",
-      question: "Who developed the theory of relativity?",
-      answers: [
-        { text: "Isaac Newton", correct: false },
-        { text: "Albert Einstein", correct: true },
-        { text: "Galileo Galilei", correct: false },
-        { text: "Nikola Tesla", correct: false },
-      ],
-    },
-    {
-      id: "5",
-      question: "What is the chemical symbol for water?",
-      answers: [
-        { text: "O2", correct: false },
-        { text: "H2O", correct: true },
-        { text: "CO2", correct: false },
-        { text: "NaCl", correct: false },
-      ],
-    },
-  ]);
+  const [questions, setQuestions] = useState<QuestionData[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [score, setScore] = useState(0);
 
-  //   useEffect(() => {
-  //     fetch("/api/questions") // Replace with your API endpoint
-  //       .then((res) => res.json())
-  //       .then((data: QuestionData[]) => {
-  //         setQuestions(data);
-  //       });
-  //   }, []);
+  useEffect(() => {
+    fetch("http://127.0.0.1:8080/getQuiz", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data: QuestionData[]) => {
+        setQuestions(data);
+      });
+  }, []);
 
   function handleSelectAnswer(isCorrect: boolean) {
     if (isCorrect) {
@@ -109,7 +62,11 @@ export default function Quiz() {
             answers={questions[currentQuestionIndex].answers}
             onSelectAnswer={handleSelectAnswer}
           />
-          <Timer totalTime={15} onTimeout={moveToNextQuestion} />
+          <Timer
+            key={currentQuestionIndex}
+            totalTime={15}
+            onTimeout={moveToNextQuestion}
+          />
         </>
       ) : (
         <h2>Quiz Completed your score: {score}</h2>
