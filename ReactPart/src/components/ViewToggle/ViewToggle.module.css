@@ -1,10 +1,34 @@
-.view-toggle {
-    margin-bottom: 20px;
-    font-size: 16px;
-  }
-  @media (max-width: 768px) {
-  
-    .view-toggle{
-      display: none;
-    }
-  }
+.viewToggle {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
+  margin-top: 10px;
+}
+
+.viewToggle select {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.viewToggle select:hover {
+  background-color: #0056b3;
+}
+
+.viewToggle label {
+  font-weight: bold;
+  color: #333;
+}
+
+.viewToggle select option {
+  background-color: #fff;
+  color: #333;
+  padding: 8px;
+}
+

@@ -12,6 +12,10 @@
   max-height: 400px; /* Optional: limits height on larger screens */
   object-fit: fill; /* Crops image gracefully if necessary */
 }
+.bannerOverlay {
+  display: flex;
+  justify-content: center;
+}
 @media (max-width: 768px) {
   .bannerContainer {
     margin-bottom: 10px; /* Reduces space below banner on smaller screens */

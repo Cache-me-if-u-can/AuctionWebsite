@@ -1,11 +1,11 @@
-import React from 'react';
-import { useUser } from '../../context/UserProvider';
-import styles from './SearchAuctions.module.css';
-import Header from '../../components/Header/Header';
-import AuctionBanner from '../../components/auctionBanner/auctionBanner';
-import Sidebar from '../../components/Sidebar/Sidebar';
-import SearchAuctionsContent from '../../components/SearchAuctionsContent/SearchAuctionsContent';
-import ManageListingsContent from '../../components/ManageListingsContent/ManageListingsContent';
+import React from "react";
+import { useUser } from "../../context/UserProvider";
+import styles from "./SearchAuctions.module.css";
+import Header from "../../components/Header/Header";
+import AuctionBanner from "../../components/auctionBanner/auctionBanner";
+import Sidebar from "../../components/Sidebar/Sidebar";
+import SearchAuctionsContent from "../../components/SearchAuctionsContent/SearchAuctionsContent";
+import ManageListingsContent from "../../components/ManageListingsContent/ManageListingsContent";
 
 const SearchAuctions: React.FC = () => {
   const { getUserType } = useUser();
@@ -17,8 +17,8 @@ const SearchAuctions: React.FC = () => {
       <AuctionBanner />
       <div className={styles.content}>
         <Sidebar />
-        {userType === 'charity' && <ManageListingsContent />}
-        {userType === 'customer' && <SearchAuctionsContent />}
+        {userType === "charity" && <ManageListingsContent />}
+        {userType === "customer" && <SearchAuctionsContent />}
         {!userType && <SearchAuctionsContent />}
       </div>
     </div>
@@ -26,3 +26,4 @@ const SearchAuctions: React.FC = () => {
 };
 
 export default SearchAuctions;
+

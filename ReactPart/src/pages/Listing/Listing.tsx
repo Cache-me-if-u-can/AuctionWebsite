@@ -1,10 +1,10 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
-import styles from './Listing.module.css';
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
-import AuctionBanner from '../../components/auctionBanner/auctionBanner';
-import { AuctionItem } from '../../types/AuctionItem/AuctionItem';
+import React from "react";
+import { useLocation } from "react-router-dom";
+import styles from "./Listing.module.css";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
+import AuctionBanner from "../../components/auctionBanner/auctionBanner";
+import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
 
 //:TODO: Fix passing Listing props from search Auctions page to the Listing page
 const Listing: React.FC = () => {
@@ -15,11 +15,11 @@ const Listing: React.FC = () => {
     return <div>Listing not found</div>;
   }
 
-  const [maxBid, setMaxBid] = React.useState<number | string>('');
+  const [maxBid, setMaxBid] = React.useState<number | string>("");
   const [warningVisible, setWarningVisible] = React.useState(false);
 
   const checkBid = () => {
-    if (typeof maxBid === 'number' && maxBid <= auctionItem.currentPrice) {
+    if (typeof maxBid === "number" && maxBid <= auctionItem.currentPrice) {
       setWarningVisible(true);
     } else {
       setWarningVisible(false);
@@ -36,18 +36,30 @@ const Listing: React.FC = () => {
           {auctionItem.image && (
             <img
               className={styles.auction_image}
-              src={typeof auctionItem.image === 'string' ? auctionItem.image : URL.createObjectURL(auctionItem.image)}
+              src={
+                typeof auctionItem.image === "string"
+                  ? auctionItem.image
+                  : URL.createObjectURL(auctionItem.image)
+              }
               alt={auctionItem.title}
             />
           )}
           <div className={styles.auctionListing_details}>
             <h3>{auctionItem.title}</h3>
-            <h2 className={styles.charity_seller}>Charity ID: {auctionItem.charityId}</h2>
+            <h2 className={styles.charity_seller}>
+              Charity ID: {auctionItem.charityId}
+            </h2>
             <div className={styles.bidding_details}>
               <div className={styles.bidValues}>
-                <h3 className={styles.sBid}>Starting Bid: £{auctionItem.startingPrice}</h3>
-                <h3 className={styles.cBid}>Current Bid: £{auctionItem.currentPrice}</h3>
-                <h3 className={styles.buyNow}>Buy Now: £{auctionItem.startingPrice * 10}</h3>
+                <h3 className={styles.sBid}>
+                  Starting Bid: £{auctionItem.startingPrice}
+                </h3>
+                <h3 className={styles.cBid}>
+                  Current Bid: £{auctionItem.currentPrice}
+                </h3>
+                <h3 className={styles.buyNow}>
+                  Buy Now: £{auctionItem.startingPrice * 10}
+                </h3>
               </div>
               <div className={styles.input_field}>
                 <label htmlFor="maxBid">Enter your max bid:</label>
@@ -57,7 +69,7 @@ const Listing: React.FC = () => {
                   name="maxBid"
                   value={maxBid}
                   onChange={(e) =>
-                    setMaxBid(e.target.value ? parseInt(e.target.value) : '')
+                    setMaxBid(e.target.value ? parseInt(e.target.value) : "")
                   }
                 />
                 {warningVisible && (

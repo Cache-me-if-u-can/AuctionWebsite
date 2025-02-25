@@ -3,31 +3,46 @@
   flex-direction: column;
   font-family: "Open Sans", sans-serif;
   min-height: 100vh;
+  background-color: #f8f9fa;
 }
 
 .content {
   display: flex;
   flex: 1;
   min-height: 0;
+  max-width: 1440px;
+  width: 100%;
 }
-
+.content > *:first-child {
+  flex: 0 0 250px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+}
+.content > *:last-child {
+  flex: 1;
+  min-width: 0;
+  padding-right: 20px; /* Add padding to the main content area */
+}
 @media (max-width: 768px) {
   .content {
     flex-direction: column;
+    padding: 10px;
   }
 
   .content > *:first-child {
     /*targets the sidebar*/
+    flex: 0 0 auto;
     width: 100%;
-    max-height: auto;
+    max-height: 300px;
+    overflow-y: auto;
     border-right: none;
     border-bottom: 1px solid #eee;
   }
 
   .content > *:last-child {
     width: 100%;
-    flex: 1;
-    overflow-y: auto;
   }
 }
 
