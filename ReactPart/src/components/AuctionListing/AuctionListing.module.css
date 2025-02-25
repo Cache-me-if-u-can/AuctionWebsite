@@ -1,107 +1,142 @@
-/* Common listing styles */
 .listing {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 15px;
-  overflow: hidden; /* Hide overflow content */
-  width: 100%; /* Full width */
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
-.listingContent {
+
+.listing:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.gridItem {
+  width: 300px;
+  margin: 8px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-left: 15px;
 }
 
-/* List View Layout */
 .listItem {
-  display: flex; /* Flex container */
-  flex-direction: column; /* Stack content vertically */
-  justify-content: space-between; /* Space out content */
-  width: 100%; /* Full width in list view */
-  height: auto; /* Auto height in list view */
-  max-height: fit-content;
-}
-
-/* Grid View Layout */
-.gridItem {
-  display: grid; /* Grid container */
-  width: 350px; /* Fixed width */
-  height: auto; /* Fixed height */
-  padding: 5px; /* Ensure padding inside listing */
-  box-sizing: border-box; /* Include padding in width/height */
-  align-items: center; /* Center items vertically */
-}
-
-/* Adjust listing image for grid view */
-.gridItem .listingImage {
-  width: 100%; /* Full width of the grid cell */
-  height: auto;
-  margin-right: 0; /* Remove margin in grid */
+  width: 100%;
+  max-width: 800px;
+  margin: 12px 0;
+  display: flex;
 }
 
 .listingImage {
   width: 100%;
-  height: auto;
-  border-radius: 10px;
+  height: 220px;
   object-fit: cover;
-  margin-right: 0;
+  transition: transform 0.3s ease;
+}
+
+.listing:hover .listingImage {
+  transform: scale(1.03);
+}
+
+.listItem .listingImage {
+  width: 250px;
+  height: 250px;
 }
 
 .listingContent {
-  max-width: calc(100% - 100px);
+  padding: 16px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.listing h3 {
-  margin-top: 0;
-  color: #333;
-  font-size: 18px;
+.listingContent h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.4rem;
+  color: #2c3e50;
+  line-height: 1.3;
 }
 
-.listing p {
+.listingContent p {
+  margin: 8px 0;
   color: #666;
-  margin-top: 5px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.status {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .auctionDetails {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-  width: 100%;
-  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
 }
 
-.auctionDetails p {
-  color: #000000;
-  margin-top: 5%;
-}
-
-.auctionDetails h1 {
-  color: #43c00e;
-  margin-top: 5%;
-  font-size: 12px;
-}
-
-/* Bid button styling */
-.bidButton {
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  text-decoration: none;
+.bid {
+  font-size: 1.8rem;
+  color: #1976d2;
+  margin: 12px 0;
   font-weight: bold;
-  width: 100%; /* Full width of the container */
-  height: auto; /* Auto height */
   text-align: center;
-  margin-top: 10px;
-  box-sizing: border-box; /* Include padding in width */
+}
+
+.bidButton {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: block;
+  width: 80%;
+  margin: 0 auto;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .bidButton:hover {
-  background-color: #0056b3;
+  background-color: #1565c0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
 }
+
+.bidButton:active {
+  transform: translateY(0);
+}
+
+.listItem .listingContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+  .listItem {
+    flex-direction: column;
+  }
+
+  .listItem .listingImage {
+    width: 100%;
+    height: 200px;
+  }
+
+  .bidButton {
+    width: 100%;
+  }
+}
+
