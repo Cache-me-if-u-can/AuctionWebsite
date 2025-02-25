@@ -1,9 +1,33 @@
 .container {
   display: flex;
   flex-direction: column;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
+  min-height: 100vh;
 }
 
 .content {
   display: flex;
+  flex: 1;
+  min-height: 0;
 }
+
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .content > *:first-child {
+    /*targets the sidebar*/
+    width: 100%;
+    max-height: auto;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+  }
+
+  .content > *:last-child {
+    width: 100%;
+    flex: 1;
+    overflow-y: auto;
+  }
+}
+
