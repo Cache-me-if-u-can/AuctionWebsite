@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import styles from  "./Sidebar.module.css";
+import styles from './Sidebar.module.css';
+import CategoriesForm from './DisplayingCategories';
+import CharitiesForm from './DisplayingCharityNames';
 
-const Sidebar: React.FC = () => {
+type SidebarProps = {
+  onFilterChange: (filters: { category: string; conditions: string[]; charity: string }) => void;
+};
+
+const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
   const [category, setCategory] = useState('all');
   const [conditions, setConditions] = useState<string[]>([]);
   const [charity, setCharity] = useState('all');
-
-  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setCategory(event.target.value);
-  };
 
   const handleConditionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -19,63 +21,47 @@ const Sidebar: React.FC = () => {
     );
   };
 
-  const handleCharityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setCharity(event.target.value);
+  const handleFilterClick = () => {
+    onFilterChange({ category, conditions, charity });
+    console.log('Filters Applied:', { category, conditions, charity });
   };
 
   return (
     <div className={styles.sidebar}>
       <h2>Filters</h2>
+
+      {/* Dynamic Category Selector */}
       <div className={styles.filter_group}>
         <label htmlFor="category-filter">Category</label>
-        <select id="category-filter" value={category} onChange={handleCategoryChange}>
-          <option value="all">All</option>
-          <option value="electronics">Electronics</option>
-          <option value="furniture">Furniture</option>
-          <option value="art">Art</option>
-        </select>
+        <CategoriesForm onSelect={setCategory} />
       </div>
+
+      {/* Status Checkboxes */}
       <div className={styles.filter_group}>
         <label>Status</label>
-        <label>
-          <input
-            type="checkbox"
-            value="live"
-            className={styles.condition_filter}
-            checked={conditions.includes('live')}
-            onChange={handleConditionChange}
-          />{' '}
-          Live
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="complete"
-            className={styles.condition_filter}
-            checked={conditions.includes('complete')}
-            onChange={handleConditionChange}
-          />{' '}
-          Complete
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="hidden"
-            className={styles.condition_filter}
-            checked={conditions.includes('hidden')}
-            onChange={handleConditionChange}
-          />{' '}
-          Hidden
-        </label>
+        {['live', 'complete', 'hidden'].map(status => (
+          <label key={status}>
+            <input
+              type="checkbox"
+              value={status}
+              className={styles.condition_filter}
+              checked={conditions.includes(status)}
+              onChange={handleConditionChange}
+            />{' '}
+            {status.charAt(0).toUpperCase() + status.slice(1)}
+          </label>
+        ))}
       </div>
+
+      {/* Dynamic Charity Selector */}
       <div className={styles.filter_group}>
         <label htmlFor="charity-filter">Charity</label>
-        <select id="charity-filter" value={charity} onChange={handleCharityChange}>
-          <option value="all">All</option>
-          <option value="goodwill">Goodwill</option>
-          <option value="mentalhealthaberdeen">Mental Health Aberdeen</option>
-          <option value="salvationarmy">Salvation Army</option>
-        </select>
+        <CharitiesForm onSelect={setCharity} />
+      </div>
+
+      {/* Filter Button */}
+      <div className={styles.filter_button}>
+        <button onClick={handleFilterClick}>Filter</button>
       </div>
     </div>
   );

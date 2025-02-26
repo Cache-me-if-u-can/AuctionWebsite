@@ -24,6 +24,7 @@ from auctionItemRepository import *
 from quizRepository import *
 from questionRepository import *
 from answerRepository import *
+from categoryRepository import  *
 import datetime
 from pprint import pprint
 
@@ -54,6 +55,7 @@ charityConnection = CharityRepository(db)
 quizConnection = QuizRepository(db)
 questionConnection = QuestionRepository(db)
 answerConnection = AnswerRepository(db)
+categoryConnection = CategoryRepository(db)
 
 
 # server function for customer registration
@@ -402,7 +404,51 @@ def getCharityAuctionItems():
         return jsonify(auction_items), 200
     except Exception as e:
         print(f"Error: {e}")
-        return jsonify({"message": "Unable to fetch auction items"}), 500
+        return jsonify({"message": "Unable to fetch auction items"}), 500   
+    
+
+# server function for getting a dictionary of all categories
+@app.route('/getCategories', methods=['GET'])
+def getCategories():
+    try:
+        categoriesNames = categoryConnection.getListOfCategories()
+        return jsonify({'categories': categoriesNames}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'message': 'Error fetching categories'}), 500
+    
+# server function for getting a dictionary of searched auction items
+@app.route('/getSearchedAuctionItems', methods=['POST'])
+def getSearchedAuctionItems():
+    try:
+        auctionItems = auctionItemConnection.getListOfAuctionItems()
+        print(auctionItems)
+        list_auctionItems = []
+        for auctionItem in auctionItems:
+            print(str(auctionItem["categoryId"]))
+            print(str(charityConnection.getCharityById(auctionItem["charityId"])["name"]) )
+            auctionItem_dict = {
+                "_id": str(auctionItem["_id"]),  
+                "title":auctionItem["title"],
+                "description": auctionItem["description"],
+                "startingPrice":auctionItem["startingPrice"],
+                "currentPrice" : auctionItem["currentPrice"],
+                "image" : auctionItem["image"],
+                "auctionStartDate": auctionItem["auctionStartDate"],
+                "auctionEndDate" : auctionItem["auctionEndDate"],
+                "categoryId" : str(categoryConnection.getCategoryById(auctionItem["categoryId"])["categoryName"]), 
+                "charityId" : str(charityConnection.getCharityById(auctionItem["charityId"])["name"]), 
+                "status" : auctionItem["status"],
+            }
+            list_auctionItems.append(auctionItem_dict)
+        return jsonify({'auctionItems': list_auctionItems}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Error fetching auction items'}), 500
+    
+
+    
+
 
 
 if __name__ == "__main__":
