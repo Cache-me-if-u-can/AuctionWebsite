@@ -74,6 +74,14 @@ class AuctionItemRepository:
             return True
         return False
 
+    def auctionItemExistsByCharityId(self, auctionItem_id, charity_id):
+        query = {
+            "_id": ObjectId(auctionItem_id),
+            "charityId": charity_id
+        }
+        auctionItem = self.coll.find_one(query)
+        return auctionItem is not None
+
     # find auction item data by ID
     def getAuctionItemById(self, auctionItem_id):
         query = {"_id": ObjectId(auctionItem_id)}
@@ -117,6 +125,7 @@ class AuctionItemRepository:
                     "currentPrice": auctionItem.currentPrice,
                     "image": auctionItem.image,
                     "auctionEndDate": auctionItem.auctionEndDate,
+                    "auctionStartDate": auctionItem.auctionStartDate,
                     "categoryId": auctionItem.categoryId,
                     "charityId": auctionItem.charityId,
                     "status": auctionItem.status,

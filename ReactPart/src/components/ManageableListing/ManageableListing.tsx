@@ -1,13 +1,15 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import styles from './ManageableListing.module.css';
-import { AuctionItem } from '../../types/AuctionItem/AuctionItem';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "./ManageableListing.module.css";
+import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
+import OverlayForm from "../OverlayForm/OverlayForm";
 
 interface ManageableListingProps extends AuctionItem {
   view: string;
 }
 
 const ManageableListing: React.FC<ManageableListingProps> = ({
+  _id,
   title,
   description,
   startingPrice,
@@ -20,15 +22,112 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
   status,
   view,
 }) => {
+  const [isEditOverlayVisible, setIsEditOverlayVisible] = useState(false);
   const navigate = useNavigate();
-  const imageUrl = image ? URL.createObjectURL(new Blob([image])) : '';
+  const imageUrl = image ? URL.createObjectURL(new Blob([image])) : "";
 
+  const toggleEditOverlay = () => {
+    setIsEditOverlayVisible(!isEditOverlayVisible);
+  };
+
+  const handleEditSubmit = async (updatedListing: AuctionItem) => {
+    try {
+      console.log("Submitting updated listing:", updatedListing);
+
+      const response = await fetch("http://127.0.0.1:8080/updateAuctionItem", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          ...updatedListing,
+          _id: _id, // Ensure we're passing the correct ID
+        }),
+      });
+
+      console.log("Update response status:", response.status);
+
+      if (response.ok) {
+        console.log("Update successful");
+        window.location.reload();
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to update listing:", errorData);
+        alert(errorData.message || "Failed to update listing");
+      }
+    } catch (error) {
+      console.error("Error updating listing:", error);
+      alert("An error occurred while updating the listing");
+    }
+
+    setIsEditOverlayVisible(false);
+  };
+
+  const deleteListing = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8080/deleteAuctionItem", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ _id }),
+      });
+
+      if (response.ok) {
+        // Handle successful deletion (e.g., refresh the listings)
+        window.location.reload();
+      } else {
+        console.error("Failed to delete listing");
+      }
+    } catch (error) {
+      console.error("Error deleting listing:", error);
+    }
+  };
+
+  // View the listing details
   const viewListing = () => {
-    navigate(`/listing/${title}`, { state: { listing: { title, charityId, status, categoryId, auctionEndDate, currentPrice, image } } });
+    navigate(`/listing/${charityId}/${categoryId}/${_id}`, {
+      state: {
+        listing: {
+          title,
+          charityId,
+          status,
+          categoryId,
+          description,
+          auctionStartDate,
+          auctionEndDate,
+          startingPrice,
+          currentPrice,
+          image,
+        },
+      },
+    });
   };
 
   return (
-    <div className={view === 'grid' ? styles.gridView : styles.listView}>
+    <div className={view === "grid" ? styles.gridView : styles.listView}>
+      {isEditOverlayVisible && (
+        <OverlayForm
+          onClose={toggleEditOverlay}
+          onSubmit={handleEditSubmit}
+          initialData={{
+            _id, // Add this
+            title,
+            description,
+            startingPrice,
+            currentPrice,
+            image,
+            auctionStartDate,
+            auctionEndDate,
+            categoryId,
+            charityId,
+            status,
+          }}
+          isEditing={true}
+        />
+      )}
       <img src={imageUrl} alt={title} className={styles.image} />
       <div className={styles.details}>
         <h3>{title}</h3>
@@ -40,11 +139,17 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
         <p>Status: {status}</p>
       </div>
       <div className={styles.managementTools}>
-        <a className={styles.editListing}>Edit</a>
-        <a className={styles.deleteListing}>Delete</a>
+        <a className={styles.editListing} onClick={toggleEditOverlay}>
+          Edit
+        </a>
+        <a className={styles.deleteListing} onClick={deleteListing}>
+          Delete
+        </a>
         <a className={styles.exportMailList}>Export Mailing list</a>
         <a className={styles.viewBidders}>View Bidders</a>
-        <a className={styles.viewListing} onClick={viewListing}>View Listing</a>
+        <a className={styles.viewListing} onClick={viewListing}>
+          View Listing
+        </a>
       </div>
     </div>
   );

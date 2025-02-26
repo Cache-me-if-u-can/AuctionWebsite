@@ -1,14 +1,15 @@
+export type AuctionStatus = "hidden" | "live" | "completed";
+
 export interface AuctionItem {
-    _id: string;
-    title: string;
-    charityId: string;
-    description: string;
-    startingPrice: number;
-    currentPrice: number;
-    status: 'live' | 'complete' | 'hidden';
-    categoryId: string;
-    auctionStartDate: string;
-    auctionEndDate: string;
-    image: File | null;
-    
-  }
+  _id?: string;
+  title: string;
+  description: string;
+  startingPrice: number;
+  currentPrice: number;
+  image: File | null;
+  auctionStartDate: string;
+  auctionEndDate: string;
+  categoryId: string;
+  charityId: string;
+  status: AuctionStatus;
+}

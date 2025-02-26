@@ -1,23 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import ViewToggle from './../ViewToggle/ViewToggle';
-import AddListingButton from './../AddListingButton/AddListingButton';
-import OverlayForm from './../OverlayForm/OverlayForm';
-import ManageableListing from '../ManageableListing/ManageableListing';
-import styles from './ManageListingsContent.module.css';
-import { AuctionItem } from '../../types/AuctionItem/AuctionItem';
+import React, { useState, useEffect } from "react";
+import ViewToggle from "./../ViewToggle/ViewToggle";
+import AddListingButton from "./../AddListingButton/AddListingButton";
+import OverlayForm from "./../OverlayForm/OverlayForm";
+import ManageableListing from "../ManageableListing/ManageableListing";
+import styles from "./ManageListingsContent.module.css";
+import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
 
 const ManageListingsContent: React.FC = () => {
-  const [view, setView] = useState('list');
+  const [view, setView] = useState("list");
   const [isOverlayVisible, setOverlayVisible] = useState(false);
   const [listings, setListings] = useState<AuctionItem[]>([]);
 
   useEffect(() => {
     const fetchAuctionItems = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8080/getCharityAuctionItems', {
-          method: 'GET',
-          credentials: 'include', // Include cookies for JWT authentication
-        });
+        const response = await fetch(
+          "http://127.0.0.1:8080/getCharityAuctionItems",
+          {
+            method: "GET",
+            credentials: "include", // Include cookies for JWT authentication
+          }
+        );
 
         if (response.ok) {
           const result: AuctionItem[] = await response.json();
@@ -26,7 +29,7 @@ const ManageListingsContent: React.FC = () => {
           console.error(`Unexpected error: ${response.statusText}`);
         }
       } catch (error) {
-        console.error('Error fetching auction items:', error);
+        console.error("Error fetching auction items:", error);
       }
     };
 
@@ -49,8 +52,13 @@ const ManageListingsContent: React.FC = () => {
     <div className={styles.mainContent} id="listing_container">
       <ViewToggle view={view} onViewChange={handleViewChange} />
       <AddListingButton onClick={toggleOverlay} />
-      {isOverlayVisible && <OverlayForm onClose={toggleOverlay} onSubmit={handleAddListing} />}
-      <div id={styles.listings_container} className={view === 'grid' ? styles.gridView : styles.listView}>
+      {isOverlayVisible && (
+        <OverlayForm onClose={toggleOverlay} onSubmit={handleAddListing} />
+      )}
+      <div
+        id={styles.listings_container}
+        className={view === "grid" ? styles.gridView : styles.listView}
+      >
         {listings.map((listing) => (
           <ManageableListing key={listing._id} view={view} {...listing} />
         ))}

@@ -25,6 +25,10 @@ from quizRepository import *
 from questionRepository import *
 from answerRepository import *
 from categoryRepository import  *
+from quizRepository import *
+from questionRepository import *
+from answerRepository import *
+from categoryRepository import *
 import datetime
 from pprint import pprint
 
@@ -56,6 +60,11 @@ quizConnection = QuizRepository(db)
 questionConnection = QuestionRepository(db)
 answerConnection = AnswerRepository(db)
 categoryConnection = CategoryRepository(db)
+categoryConnection = CategoryRepository(db)
+
+quizConnection = QuizRepository(db)
+questionConnection = QuestionRepository(db)
+answerConnection = AnswerRepository(db)
 
 
 # server function for customer registration
@@ -338,9 +347,7 @@ def getQuiz():
 
 # Initialize the AuctionItemRepository
 auctionItemConnection = AuctionItemRepository(db)
-
-
-# Get Auction Items
+#Get Auction Items
 @app.route("/getAuctionItems", methods=["GET"])
 def getAuctionItems():
     try:
@@ -448,6 +455,77 @@ def getSearchedAuctionItems():
     
 
     
+
+
+
+
+##Update Auction Item
+@app.route("/updateAuctionItem", methods=["POST"])
+@jwt_required()
+def updateAuctionItem():
+    try:
+        content = request.json
+        if not content or "_id" not in content:
+            return jsonify({"message": "No data or ID provided"}), 400
+            
+        # Get the current user from JWT
+        current_user = get_jwt_identity()
+        
+        if not current_user or "id" not in current_user:
+            return jsonify({"message": "Invalid authentication token"}), 401
+
+        # Convert string ID to ObjectId for MongoDB
+        try:
+            item_id = ObjectId(content["_id"])
+        except:
+            return jsonify({"message": "Invalid item ID format"}), 400
+
+        # Verify the item exists and belongs to this charity
+        if not auctionItemConnection.auctionItemExistsByCharityId(str(item_id), current_user["id"]):
+            return jsonify({"message": "Access forbidden - item not found or you don't own this item"}), 403
+            
+        # Create AuctionItem object
+        auction_item = AuctionItem(
+            title=content["title"],
+            description=content["description"],
+            startingPrice=float(content["startingPrice"]),
+            currentPrice=float(content["currentPrice"]),
+            image=content["image"],
+            auctionStartDate=content["auctionStartDate"],
+            auctionEndDate=content["auctionEndDate"],
+            categoryId=content["categoryId"],
+            charityId=current_user["id"],
+            status=content["status"],
+            _id=str(item_id)
+        )
+            
+        # Update the item
+        success = auctionItemConnection.updateAuctionItem(auction_item, str(item_id))
+        
+        if success:
+            return jsonify({"message": "Auction item updated successfully"}), 200
+        else:
+            return jsonify({"message": "Auction item not found"}), 404
+            
+    except Exception as e:
+        print(f"Error in updateAuctionItem: {e}")
+        return jsonify({
+            "message": "Unable to update auction item",
+            "error": str(e)
+        }), 500
+
+##Delete Auction Item
+@app.route("/deleteAuctionItem", methods=["POST"])
+def deleteAuctionItemByID():
+    try:
+        content = request.json
+        status = auctionItemConnection.deleteAuctionItemByID(content["_id"])
+        if status:
+            return jsonify({"message": "Auction item deleted"}), 200
+        return jsonify({"message": "Failed to delete auction item"}), 404
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"message": "It is not possible to delete the auction item"}), 404
 
 
 
