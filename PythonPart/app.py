@@ -528,6 +528,25 @@ def deleteAuctionItemByID():
         return jsonify({"message": "It is not possible to delete the auction item"}), 404
 
 
+# Add new endpoint for category dropdown
+@app.route('/getCategoryDropdownData', methods=['GET'])
+def getCategoryDropdownData():
+    try:
+        categories = categoryConnection.getCategories()
+        print("Categories fetched:", categories)  # Add logging
+        formatted_categories = [
+            {
+                '_id': str(cat['_id']),
+                'categoryName': cat['categoryName']
+            }
+            for cat in categories
+        ]
+        print("Formatted categories:", formatted_categories)  # Add logging
+        return jsonify({'categories': formatted_categories}), 200
+    except Exception as e:
+        print(f"Error in getCategoryDropdownData: {e}")
+        return jsonify({'message': 'Error fetching categories'}), 500
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)

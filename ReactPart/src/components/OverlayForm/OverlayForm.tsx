@@ -13,6 +13,12 @@ interface OverlayFormProps {
   isEditing?: boolean;
 }
 
+// First, create an interface for category data
+interface Category {
+  _id: string;
+  categoryName: string;
+}
+
 const OverlayForm: React.FC<OverlayFormProps> = ({
   onClose,
   onSubmit,
@@ -20,18 +26,25 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
   isEditing = false,
 }) => {
   const { getCsrfToken, getUserType } = useUser();
-  const [categories, setCategories] = useState<string[]>([]);
+  // Update the categories state type
+  const [categories, setCategories] = useState<Category[]>([]);
 
-  // Add useEffect to fetch categories
+  // Update the categories fetch with logging
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8080/getCategories", {
-          credentials: "include",
-        });
+        const response = await fetch(
+          "http://127.0.0.1:8080/getCategoryDropdownData",
+          {
+            credentials: "include",
+          }
+        );
         if (response.ok) {
           const data = await response.json();
-          setCategories(data.categories || []); // Extract categories array from response
+          console.log("Categories data received:", data); // Add logging
+          if (data.categories) {
+            setCategories(data.categories);
+          }
         }
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -308,11 +321,20 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
             onChange={handleChange}
           >
             <option value="">Select a category</option>
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
+            {categories.length > 0 ? (
+              categories.map((category) => {
+                console.log("Rendering category:", category); // Add logging
+                return (
+                  <option key={category._id} value={category._id}>
+                    {category.categoryName}
+                  </option>
+                );
+              })
+            ) : (
+              <option value="" disabled>
+                Loading categories...
               </option>
-            ))}
+            )}
           </select>
 
           <label htmlFor="auctionStartDate">Auction Starts:</label>
