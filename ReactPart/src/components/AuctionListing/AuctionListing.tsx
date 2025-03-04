@@ -4,7 +4,7 @@ import styles from "./AuctionListing.module.css";
 import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
 
 interface AuctionListingProps extends Omit<AuctionItem, "_id"> {
-  _id: string;
+  _id?: string;
   view: string;
 }
 

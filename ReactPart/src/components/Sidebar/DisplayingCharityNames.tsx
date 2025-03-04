@@ -39,10 +39,8 @@ const CharitiesForm: React.FC<CharitiesFormProps> = ({ onSelect }) => {
 
   return (
     <div className="charity-select">
-      <select onChange={(e) => onSelect(e.target.value)} defaultValue="">
-        <option disabled value="">
-          -- select charity --
-        </option>
+      <select onChange={(e) => onSelect(e.target.value)} defaultValue="all">
+      <option value="all">All</option>
         {charities.map((charity) => (
           <option key={charity} value={charity}>
             {charity}

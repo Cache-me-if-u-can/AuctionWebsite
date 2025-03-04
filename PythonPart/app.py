@@ -24,7 +24,7 @@ from auctionItemRepository import *
 from quizRepository import *
 from questionRepository import *
 from answerRepository import *
-from categoryRepository import  *
+from categoryRepository import *
 from quizRepository import *
 from questionRepository import *
 from answerRepository import *
@@ -347,7 +347,9 @@ def getQuiz():
 
 # Initialize the AuctionItemRepository
 auctionItemConnection = AuctionItemRepository(db)
-#Get Auction Items
+
+
+# Get Auction Items
 @app.route("/getAuctionItems", methods=["GET"])
 def getAuctionItems():
     try:
@@ -411,52 +413,63 @@ def getCharityAuctionItems():
         return jsonify(auction_items), 200
     except Exception as e:
         print(f"Error: {e}")
-        return jsonify({"message": "Unable to fetch auction items"}), 500   
-    
+        return jsonify({"message": "Unable to fetch auction items"}), 500
+
 
 # server function for getting a dictionary of all categories
-@app.route('/getCategories', methods=['GET'])
+@app.route("/getCategories", methods=["GET"])
 def getCategories():
     try:
         categoriesNames = categoryConnection.getListOfCategories()
-        return jsonify({'categories': categoriesNames}), 200
+        return jsonify({"categories": categoriesNames}), 200
     except Exception as e:
         print(e)
-        return jsonify({'message': 'Error fetching categories'}), 500
-    
+        return jsonify({"message": "Error fetching categories"}), 500
+
+
 # server function for getting a dictionary of searched auction items
-@app.route('/getSearchedAuctionItems', methods=['POST'])
+@app.route("/getSearchedAuctionItems", methods=["POST"])
 def getSearchedAuctionItems():
     try:
-        auctionItems = auctionItemConnection.getListOfAuctionItems()
-        print(auctionItems)
-        list_auctionItems = []
-        for auctionItem in auctionItems:
-            print(str(auctionItem["categoryId"]))
-            print(str(charityConnection.getCharityById(auctionItem["charityId"])["name"]) )
-            auctionItem_dict = {
-                "_id": str(auctionItem["_id"]),  
-                "title":auctionItem["title"],
-                "description": auctionItem["description"],
-                "startingPrice":auctionItem["startingPrice"],
-                "currentPrice" : auctionItem["currentPrice"],
-                "image" : auctionItem["image"],
-                "auctionStartDate": auctionItem["auctionStartDate"],
-                "auctionEndDate" : auctionItem["auctionEndDate"],
-                "categoryId" : str(categoryConnection.getCategoryById(auctionItem["categoryId"])["categoryName"]), 
-                "charityId" : str(charityConnection.getCharityById(auctionItem["charityId"])["name"]), 
-                "status" : auctionItem["status"],
-            }
-            list_auctionItems.append(auctionItem_dict)
-        return jsonify({'auctionItems': list_auctionItems}), 200
+        data = request.json
+        category = data.get("category", "all")
+        conditions = data.get("conditions", [])
+        charity = data.get("charity", "all")
+
+        auction_items = auctionItemConnection.getListOfAuctionItems()
+
+        if category != "all":
+            auction_items = [
+                item
+                for item in auction_items
+                if item["categoryId"]
+                == str(categoryConnection.getCategoryByName(category)["_id"])
+            ]
+
+        if conditions:
+            auction_items = [
+                item for item in auction_items if item["status"] in conditions
+            ]
+
+        if charity != "all":
+            auction_items = [
+                item
+                for item in auction_items
+                if item["charityId"]
+                == str(charityConnection.getCharityByName(charity)["_id"])
+            ]
+        print(auction_items)
+        for item in auction_items:
+            item["charityId"] = charityConnection.getCharityById(item["charityId"])[
+                "name"
+            ]
+            item["categoryId"] = categoryConnection.getCategoryById(item["categoryId"])[
+                "categoryName"
+            ]
+        return jsonify(auction_items), 200
     except Exception as e:
         print(e)
-        return jsonify({'error': 'Error fetching auction items'}), 500
-    
-
-    
-
-
+        return jsonify({"error": "Error fetching auction items"}), 500
 
 
 ##Update Auction Item
@@ -467,10 +480,10 @@ def updateAuctionItem():
         content = request.json
         if not content or "_id" not in content:
             return jsonify({"message": "No data or ID provided"}), 400
-            
+
         # Get the current user from JWT
         current_user = get_jwt_identity()
-        
+
         if not current_user or "id" not in current_user:
             return jsonify({"message": "Invalid authentication token"}), 401
 
@@ -481,9 +494,18 @@ def updateAuctionItem():
             return jsonify({"message": "Invalid item ID format"}), 400
 
         # Verify the item exists and belongs to this charity
-        if not auctionItemConnection.auctionItemExistsByCharityId(str(item_id), current_user["id"]):
-            return jsonify({"message": "Access forbidden - item not found or you don't own this item"}), 403
-            
+        if not auctionItemConnection.auctionItemExistsByCharityId(
+            str(item_id), current_user["id"]
+        ):
+            return (
+                jsonify(
+                    {
+                        "message": "Access forbidden - item not found or you don't own this item"
+                    }
+                ),
+                403,
+            )
+
         # Create AuctionItem object
         auction_item = AuctionItem(
             title=content["title"],
@@ -496,23 +518,24 @@ def updateAuctionItem():
             categoryId=content["categoryId"],
             charityId=current_user["id"],
             status=content["status"],
-            _id=str(item_id)
+            _id=str(item_id),
         )
-            
+
         # Update the item
         success = auctionItemConnection.updateAuctionItem(auction_item, str(item_id))
-        
+
         if success:
             return jsonify({"message": "Auction item updated successfully"}), 200
         else:
             return jsonify({"message": "Auction item not found"}), 404
-            
+
     except Exception as e:
         print(f"Error in updateAuctionItem: {e}")
-        return jsonify({
-            "message": "Unable to update auction item",
-            "error": str(e)
-        }), 500
+        return (
+            jsonify({"message": "Unable to update auction item", "error": str(e)}),
+            500,
+        )
+
 
 ##Delete Auction Item
 @app.route("/deleteAuctionItem", methods=["POST"])
@@ -525,27 +548,27 @@ def deleteAuctionItemByID():
         return jsonify({"message": "Failed to delete auction item"}), 404
     except Exception as e:
         print(f"Error: {e}")
-        return jsonify({"message": "It is not possible to delete the auction item"}), 404
+        return (
+            jsonify({"message": "It is not possible to delete the auction item"}),
+            404,
+        )
 
 
 # Add new endpoint for category dropdown
-@app.route('/getCategoryDropdownData', methods=['GET'])
+@app.route("/getCategoryDropdownData", methods=["GET"])
 def getCategoryDropdownData():
     try:
         categories = categoryConnection.getCategories()
         print("Categories fetched:", categories)  # Add logging
         formatted_categories = [
-            {
-                '_id': str(cat['_id']),
-                'categoryName': cat['categoryName']
-            }
+            {"_id": str(cat["_id"]), "categoryName": cat["categoryName"]}
             for cat in categories
         ]
         print("Formatted categories:", formatted_categories)  # Add logging
-        return jsonify({'categories': formatted_categories}), 200
+        return jsonify({"categories": formatted_categories}), 200
     except Exception as e:
         print(f"Error in getCategoryDropdownData: {e}")
-        return jsonify({'message': 'Error fetching categories'}), 500
+        return jsonify({"message": "Error fetching categories"}), 500
 
 
 if __name__ == "__main__":

@@ -79,6 +79,12 @@ class CharityRepository:
         charity = self.coll.find_one(query)
         return charity
 
+    # find charity data by name
+    def getCharityByName(self, charity_name):
+        query = {"name": charity_name}
+        charity = self.coll.find_one(query)
+        return charity
+
     # find charity data by e-mail
     def getCharityByEmail(self, email):
         query = {"email": email}

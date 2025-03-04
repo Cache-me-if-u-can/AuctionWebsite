@@ -23,7 +23,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
 
   const handleFilterClick = () => {
     onFilterChange({ category, conditions, charity });
-    console.log('Filters Applied:', { category, conditions, charity });
   };
 
   return (

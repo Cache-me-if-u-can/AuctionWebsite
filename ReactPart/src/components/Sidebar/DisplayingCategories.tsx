@@ -26,16 +26,14 @@ const CategoriesForm: React.FC<CategoriesFormProps> = ({ onSelect }) => {
 
   return (
     <div className="category-select">
-      <select onChange={(e) => onSelect(e.target.value)} defaultValue="">
-        <option disabled value="">
-          -- select category --
+      <select onChange={(e) => onSelect(e.target.value)} defaultValue="all">
+      <option value="all">All</option>
+      {categories.map((category) => (
+        <option key={category} value={category}>
+          {category}
         </option>
-        {categories.map((category) => (
-          <option key={category} value={category}>
-            {category}
-          </option>
-        ))}
-      </select>
+      ))}
+    </select>
     </div>
   );
 };
