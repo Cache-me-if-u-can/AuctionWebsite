@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./ManageableListing.module.css";
 import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
 import OverlayForm from "../OverlayForm/OverlayForm";
+import ConfirmDelete from "../ConfirmDelete/ConfirmDelete";
 
 interface ManageableListingProps extends AuctionItem {
   view: string;
@@ -23,6 +24,7 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
   view,
 }) => {
   const [isEditOverlayVisible, setIsEditOverlayVisible] = useState(false);
+  const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
   const navigate = useNavigate();
   const imageUrl = image ? URL.createObjectURL(new Blob([image])) : "";
 
@@ -62,28 +64,6 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
     }
 
     setIsEditOverlayVisible(false);
-  };
-
-  const deleteListing = async () => {
-    try {
-      const response = await fetch("http://127.0.0.1:8080/deleteAuctionItem", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ _id }),
-      });
-
-      if (response.ok) {
-        // Handle successful deletion (e.g., refresh the listings)
-        window.location.reload();
-      } else {
-        console.error("Failed to delete listing");
-      }
-    } catch (error) {
-      console.error("Error deleting listing:", error);
-    }
   };
 
   // View the listing details
@@ -138,11 +118,24 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
         <p>End Date: {new Date(auctionEndDate).toLocaleString()}</p>
         <p>Status: {status}</p>
       </div>
+      <ConfirmDelete
+        isVisible={isDeleteConfirmVisible}
+        itemId={_id || ""} // Add default empty string if _id is undefined
+        onClose={() => setIsDeleteConfirmVisible(false)}
+        onConfirm={() => {
+          setIsDeleteConfirmVisible(false);
+          // Optionally trigger a callback to parent component for refresh
+          window.location.reload();
+        }}
+      />
       <div className={styles.managementTools}>
         <a className={styles.editListing} onClick={toggleEditOverlay}>
           Edit
         </a>
-        <a className={styles.deleteListing} onClick={deleteListing}>
+        <a
+          className={styles.deleteListing}
+          onClick={() => setIsDeleteConfirmVisible(true)}
+        >
           Delete
         </a>
         <a className={styles.exportMailList}>Export Mailing list</a>
