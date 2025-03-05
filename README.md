@@ -1,50 +1,84 @@
-# React + TypeScript + Vite
+# Gavel XYZ - Online Charity Auction Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Overview
+Gavel XYZ is an online auction platform dedicated to charity fundraising. The platform allows users to list items for auction, place bids, and connect with charitable causes. This project was developed as part of a group assignment for a Software Development HND course.
 
-Currently, two official plugins are available:
+## Technology Stack
+- **Frontend**: React with TypeScript, built using Vite
+- **Backend**: Python with Flask
+- **Database**: MongoDB Atlas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+- User registration and authentication
+- Auction item listing and management
+- Bidding system
+- Charity profiles and integration
+- Review system for auction items
+- Question and answer functionality
+- Category-based browsing
+- Search functionality
 
-## Expanding the ESLint configuration
+## Project Structure
+The project is organized into two main directories:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### ReactPart
+Contains the frontend React application with the following structure:
+- `src/components`: Reusable UI components
+- `src/pages`: Page-level components
+- `src/types`: TypeScript type definitions
+- `src/context`: React context providers
+- `src/routes`: Routing configuration
+- `src/assets`: Static resources like images
 
-- Configure the top-level `parserOptions` property like this:
+### PythonPart
+Contains the backend Python application with the following structure:
+- Data models (customer.py, auctionItem.py, etc.)
+- Repository classes for database operations
+- API endpoints in app.py
+- Database connection management
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Setup and Installation
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Prerequisites
+- Node.js (v16+)
+- Python (v3.8+)
+- MongoDB Atlas account
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### Backend Setup
+1. Navigate to the PythonPart directory:
+   ```
+   cd PythonPart
+   ```
+2. Install required Python packages:
+   ```
+   pip install -r requirements.txt
+   ```
+3. Configure your MongoDB connection in bdConnection.py
+4. Start the Flask server:
+   ```
+   python app.py
+   ```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### Frontend Setup
+1. Navigate to the ReactPart directory:
+   ```
+   cd ReactPart
+   ```
+2. Install dependencies:
+   ```
+   npm install
+   ```
+3. Start the development server:
+   ```
+   npm run dev
+   ```
+
+## Team Members
+- Stefanos
+- Dominic
+- Oliver
+- Viktoriia
+- Roman
+
+## License
+This project is intended for academic purposes only.

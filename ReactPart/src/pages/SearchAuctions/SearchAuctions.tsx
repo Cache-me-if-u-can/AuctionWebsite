@@ -1,4 +1,3 @@
-// src/pages/SearchAuctions/SearchAuctions.tsx
 import React, { useState } from "react";
 import { useUser } from "../../context/UserProvider";
 import styles from "./SearchAuctions.module.css";
