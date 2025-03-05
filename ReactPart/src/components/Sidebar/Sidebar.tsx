@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styles from "./Sidebar.module.css";
 import CategoriesForm from "./DisplayingCategories";
 import CharitiesForm from "./DisplayingCharityNames";
@@ -15,6 +15,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
   const [category, setCategory] = useState("all");
   const [conditions, setConditions] = useState<string[]>([]);
   const [charity, setCharity] = useState("all");
+
+  // Create refs for the select elements
+  const categorySelectRef = useRef<HTMLSelectElement>(null);
+  const charitySelectRef = useRef<HTMLSelectElement>(null);
 
   const handleConditionChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -37,6 +41,15 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
     setConditions([]);
     setCharity("all");
 
+    // Reset the select elements to their default values
+    if (categorySelectRef.current) {
+      categorySelectRef.current.value = "all";
+    }
+
+    if (charitySelectRef.current) {
+      charitySelectRef.current.value = "all";
+    }
+
     // Trigger filter change with default values
     onFilterChange({ category: "all", conditions: [], charity: "all" });
   };
@@ -48,7 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
       {/* Dynamic Category Selector */}
       <div className={styles.filter_group}>
         <label htmlFor="category-filter">Category</label>
-        <CategoriesForm onSelect={setCategory} />
+        <CategoriesForm onSelect={setCategory} selectRef={categorySelectRef} />
       </div>
 
       {/* Status Checkboxes */}
@@ -71,7 +84,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
       {/* Dynamic Charity Selector */}
       <div className={styles.filter_group}>
         <label htmlFor="charity-filter">Charity</label>
-        <CharitiesForm onSelect={setCharity} />
+        <CharitiesForm onSelect={setCharity} selectRef={charitySelectRef} />
       </div>
 
       {/* Filter Buttons */}
