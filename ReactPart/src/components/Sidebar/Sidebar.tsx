@@ -1,28 +1,44 @@
-import React, { useState } from 'react';
-import styles from './Sidebar.module.css';
-import CategoriesForm from './DisplayingCategories';
-import CharitiesForm from './DisplayingCharityNames';
+import React, { useState } from "react";
+import styles from "./Sidebar.module.css";
+import CategoriesForm from "./DisplayingCategories";
+import CharitiesForm from "./DisplayingCharityNames";
 
 type SidebarProps = {
-  onFilterChange: (filters: { category: string; conditions: string[]; charity: string }) => void;
+  onFilterChange: (filters: {
+    category: string;
+    conditions: string[];
+    charity: string;
+  }) => void;
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
-  const [category, setCategory] = useState('all');
+  const [category, setCategory] = useState("all");
   const [conditions, setConditions] = useState<string[]>([]);
-  const [charity, setCharity] = useState('all');
+  const [charity, setCharity] = useState("all");
 
-  const handleConditionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleConditionChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const value = event.target.value;
-    setConditions(prevConditions =>
+    setConditions((prevConditions) =>
       prevConditions.includes(value)
-        ? prevConditions.filter(condition => condition !== value)
-        : [...prevConditions, value]
+        ? prevConditions.filter((condition) => condition !== value)
+        : [...prevConditions, value],
     );
   };
 
   const handleFilterClick = () => {
     onFilterChange({ category, conditions, charity });
+  };
+
+  const handleClearFilters = () => {
+    // Reset all filter states
+    setCategory("all");
+    setConditions([]);
+    setCharity("all");
+
+    // Trigger filter change with default values
+    onFilterChange({ category: "all", conditions: [], charity: "all" });
   };
 
   return (
@@ -38,7 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
       {/* Status Checkboxes */}
       <div className={styles.filter_group}>
         <label>Status</label>
-        {['live', 'complete', 'hidden'].map(status => (
+        {["live", "complete", "hidden"].map((status) => (
           <label key={status}>
             <input
               type="checkbox"
@@ -46,7 +62,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
               className={styles.condition_filter}
               checked={conditions.includes(status)}
               onChange={handleConditionChange}
-            />{' '}
+            />{" "}
             {status.charAt(0).toUpperCase() + status.slice(1)}
           </label>
         ))}
@@ -58,9 +74,14 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
         <CharitiesForm onSelect={setCharity} />
       </div>
 
-      {/* Filter Button */}
-      <div className={styles.filter_button}>
-        <button onClick={handleFilterClick}>Filter</button>
+      {/* Filter Buttons */}
+      <div className={styles.filter_buttons}>
+        <button className={styles.filter_button} onClick={handleFilterClick}>
+          Filter
+        </button>
+        <button className={styles.clear_button} onClick={handleClearFilters}>
+          Clear Filters
+        </button>
       </div>
     </div>
   );
