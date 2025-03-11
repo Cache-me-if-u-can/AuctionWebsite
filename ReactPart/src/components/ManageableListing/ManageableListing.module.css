@@ -2,22 +2,14 @@
 .listing {
   display: flex;
   flex-direction: row;
-  padding: 20px 50px;
+  padding: 20px 25px;
+  margin: 12px 0;
   background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 12px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  margin: 12px 0;
-}
-
-.listView {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 800px;
-  margin: 12px 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .listing:hover {
@@ -25,68 +17,14 @@
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-.listing:hover .listingImage {
-  transform: scale(1.03);
-}
-
-/* List View Specific Styles */
-.listView .listing {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 800px;
-  margin: 12px 0px;
-}
-
-.listView .listingImage {
-  width: 200px;
-  height: 200px;
-  margin-right: 20px;
-  border-radius: 10px;
-  object-fit: cover;
-}
-
-.listView .details {
-  flex: 1;
-  padding: 16px;
-}
-
-.listView .managementTools {
-  padding-top: auto;
-  padding-bottom: auto;
-  border-left: 1px solid #eee;
-  display: flex;
-  gap: 8px;
-  flex-direction: row;
-  justify-content: center;
-  align-self: flex-start;
-}
-
+/* Details Section */
 .details {
-  padding: 5px;
   flex-grow: 1;
-  display: flex;
-  align-self: flex-start;
-  flex-direction: column;
-  justify-items: center;
-}
-.auctionDetails {
+  padding: 5px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  border-top: 1px solid #eee;
+  align-self: center;
   justify-items: center;
-}
-.status {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 20px;
-  background-color: #e8f5e9;
-  color: #2e7d32;
-  font-weight: 600;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .details h3 {
@@ -103,72 +41,57 @@
   line-height: 1.5;
 }
 
-/* Price and Status Styling */
-.details p:nth-child(3),
-.details p:nth-child(4) {
-  color: #2c5282;
-  font-weight: 600;
-}
-
-.details p:last-child {
-  color: #38a169;
-  font-weight: 500;
-}
-
-/* Management Tools */
-.managementTools {
-  margin-top: 20px;
+.auctionDetails {
   display: flex;
+  flex-direction: column;
   gap: 8px;
-  flex-wrap: wrap;
-  flex-direction: row;
+  border-top: 1px solid #eee;
+  justify-items: center;
 }
 
-.managementTools a {
-  padding: 12px 24px;
-  border-radius: 25px;
-  font-size: 1rem;
+/* Status Styles */
+.status {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background-color: #e8f5e9;
+  color: #2e7d32;
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  font-size: 0.9rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  text-decoration: none;
-  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* List View Styles */
+.listView {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 800px;
+  margin: 12px 0;
+}
+
+.listView .listing {
+  width: 100%;
+  max-width: 800px;
+  margin: 12px 0;
+}
+
+.listView .listingImage {
+  width: 200px;
+  height: 200px;
+  margin-right: 20px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.listView .details {
   flex: 1;
-  min-width: 120px;
-}
-
-.editListing {
-  background-color: #1976d2;
-  color: white;
-}
-
-.editListing:hover {
-  background-color: #1565c0;
-}
-
-.deleteListing {
-  background-color: #dc3545;
-  color: white;
-}
-
-.deleteListing:hover {
-  background-color: #c82333;
-}
-
-.viewListing,
-.viewBidders {
-  background-color: #1976d2;
-  color: white;
-}
-
-.viewListing:hover,
-.viewBidders:hover {
-  background-color: #1565c0;
+  padding: 16px;
 }
 
 .listView .managementTools {
+  margin: auto;
   height: 100%;
   padding: 16px;
   border-left: 1px solid #eee;
@@ -176,31 +99,13 @@
   gap: 8px;
   flex-direction: column;
 }
-.listView .managementTools a {
-  padding: 12px 24px;
-  border-radius: 25px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-decoration: none;
-  text-align: center;
-  flex: 1;
-  min-width: 120px;
-  max-width: 220px;
-  max-height: 40px;
-}
 
-/* Grid View Specific Styles */
+/* Grid View Styles */
 .gridView {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
-  padding: 20px;
   width: 100%;
-  /* Remove max-width constraint */
 }
 
 .gridView .listing {
@@ -209,8 +114,6 @@
   height: 100%;
   padding: 0;
   margin: 0;
-  border-radius: 12px;
-  overflow: hidden;
   max-width: 350px;
 }
 
@@ -223,16 +126,12 @@
 
 .gridView .details {
   flex: 1;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
+  padding: 5px;
 }
+
 .gridView .auctionDetails {
-  display: flex;
-  flex-direction: column;
   gap: 8px;
   border-top: 1px solid #eee;
-  justify-items: center;
 }
 
 .gridView .managementTools {
@@ -240,35 +139,98 @@
   padding: 4px;
   border-top: 1px solid #eee;
   display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
   margin-top: auto;
   justify-content: center;
-  grid-template-columns: repeat(2, 1fr);
 }
 
-.gridView .managementTools a {
-  margin: 4px 0;
+/* Management Tools Common Styles */
+.managementTools {
+  margin-top: 20px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-/* List View remains unchanged */
-.listView .listing {
-  flex-direction: row;
-  padding: 20px 50px;
+.managementTools a {
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  text-align: center;
+  flex: 1;
+  min-width: 120px;
+  transition: all 0.2s ease;
+}
+
+/* Button Styles */
+.editListing,
+.viewListing,
+.viewBidders {
+  background-color: #1976d2;
+  color: white;
+}
+
+.editListing:hover,
+.viewListing:hover,
+.viewBidders:hover {
+  background-color: #1565c0;
+}
+
+.deleteListing {
+  background-color: #dc3545;
+  color: white;
+}
+
+.deleteListing:hover {
+  background-color: #c82333;
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 800px) {
+  .listing {
+    display: table-column;
+    padding: 20px;
+    margin: 12px 0;
+  }
+
   .listView .listing {
     flex-direction: column;
+    align-items: center;
   }
 
   .listingImage {
     width: 100%;
     height: 200px;
   }
-
-  .managementTools {
+  .details {
+    width: 100%;
+    display: column;
+    align-items: center;
+  }
+  .auctionDetails {
+    display: flex;
     flex-direction: column;
+    gap: 4px;
+    border-top: 1px solid #eee;
+    justify-items: center;
+    align-items: center;
+  }
+
+  .listView .managementTools {
+    width: 100%;
+    padding: 4px;
+    border-top: 1px solid #eee;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-top: auto;
+    justify-content: center;
   }
 
   .managementTools a {
@@ -277,5 +239,13 @@
 
   .gridView {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  .gridView .listing {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    max-width: 250px;
   }
 }
