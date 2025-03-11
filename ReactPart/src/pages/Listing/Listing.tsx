@@ -10,20 +10,37 @@ import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
 const Listing: React.FC = () => {
   const location = useLocation();
   const auctionItem = location.state?.listing as AuctionItem;
-
-  if (!auctionItem) {
-    return <div>Listing not found</div>;
-  }
-
   const [maxBid, setMaxBid] = React.useState<number | string>("");
   const [warningVisible, setWarningVisible] = React.useState(false);
 
-  const checkBid = () => {
+  // Add loading state
+  if (!auctionItem) {
+    return <div>Loading...</div>;
+  }
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleString();
+  };
+
+  const handleBid = () => {
     if (typeof maxBid === "number" && maxBid <= auctionItem.currentPrice) {
       setWarningVisible(true);
-    } else {
-      setWarningVisible(false);
-      alert(`Bid of £${maxBid} placed!`);
+      return;
+    }
+    setWarningVisible(false);
+    // Add your bid submission logic here
+    console.log(`Placing bid: ${maxBid}`);
+  };
+
+  const renderImage = () => {
+    try {
+      if (auctionItem.image instanceof Blob) {
+        return URL.createObjectURL(auctionItem.image);
+      }
+      return auctionItem.image ? (auctionItem.image as string) : "";
+    } catch (error) {
+      console.error("Error rendering image:", error);
+      return "";
     }
   };
 
@@ -33,22 +50,17 @@ const Listing: React.FC = () => {
       <AuctionBanner />
       <div className={styles.main_content}>
         <div className={styles.auction_container}>
-          {auctionItem.image && (
-            <img
-              className={styles.auction_image}
-              src={
-                typeof auctionItem.image === "string"
-                  ? auctionItem.image
-                  : URL.createObjectURL(auctionItem.image)
-              }
-              alt={auctionItem.title}
-            />
-          )}
+          <img
+            className={styles.auction_image}
+            src={renderImage()}
+            alt={auctionItem.title}
+          />
           <div className={styles.auctionListing_details}>
             <h3>{auctionItem.title}</h3>
             <h2 className={styles.charity_seller}>
               Charity ID: {auctionItem.charityId}
             </h2>
+            <p>{auctionItem.description}</p>
             <div className={styles.bidding_details}>
               <div className={styles.bidValues}>
                 <h3 className={styles.sBid}>
@@ -77,9 +89,13 @@ const Listing: React.FC = () => {
                     Your bid must be higher than the current bid.
                   </p>
                 )}
-                <button className={styles.bid_button} onClick={checkBid}>
+                <button className={styles.bid_button} onClick={handleBid}>
                   Place Bid
                 </button>
+              </div>
+              <div className={styles.timeTillEnd}>
+                <span>Start: {formatDate(auctionItem.auctionStartDate)}</span>
+                <span>End: {formatDate(auctionItem.auctionEndDate)}</span>
               </div>
               <div className={styles.additionalDetails}>
                 <h4 className={styles.activeBidders}>

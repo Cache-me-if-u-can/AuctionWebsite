@@ -49,19 +49,26 @@ const ManageListingsContent: React.FC = () => {
   };
 
   return (
-    <div className={styles.mainContent} id="listing_container">
-      <ViewToggle view={view} onViewChange={handleViewChange} />
-      <AddListingButton onClick={toggleOverlay} />
-      {isOverlayVisible && (
-        <OverlayForm onClose={toggleOverlay} onSubmit={handleAddListing} />
-      )}
-      <div
-        id={styles.listings_container}
-        className={view === "grid" ? styles.gridView : styles.listView}
-      >
-        {listings.map((listing) => (
-          <ManageableListing key={listing._id} view={view} {...listing} />
-        ))}
+    <div className={styles["listing-container"]}>
+      <div className={styles.mainContent}>
+        <div className={styles.listingControls}>
+          <ViewToggle view={view} onViewChange={handleViewChange} />
+          <AddListingButton onClick={toggleOverlay} />
+        </div>
+
+        <div
+          className={`${styles.listingsWrapper} ${
+            view === "grid" ? styles.gridView : ""
+          }`}
+        >
+          {listings.map((listing) => (
+            <ManageableListing key={listing._id} view={view} {...listing} />
+          ))}
+        </div>
+
+        {isOverlayVisible && (
+          <OverlayForm onClose={toggleOverlay} onSubmit={handleAddListing} />
+        )}
       </div>
     </div>
   );

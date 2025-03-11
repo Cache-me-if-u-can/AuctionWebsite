@@ -399,17 +399,17 @@ def getCharityAuctionItems():
     try:
         current_user = get_jwt_identity()
         if current_user["userType"] != "charity":
-            return (
-                jsonify(
-                    {
-                        "message": "Access forbidden: Only charity users can access this route"
-                    }
-                ),
-                403,
-            )
+            return jsonify({
+                "message": "Access forbidden: Only charity users can access this route"
+            }), 403
 
         charity_id = current_user["id"]
         auction_items = auctionItemConnection.getAuctionItemsByCharityId(charity_id)
+        
+        # Convert category IDs to category names
+        for item in auction_items:
+            item["categoryId"] = categoryConnection.getCategoryById(item["categoryId"])["categoryName"]
+            
         return jsonify(auction_items), 200
     except Exception as e:
         print(f"Error: {e}")

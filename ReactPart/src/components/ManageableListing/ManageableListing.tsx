@@ -68,7 +68,7 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
 
   // View the listing details
   const viewListing = () => {
-    navigate(`/listing/${charityId}/${categoryId}/${_id}`, {
+    navigate(`/listing/${_id}`, {
       state: {
         listing: {
           title,
@@ -86,8 +86,32 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
     });
   };
 
+  const renderImage = () => {
+    try {
+      if (image instanceof Blob) {
+        return (
+          <img
+            src={URL.createObjectURL(image)}
+            alt={title}
+            className={styles.listingImage}
+          />
+        );
+      } else if (typeof image === "string") {
+        return <img src={image} alt={title} className={styles.listingImage} />;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error rendering image:", error);
+      return null;
+    }
+  };
+
   return (
-    <div className={view === "grid" ? styles.gridView : styles.listView}>
+    <div
+      className={`${styles.listing} ${
+        view === "grid" ? styles.gridView : styles.listView
+      }`}
+    >
       {isEditOverlayVisible && (
         <OverlayForm
           onClose={toggleEditOverlay}
@@ -108,15 +132,18 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
           isEditing={true}
         />
       )}
-      <img src={imageUrl} alt={title} className={styles.image} />
+      {renderImage()}
       <div className={styles.details}>
         <h3>{title}</h3>
+        <p className={styles.status}>Status: {status}</p>
+        <p>Category: {categoryId}</p>
         <p>{description}</p>
-        <p>Starting Price: ${startingPrice}</p>
-        <p>Current Price: ${currentPrice}</p>
-        <p>Start Date: {new Date(auctionStartDate).toLocaleString()} </p>
-        <p>End Date: {new Date(auctionEndDate).toLocaleString()}</p>
-        <p>Status: {status}</p>
+        <div className={styles.auctionDetails}>
+          <p>Starting Price: ${startingPrice}</p>
+          <p>Current Price: ${currentPrice}</p>
+          <p>Start Date: {new Date(auctionStartDate).toLocaleString()} </p>
+          <p>End Date: {new Date(auctionEndDate).toLocaleString()}</p>
+        </div>
       </div>
       <ConfirmDelete
         isVisible={isDeleteConfirmVisible}
@@ -129,6 +156,10 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
         }}
       />
       <div className={styles.managementTools}>
+        <a className={styles.viewListing} onClick={viewListing}>
+          Listing
+        </a>
+        <a className={styles.viewBidders}>Bidders</a>
         <a className={styles.editListing} onClick={toggleEditOverlay}>
           Edit
         </a>
@@ -137,11 +168,6 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
           onClick={() => setIsDeleteConfirmVisible(true)}
         >
           Delete
-        </a>
-        <a className={styles.exportMailList}>Export Mailing list</a>
-        <a className={styles.viewBidders}>View Bidders</a>
-        <a className={styles.viewListing} onClick={viewListing}>
-          View Listing
         </a>
       </div>
     </div>

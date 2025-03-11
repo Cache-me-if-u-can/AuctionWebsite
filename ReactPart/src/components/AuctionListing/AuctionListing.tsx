@@ -65,15 +65,17 @@ const AuctionListing: React.FC<AuctionListingProps> = ({
 
   return (
     <div
-      className={`${styles.listing} ${view === "grid" ? styles.gridItem : styles.listItem}`}
+      className={`${styles.listing} ${
+        view === "grid" ? styles.gridItem : styles.listItem
+      }`}
     >
       {renderImage()}
       <div className={styles.listingContent}>
         <h3>{title}</h3>
-        <p>Charity ID: {charityId}</p>
+        <p>Charity: {charityId}</p>
         <p className={styles.status}>Status: {status}</p>
         <p>Description: {description}</p>
-        <p>Category ID: {categoryId}</p>
+        <p>Category: {categoryId}</p>
         <div className={styles.auctionDetails}>
           <p>Auction Starts: {auctionStartDate}</p>
           <p>Auction Ends: {auctionEndDate}</p>
@@ -88,4 +90,3 @@ const AuctionListing: React.FC<AuctionListingProps> = ({
 };
 
 export default AuctionListing;
-

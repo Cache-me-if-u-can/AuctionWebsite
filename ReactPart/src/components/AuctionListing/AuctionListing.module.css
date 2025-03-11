@@ -2,9 +2,7 @@
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   overflow: hidden;
   border: 1px solid rgba(0, 0, 0, 0.08);
 }
@@ -139,4 +137,3 @@
     width: 100%;
   }
 }
-

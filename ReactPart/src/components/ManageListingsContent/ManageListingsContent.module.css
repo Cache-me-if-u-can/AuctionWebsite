@@ -1,157 +1,88 @@
-.mainContent {
-  padding: 20px;
-  background-color: #f9f9f9;
-}
-
-.listings_container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.gridView {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-}
-
-.listView {
+.listing-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  font-family: "Open Sans", sans-serif;
+  min-height: 100vh;
 }
 
-.listing {
+.mainContent {
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: 15px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
-}
-
-.listing_image {
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
-  object-fit: cover;
-  margin-right: 15px;
-}
-
-.listing_content {
-  max-width: calc(75% - 100px);
-  flex: 1;
-}
-
-.listing h3 {
-  margin-top: 0;
-  color: #333;
-  font-size: 18px;
-}
-
-.listing p {
-  color: #666;
-  margin-top: 5px;
-}
-
-.auction_details {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
+  flex-direction: column;
+  max-width: 1920px;
   width: 100%;
-  flex-wrap: wrap;
+  padding: 10px;
 }
 
-.gridView {
+/* Add controls container for view toggle and add new listing */
+.listingControls {
+  display: flex;
+  justify-content: row;
+  width: 100%;
+  margin-bottom: 5px;
+  background: white;
+  border-radius: 8px;
+}
+
+/* Style the listings container */
+.listingsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: white;
+  border-radius: 8px;
+  width: 100%;
+  align-items: center;
+  justify-items: space-between;
+}
+
+/* Fix the grid view layout */
+.listingsWrapper.gridView {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 10px;
-  justify-content: center;
-}
-
-.listing {
-  width: 350px;
-  height: auto;
-  padding: 15px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
+  gap: 20px;
+  transition: all 0.5s ease;
   align-items: center;
-  justify-content: flex-start;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-.gridView .listing {
-  width: 350px;
-  height: auto;
-  padding: 15px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-.gridView .managementTools {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 0.5fr));
-  margin: auto;
-  gap: 5px;
-  align-self: center;
   max-width: 100%;
-  flex-wrap: wrap;
-  justify-content: center;
 }
 
-.gridView .managementTools a {
-  padding: 8px 12px;
-  background-color: #007bff;
-  color: #fff;
-  text-decoration: none;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 10px; /* Space between links */
-  border-radius: 4px;
-  position: center;
+.gridView .listingsWrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
 }
 
-.gridView .managementTools a:hover {
-  background-color: #0056b3;
-}
-
-.listView {
+.listing-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  font-family: "Open Sans", sans-serif;
+  min-height: 100vh;
+  padding: 20px;
 }
 
-.managementTools {
-  display: flex;
-  flex-direction: column;
-  margin-left: 20px;
-  align-self: flex-end;
-  margin-left: auto;
-  max-width: 25%;
+/* Remove conflicting styles */
+.gridView {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
 }
 
-.managementTools a {
-  padding: 8px 12px;
-  background-color: #007bff;
-  color: #fff;
-  text-decoration: none;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 10px;
-  border-radius: 4px;
-}
+/* Responsive Design */
+@media (max-width: 768px) {
+  .listing-container {
+    padding: 15px;
+    margin-left: 0;
+  }
 
-.managementTools a:hover {
-  background-color: #0056b3;
+  .mainContent {
+    padding: 10px;
+  }
+
+  .listingControls {
+    flex-direction: column;
+    gap: 10px;
+  }
 }
