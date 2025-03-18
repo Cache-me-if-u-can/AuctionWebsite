@@ -575,7 +575,8 @@ def getCategoryDropdownData():
 
 # server function for adding new bid
 @app.route('/createBid', methods=['POST'])
-def create_bid():
+@jwt_required()
+def createBid():
         content = request.json
         
         highest_bid = bidConnection.getCurrentBid(content["auctionItemId"])
