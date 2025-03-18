@@ -18,8 +18,9 @@ class BidRepository:
             customerId = bid["customerId"]
             bidAmount= bid["bidAmount"]
             bidDate= bid["bidDate"]
+            bidAnonymous= bid["isAnonymous"]
             
-            auctionItemBid= Bid(_id, auctionId,customerId, bidAmount, bidDate)
+            auctionItemBid= Bid(_id, auctionId,customerId, bidAmount, bidDate, bidAnonymous)
             list_bids.append(auctionItemBid)
         
         return list_bids
@@ -27,7 +28,7 @@ class BidRepository:
     #create new bid and add to database
     def createBid(self,bid, customerConnection, auctionItemConnection):
         if(customerConnection.customerExistsById(bid.customerId)==True and  auctionItemConnection.auctionItemExistsById(bid.auctionItemId)==True):
-            new_bid={  "auctionItemId":bid.auctionItemId, "customerId": bid.customerId, "bidAmount": bid.bidAmount, "bidDate": bid.bidDate}
+            new_bid={  "auctionItemId":bid.auctionItemId, "customerId": bid.customerId, "bidAmount": bid.bidAmount, "bidDate": bid.bidDate, "isAnonymous": bid.isAnonymous}
             result=self.coll.insert_one(new_bid)
             return result.inserted_id
         else: 
@@ -62,7 +63,8 @@ class BidRepository:
             'auctionItemId': bid.auctionItemId,
             'customerId': bid.customerId,
             'bidAmount': bid.bidAmount,
-            'bidDate': bid.bidDate
+            'bidDate': bid.bidDate,
+            'isAnonymous': bid.isAnonymous
         }}
         )
 
@@ -76,3 +78,24 @@ class BidRepository:
         query = {'_id': ObjectId(bidId)}
         bid = self.coll.find_one(query)
         return bid
+    
+    # get current highest bid amount for auction item
+    def getCurrentBid(self, auctionId):
+        highest_bid = self.coll.find_one({'auctionItemId': ObjectId(auctionId)}, sort=[("bidAmount", -1)])
+        if highest_bid:
+            return highest_bid["bidAmount"]
+        return None
+    
+
+    # get top three bids with user info
+    def getTopThreeBids(self, auctionId, customerConnection):
+        top_bids = self.coll.find({'auctionItemId': ObjectId(auctionId)}, sort=[("bidAmount", -1)]).limit(3)
+        results = []
+        for bid in top_bids:
+            customer = customerConnection.getCustomerById(bid["customerId"])
+            user_name = "Anonymous User" if bid.get("isAnonymous", False) else f"{customer['firstName']} {customer['lastName']}"
+            results.append({
+                "userName": user_name,
+                "bidAmount": bid["bidAmount"]
+            })
+        return results

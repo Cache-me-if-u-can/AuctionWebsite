@@ -1,11 +1,11 @@
 class Bid(object):
-    def __init__(self, _id, auctionId, customerId, bidAmount, bidDate):
+    def __init__(self, auctionId, customerId, bidAmount, bidDate, isAnonymous, _id=0):
         self.__id = _id
         self.__auctionId = auctionId
         self.__customerId = customerId
         self.__bidAmount = bidAmount
         self.__bidDate = bidDate
-
+        self.__isAnonymous= isAnonymous
 
     @property
     def id(self):
@@ -42,3 +42,11 @@ class Bid(object):
     @bidDate.setter
     def bidDate(self, bidDate):
         self.__bidDate = bidDate
+
+    @property
+    def isAnonymous(self):
+        return self.__isAnonymous
+    
+    @isAnonymous.setter
+    def isAnonymous(self, isAnonymous):
+        self.__isAnonymous = isAnonymous

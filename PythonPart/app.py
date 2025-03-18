@@ -29,6 +29,7 @@ from quizRepository import *
 from questionRepository import *
 from answerRepository import *
 from categoryRepository import *
+from bidRepository import *
 import datetime
 from pprint import pprint
 
@@ -65,6 +66,7 @@ categoryConnection = CategoryRepository(db)
 quizConnection = QuizRepository(db)
 questionConnection = QuestionRepository(db)
 answerConnection = AnswerRepository(db)
+bidConnection = BidRepository(db)
 
 
 # server function for customer registration
@@ -569,6 +571,39 @@ def getCategoryDropdownData():
     except Exception as e:
         print(f"Error in getCategoryDropdownData: {e}")
         return jsonify({"message": "Error fetching categories"}), 500
+
+
+# server function for adding new bid
+@app.route('/createBid', methods=['POST'])
+def create_bid():
+        content = request.json
+        
+        highest_bid = bidConnection.getCurrentBid(content["auctionItemId"])
+        if highest_bid is not None and content["bidAmount"] <= highest_bid:
+            return jsonify({"error": "Bid amount must be higher than the current highest bid"}), 400
+        
+        bid = Bid(
+            content["auctionItemId"],
+            content["customerId"],
+            content["bidAmount"],
+            datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+            content["isAnonymous"]
+        )
+        
+        bid_id = bidConnection.createBid(bid, customerConnection, auctionItemConnection)
+        if bid_id:
+            return jsonify({"message": "Bid created successfully", "bidId": str(bid_id)}), 201
+        else:
+            return jsonify({"error": "Failed to create bid."}), 400
+
+
+# server function for getting top 3 bids for an auction item
+@app.route('/getTopBids/<auctionId>', methods=['GET'])
+def getTopBids(auctionId):
+    top_bids = bidConnection.getTopThreeBids(auctionId, customerConnection)
+    if not top_bids:
+            return jsonify({"message": "No bids found for this auction item."}), 200
+    return jsonify(top_bids), 200
 
 
 if __name__ == "__main__":
