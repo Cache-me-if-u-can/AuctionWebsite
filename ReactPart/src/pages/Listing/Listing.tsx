@@ -25,16 +25,71 @@ const Listing: React.FC = () => {
     return new Date(dateString).toLocaleString();
   };
 
-  const handleBid = () => {
-    if (typeof maxBid === "number" && maxBid <= auctionItem.currentPrice) {
+  const handleBid = async () => {
+    // Validate bid amount
+    if (typeof maxBid !== "number" || maxBid <= auctionItem.currentPrice) {
       setWarningVisible(true);
       return;
     }
-    setWarningVisible(false);
-    // Add your bid submission logic here
-    console.log(`Placing bid: ${maxBid}`);
-  };
 
+    setWarningVisible(false);
+
+    try {
+      const csrfToken = getCsrfToken();
+      if (!csrfToken) {
+        throw new Error("No authentication token found");
+      }
+
+      // Get the current user data to extract customerId
+      const userResponse = await fetch("http://127.0.0.1:8080/getUserData", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!userResponse.ok) {
+        throw new Error("Failed to get user data");
+      }
+
+      const userData = await userResponse.json();
+
+      const bidData = {
+        auctionItemId: auctionItem._id,
+        bidAmount: maxBid,
+        customerId: userData._id,
+        isAnonymous: false,
+      };
+
+      console.log("Submitting bid:", bidData);
+
+      const response = await fetch("http://127.0.0.1:8080/createBid", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": csrfToken,
+        },
+        credentials: "include",
+        body: JSON.stringify(bidData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to place bid");
+      }
+
+      const data = await response.json();
+      console.log("Bid placed successfully:", data);
+
+      // Update auction item's current price
+      //!TODO: Update auction item's current price in the UI and backend
+      alert("Bid placed successfully!");
+      //window.location.reload();
+    } catch (error) {
+      console.error("Error placing bid:", error);
+      alert(
+        error instanceof Error ? error.message : "An unexpected error occurred",
+      );
+    }
+  };
   const renderImage = () => {
     try {
       if (auctionItem.image instanceof Blob) {
