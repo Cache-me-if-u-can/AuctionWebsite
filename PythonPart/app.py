@@ -537,6 +537,38 @@ def updateAuctionItem():
             500,
         )
 
+# Update price after a bid
+@app.route("/updateAuctionPrice", methods=["POST"])
+@jwt_required()  
+def update_auction_price():
+    try:
+        content = request.json
+        if not content or "auctionItemId" not in content or "newPrice" not in content:
+            return jsonify({"message": "Missing required data"}), 400
+
+        auction_item_id = content["auctionItemId"]
+        new_price = float(content["newPrice"])
+        
+        # Get the item to check current price
+        auction_item = auctionItemConnection.getAuctionItemById(auction_item_id)
+        if not auction_item:
+            return jsonify({"message": "Auction item not found"}), 404
+            
+        # Ensure new price is higher
+        if new_price <= auction_item["currentPrice"]:
+            return jsonify({"message": "New price must be higher than current price"}), 400
+            
+        # Update only the price
+        success = auctionItemConnection.updateAuctionPrice(auction_item_id, new_price)
+        
+        if success:
+            return jsonify({"message": "Price updated successfully"}), 200
+        else:
+            return jsonify({"message": "Failed to update price"}), 500
+            
+    except Exception as e:
+        print(f"Error in updateAuctionPrice: {e}")
+        return jsonify({"message": "Unable to update price", "error": str(e)}), 500
 
 ##Delete Auction Item
 @app.route("/deleteAuctionItem", methods=["POST"])
@@ -573,30 +605,59 @@ def getCategoryDropdownData():
 
 
 # server function for adding new bid
-@app.route('/createBid', methods=['POST'])
+@app.route("/createBid", methods=["POST"])
 @jwt_required()
-def createBid():
+def create_bid():
+    try:
         content = request.json
-        
-        highest_bid = bidConnection.getCurrentBid(content["auctionItemId"])
-        if highest_bid is not None and content["bidAmount"] <= highest_bid:
-            return jsonify({"error": "Bid amount must be higher than the current highest bid"}), 400
-        
+        if not content:
+            return jsonify({"message": "No data provided"}), 400
+
+        # Get the current user from JWT
+        current_user = get_jwt_identity()
+
+        if not current_user or "id" not in current_user:
+            return jsonify({"message": "Invalid authentication token"}), 401
+
+        # Create bid object with all required parameters including bidDate
         bid = Bid(
-            content["auctionItemId"],
-            content["customerId"],
-            content["bidAmount"],
-            datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
-            content["isAnonymous"]
+            auctionId=content["auctionItemId"],  # Use auctionId instead of auctionItemId
+            bidAmount=float(content["bidAmount"]),
+            customerId=content["customerId"],
+            isAnonymous=content["isAnonymous"],
+            bidDate=datetime.now(timezone.utc),  # Add the current UTC date/time
         )
+
+        # Validate bid amount against current price
+        auction_item = auctionItemConnection.getAuctionItemById(content["auctionItemId"])
+        if not auction_item:
+            return jsonify({"message": "Auction item not found"}), 404
+
+        if bid.bidAmount <= auction_item["currentPrice"]:
+            return jsonify({"message": "Bid amount must be higher than current price"}), 400
+
+        # Create the bid with the required connections
+        result = bidConnection.createBid(bid, customerConnection, auctionItemConnection)
         
-        bid_id = bidConnection.createBid(bid, customerConnection, auctionItemConnection)
-        if bid_id:
-            return jsonify({"message": "Bid created successfully", "bidId": str(bid_id)}), 201
+        # If bid was created successfully, update the auction item's current price
+        if result:
+            # Update the auction item's current price
+            # Use content["auctionItemId"] here since that's the name used in the request
+            update_result = auctionItemConnection.update_auction_price(
+                content["auctionItemId"], bid.bidAmount
+            )
+            
+            if update_result:
+                return jsonify({"message": "Bid placed successfully and price updated"}), 201
+            else:
+                # Bid was created but price wasn't updated
+                return jsonify({"message": "Bid placed successfully but price update failed"}), 201
         else:
-            return jsonify({"error": "Failed to create bid."}), 400
+            return jsonify({"message": "Failed to create bid"}), 500
 
-
+    except Exception as e:
+        print(f"Error in createBid: {e}")
+        return jsonify({"message": "Unable to create bid", "error": str(e)}), 500
 # server function for getting top 3 bids for an auction item
 @app.route('/getTopBids/<auctionId>', methods=['GET'])
 def getTopBids(auctionId):

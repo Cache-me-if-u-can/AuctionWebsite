@@ -61,7 +61,8 @@ const Listing: React.FC = () => {
 
       console.log("Submitting bid:", bidData);
 
-      const response = await fetch("http://127.0.0.1:8080/createBid", {
+      // Create the bid (which will also update the price on the backend)
+      const bidResponse = await fetch("http://127.0.0.1:8080/createBid", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,18 +72,25 @@ const Listing: React.FC = () => {
         body: JSON.stringify(bidData),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to place bid");
+      if (!bidResponse.ok) {
+        const errorData = await bidResponse.json();
+        throw new Error(
+          errorData.message || errorData.error || "Failed to place bid",
+        );
       }
 
-      const data = await response.json();
-      console.log("Bid placed successfully:", data);
+      // Bid was successful - update local state
+      //setAuctionItem({
+      //  ...auctionItem,
+      //  currentPrice: maxBid,
+      //});
+      //
+      // Clear the bid input
+      setMaxBid("");
 
-      // Update auction item's current price
-      //!TODO: Update auction item's current price in the UI and backend
-      alert("Bid placed successfully!");
-      //window.location.reload();
+      // Show success message
+      const bidResult = await bidResponse.json();
+      alert(bidResult.message || "Bid placed successfully!");
     } catch (error) {
       console.error("Error placing bid:", error);
       alert(
@@ -90,6 +98,7 @@ const Listing: React.FC = () => {
       );
     }
   };
+
   const renderImage = () => {
     try {
       if (auctionItem.image instanceof Blob) {

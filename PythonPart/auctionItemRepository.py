@@ -136,3 +136,15 @@ class AuctionItemRepository:
         if result.modified_count > 0:
             return True
         return False
+
+    def update_auction_price(self, auction_item_id, new_price):
+        try:
+            result = self.coll.update_one(
+                {"_id": ObjectId(auction_item_id)},
+                {"$set": {"currentPrice": new_price}}
+            )
+            return result.modified_count > 0
+        except Exception as e:
+            print(f"Error updating auction price: {e}")
+            return False
+
