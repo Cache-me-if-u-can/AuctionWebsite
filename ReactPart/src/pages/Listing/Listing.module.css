@@ -53,6 +53,66 @@
   flex: 0 0 40%;
   max-width: 500px;
 }
+.anonymousBidOption {
+  margin: 16px 0;
+  display: flex;
+  align-items: center;
+}
+
+.anonymousCheckbox {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  user-select: none;
+  color: #2c3e50;
+}
+
+.anonymousCheckbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  left: 0;
+  height: 22px;
+  width: 22px;
+  background-color: #fff;
+  border: 2px solid #1976d2;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.anonymousCheckbox:hover input ~ .checkmark {
+  background-color: #e3f2fd;
+}
+
+.anonymousCheckbox input:checked ~ .checkmark {
+  background-color: #1976d2;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.anonymousCheckbox input:checked ~ .checkmark:after {
+  display: block;
+  left: 5.5px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
 
 .auctionImage {
   width: 100%;

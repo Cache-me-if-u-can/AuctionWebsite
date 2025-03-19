@@ -1,4 +1,3 @@
-// ReactPart/src/pages/Listing/Listing.tsx
 import React from "react";
 import { useLocation, useParams } from "react-router-dom";
 import styles from "./Listing.module.css";
@@ -11,10 +10,10 @@ import { useUser } from "../../context/UserProvider";
 const Listing: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
-  //const auctionItem = location.state?.listing as AuctionItem;
   const [maxBid, setMaxBid] = React.useState<number | string>("");
   const [warningVisible, setWarningVisible] = React.useState(false);
   const { getCsrfToken } = useUser();
+  const [isAnonymous, setIsAnonymous] = React.useState<boolean>(false);
   const [auctionItem, setAuctionItem] = React.useState<AuctionItem | null>(
     location.state?.listing as AuctionItem,
   );
@@ -59,7 +58,7 @@ const Listing: React.FC = () => {
         auctionItemId: auctionItem._id,
         bidAmount: maxBid,
         customerId: userData._id,
-        isAnonymous: false,
+        isAnonymous: isAnonymous,
       };
 
       console.log("Submitting bid:", bidData);
@@ -177,11 +176,24 @@ const Listing: React.FC = () => {
                     }
                     className={styles.bidInput}
                   />
+
                   {warningVisible && (
                     <div className={styles.warningText}>
                       Your bid must be higher than the current bid.
                     </div>
                   )}
+                  <div className={styles.anonymousBidOption}>
+                    <label className={styles.anonymousCheckbox}>
+                      <input
+                        type="checkbox"
+                        checked={isAnonymous}
+                        onChange={(e) => setIsAnonymous(e.target.checked)}
+                      />
+                      <span className={styles.checkmark}></span>
+                      Bid anonymously
+                    </label>
+                  </div>
+
                   <button className={styles.bidButton} onClick={handleBid}>
                     Place Bid
                   </button>
