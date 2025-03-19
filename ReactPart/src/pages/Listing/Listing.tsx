@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import styles from "./Listing.module.css";
 import Header from "../../components/Header/Header";
@@ -17,7 +17,22 @@ const Listing: React.FC = () => {
   const [auctionItem, setAuctionItem] = React.useState<AuctionItem | null>(
     location.state?.listing as AuctionItem,
   );
+  const [leaderboard, setLeaderboard] = useState<any[]>([]);
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8080/getTopBids/${id}`);
+        const data = await response.json();
+        setLeaderboard(data);
+      } catch (error) {
+        console.error("Error fetching leaderboard:", error);
+      }
+    };
 
+    if (id) {
+      fetchLeaderboard();
+    }
+  }, [id]);
   // Add loading state
   if (!auctionItem) {
     return <div className={styles.loadingContainer}>Loading...</div>;
@@ -228,18 +243,18 @@ const Listing: React.FC = () => {
 
           <div className={styles.bidderLeaderboard}>
             <h3>Leaderboard</h3>
-            <div className={styles.bidder}>
-              <h4>1. John Doe</h4>
-              <h4>£100</h4>
-            </div>
-            <div className={styles.bidder}>
-              <h4>2. Jane Doe</h4>
-              <h4>£90</h4>
-            </div>
-            <div className={styles.bidder}>
-              <h4>3. John Smith</h4>
-              <h4>£80</h4>
-            </div>
+            {leaderboard.length > 0 ? (
+              leaderboard.map((bid, index) => (
+                <div key={index} className={styles.bidder}>
+                  <h4>
+                    {index + 1}. {bid.userName}
+                  </h4>
+                  <h4>£{bid.bidAmount}</h4>
+                </div>
+              ))
+            ) : (
+              <p>No bids found for this auction item.</p>
+            )}{" "}
           </div>
         </div>
       </div>

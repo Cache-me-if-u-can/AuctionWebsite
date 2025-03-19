@@ -89,11 +89,14 @@ class BidRepository:
 
     # get top three bids with user info
     def getTopThreeBids(self, auctionId, customerConnection):
-        top_bids = self.coll.find({'auctionItemId': ObjectId(auctionId)}, sort=[("bidAmount", -1)]).limit(3)
+        top_bids = self.coll.find({'auctionItemId': auctionId}, sort=[("bidAmount", -1)]).limit(3)
         results = []
         for bid in top_bids:
+            print(f"Processing bid: {bid}")
             customer = customerConnection.getCustomerById(bid["customerId"])
-            user_name = "Anonymous User" if bid.get("isAnonymous", False) else f"{customer['firstName']} {customer['lastName']}"
+            if not customer:
+                continue
+            user_name = "Anonymous User" if bid.get("isAnonymous", False) else f"{customer['name']} {customer['surname']}"
             results.append({
                 "userName": user_name,
                 "bidAmount": bid["bidAmount"]
