@@ -11,10 +11,13 @@ import { useUser } from "../../context/UserProvider";
 const Listing: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
-  const auctionItem = location.state?.listing as AuctionItem;
+  //const auctionItem = location.state?.listing as AuctionItem;
   const [maxBid, setMaxBid] = React.useState<number | string>("");
   const [warningVisible, setWarningVisible] = React.useState(false);
   const { getCsrfToken } = useUser();
+  const [auctionItem, setAuctionItem] = React.useState<AuctionItem | null>(
+    location.state?.listing as AuctionItem,
+  );
 
   // Add loading state
   if (!auctionItem) {
@@ -80,11 +83,11 @@ const Listing: React.FC = () => {
       }
 
       // Bid was successful - update local state
-      //setAuctionItem({
-      //  ...auctionItem,
-      //  currentPrice: maxBid,
-      //});
-      //
+      setAuctionItem({
+        ...auctionItem,
+        currentPrice: maxBid,
+      });
+
       // Clear the bid input
       setMaxBid("");
 
