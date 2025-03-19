@@ -30,7 +30,6 @@ from questionRepository import *
 from answerRepository import *
 from categoryRepository import *
 from bidRepository import *
-import datetime
 from pprint import pprint
 
 app = Flask(__name__)
@@ -243,8 +242,8 @@ def signIn():
                 }
             )
 
-            expiration_time = datetime.datetime.fromtimestamp(
-                decode_token(token)["exp"], datetime.UTC
+            expiration_time = datetime.fromtimestamp(
+                decode_token(token)["exp"], timezone.utc
             )
             response = jsonify(
                 {
@@ -277,7 +276,7 @@ def signOut():
 def getUserInfo():
     current_user = get_jwt_identity()
 
-    expiration_time = datetime.datetime.fromtimestamp(get_jwt()["exp"], datetime.UTC)
+    expiration_time = datetime.fromtimestamp(get_jwt()["exp"], timezone.utc)
 
     if current_user["userType"] == "customer":
         existCustomer = customerConnection.getCustomerById(current_user["id"])
@@ -587,7 +586,7 @@ def createBid():
             content["auctionItemId"],
             content["customerId"],
             content["bidAmount"],
-            datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+            datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
             content["isAnonymous"]
         )
         
