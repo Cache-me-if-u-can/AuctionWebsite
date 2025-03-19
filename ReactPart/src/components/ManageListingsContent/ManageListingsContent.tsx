@@ -9,6 +9,10 @@ import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
 const ManageListingsContent: React.FC = () => {
   const [view, setView] = useState("list");
   const [isOverlayVisible, setOverlayVisible] = useState(false);
+  const [isEditOverlayVisible, setIsEditOverlayVisible] = useState(false);
+  const [editingListing, setEditingListing] = useState<AuctionItem | null>(
+    null
+  );
   const [listings, setListings] = useState<AuctionItem[]>([]);
 
   useEffect(() => {
@@ -48,6 +52,17 @@ const ManageListingsContent: React.FC = () => {
     setListings((prevListings) => [...prevListings, newListing]);
   };
 
+  const handleEditStart = (listing: AuctionItem) => {
+    setEditingListing(listing);
+    setIsEditOverlayVisible(true);
+  };
+
+  const handleEditComplete = (updatedListing: AuctionItem) => {
+    setIsEditOverlayVisible(false);
+    setEditingListing(null);
+    // Optionally update the listings state here instead of reloading the page
+  };
+
   return (
     <div className={styles["listing-container"]}>
       <div className={styles.mainContent}>
@@ -62,12 +77,26 @@ const ManageListingsContent: React.FC = () => {
           }`}
         >
           {listings.map((listing) => (
-            <ManageableListing key={listing._id} view={view} {...listing} />
+            <ManageableListing
+              key={listing._id}
+              view={view}
+              {...listing}
+              onEditClick={() => handleEditStart(listing)}
+            />
           ))}
         </div>
 
         {isOverlayVisible && (
           <OverlayForm onClose={toggleOverlay} onSubmit={handleAddListing} />
+        )}
+
+        {isEditOverlayVisible && editingListing && (
+          <OverlayForm
+            onClose={() => setIsEditOverlayVisible(false)}
+            onSubmit={handleEditComplete}
+            initialData={editingListing}
+            isEditing={true}
+          />
         )}
       </div>
     </div>

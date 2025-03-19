@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./ManageableListing.module.css";
 import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
-import OverlayForm from "../OverlayForm/OverlayForm";
 import ConfirmDelete from "../ConfirmDelete/ConfirmDelete";
 
 interface ManageableListingProps extends AuctionItem {
   view: string;
+  onEditClick: () => void;
 }
 
 const ManageableListing: React.FC<ManageableListingProps> = ({
@@ -22,49 +22,11 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
   charityId,
   status,
   view,
+  onEditClick,
 }) => {
-  const [isEditOverlayVisible, setIsEditOverlayVisible] = useState(false);
   const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
   const navigate = useNavigate();
   const imageUrl = image ? URL.createObjectURL(new Blob([image])) : "";
-
-  const toggleEditOverlay = () => {
-    setIsEditOverlayVisible(!isEditOverlayVisible);
-  };
-
-  const handleEditSubmit = async (updatedListing: AuctionItem) => {
-    try {
-      console.log("Submitting updated listing:", updatedListing);
-
-      const response = await fetch("http://127.0.0.1:8080/updateAuctionItem", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          ...updatedListing,
-          _id: _id, // Ensure we're passing the correct ID
-        }),
-      });
-
-      console.log("Update response status:", response.status);
-
-      if (response.ok) {
-        console.log("Update successful");
-        window.location.reload();
-      } else {
-        const errorData = await response.json();
-        console.error("Failed to update listing:", errorData);
-        alert(errorData.message || "Failed to update listing");
-      }
-    } catch (error) {
-      console.error("Error updating listing:", error);
-      alert("An error occurred while updating the listing");
-    }
-
-    setIsEditOverlayVisible(false);
-  };
 
   // View the listing details
   const viewListing = () => {
@@ -112,26 +74,6 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
         view === "grid" ? styles.gridView : styles.listView
       }`}
     >
-      {isEditOverlayVisible && (
-        <OverlayForm
-          onClose={toggleEditOverlay}
-          onSubmit={handleEditSubmit}
-          initialData={{
-            _id, // Add this
-            title,
-            description,
-            startingPrice,
-            currentPrice,
-            image,
-            auctionStartDate,
-            auctionEndDate,
-            categoryId,
-            charityId,
-            status,
-          }}
-          isEditing={true}
-        />
-      )}
       {renderImage()}
       <div className={styles.details}>
         <h3>{title}</h3>
@@ -160,7 +102,7 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
           Listing
         </a>
         <a className={styles.viewBidders}>Bidders</a>
-        <a className={styles.editListing} onClick={toggleEditOverlay}>
+        <a className={styles.editListing} onClick={onEditClick}>
           Edit
         </a>
         <a
