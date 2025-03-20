@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./AuctionListing.module.css";
 import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
+import { formatDateString } from "../../utils/timeUtils";
 
 interface AuctionListingProps extends Omit<AuctionItem, "_id"> {
   _id?: string;
@@ -77,8 +78,8 @@ const AuctionListing: React.FC<AuctionListingProps> = ({
         <p>Description: {description}</p>
         <p>Category: {categoryId}</p>
         <div className={styles.auctionDetails}>
-          <p>Auction Starts: {auctionStartDate}</p>
-          <p>Auction Ends: {auctionEndDate}</p>
+          <p>Auction Starts: {formatDateString(auctionStartDate)}</p>
+          <p>Auction Ends: {formatDateString(auctionEndDate)}</p>
           <h1 className={styles.bid}>Current bid: £{currentPrice}</h1>
           <button className={styles.bidButton} onClick={viewListing}>
             Place Bid

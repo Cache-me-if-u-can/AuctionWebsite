@@ -25,3 +25,22 @@ export const formatTimeRemaining = (time: { days: number; hours: number; minutes
     return `${time.seconds} seconds`;
   }
 };
+// Format a date string to a readable format
+export const formatDateString = (dateString: string) => {
+  try {
+    const date = new Date(dateString);
+
+    // Format: "March 28, 2025 at 11:02 AM"
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+  } catch (error) {
+    console.error("Error formatting date:", error);
+    return dateString;
+  }
+};
