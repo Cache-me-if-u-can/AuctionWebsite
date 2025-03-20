@@ -6,6 +6,7 @@ import Footer from "../../components/Footer/Footer";
 import AuctionBanner from "../../components/auctionBanner/auctionBanner";
 import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
 import { useUser } from "../../context/UserProvider";
+import { getTimeRemaining, formatTimeRemaining } from "../../utils/timeUtils";
 
 const Listing: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,6 +19,7 @@ const Listing: React.FC = () => {
     null,
   );
   const [leaderboard, setLeaderboard] = useState<any[]>([]);
+  const [timeRemaining, setTimeRemaining] = useState<string>("");
   useEffect(() => {
     const fetchAuctionItem = async () => {
       try {
@@ -29,6 +31,7 @@ const Listing: React.FC = () => {
         }
         const data = await response.json();
         setAuctionItem(data);
+        updateTimeRemaining(data.auctionEndDate);
       } catch (error) {
         console.error("Error fetching auction item:", error);
       }
@@ -38,6 +41,13 @@ const Listing: React.FC = () => {
       fetchLeaderboard();
       fetchAuctionItem();
     }
+    const interval = setInterval(() => {
+      if (auctionItem) {
+        updateTimeRemaining(auctionItem.auctionEndDate);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, [id]);
 
   const fetchLeaderboard = async () => {
@@ -50,6 +60,10 @@ const Listing: React.FC = () => {
     }
   };
 
+  const updateTimeRemaining = (endDate: string) => {
+    const time = getTimeRemaining(endDate);
+    setTimeRemaining(formatTimeRemaining(time));
+  };
   // Add loading state
   if (!auctionItem) {
     return <div className={styles.loadingContainer}>Loading...</div>;
@@ -252,7 +266,7 @@ const Listing: React.FC = () => {
                     <span>People bidding on this item: 3</span>
                   </div>
                   <div className={styles.infoCard}>
-                    <span>Ends in: 3 days</span>
+                    <span>Ends in: {timeRemaining}</span>
                   </div>
                 </div>
               </div>
