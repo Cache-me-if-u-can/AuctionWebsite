@@ -33,21 +33,23 @@ const Listing: React.FC = () => {
         console.error("Error fetching auction item:", error);
       }
     };
-    const fetchLeaderboard = async () => {
-      try {
-        const response = await fetch(`http://127.0.0.1:8080/getTopBids/${id}`);
-        const data = await response.json();
-        setLeaderboard(data);
-      } catch (error) {
-        console.error("Error fetching leaderboard:", error);
-      }
-    };
 
     if (id) {
       fetchLeaderboard();
       fetchAuctionItem();
     }
   }, [id]);
+
+  const fetchLeaderboard = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8080/getTopBids/${id}`);
+      const data = await response.json();
+      setLeaderboard(data);
+    } catch (error) {
+      console.error("Error fetching leaderboard:", error);
+    }
+  };
+
   // Add loading state
   if (!auctionItem) {
     return <div className={styles.loadingContainer}>Loading...</div>;
@@ -123,6 +125,7 @@ const Listing: React.FC = () => {
       // Show success message
       const bidResult = await bidResponse.json();
       alert(bidResult.message || "Bid placed successfully!");
+      fetchLeaderboard();
     } catch (error) {
       console.error("Error placing bid:", error);
       alert(
