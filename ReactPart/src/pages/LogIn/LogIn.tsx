@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import styles from "./LogIn.module.css";
 import Header from "../../components/Header/Header";
@@ -17,8 +17,21 @@ export default function LogIn() {
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("userEmail");
+    const savedPassword = localStorage.getItem("userPassword");
+
+    if (savedEmail && savedPassword) {
+      setFormData({
+        userEmail: savedEmail,
+        userPassword: savedPassword,
+        rememberMe: true,
+      });
+    }
+  }, []);
+
   const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = event.target;
     let processedValue = value;
@@ -66,6 +79,15 @@ export default function LogIn() {
       try {
         await logIn(formData.userEmail, formData.userPassword);
         console.log("Logged in!");
+
+        // Storing credential for remember me feature
+        if (formData.rememberMe) {
+          localStorage.setItem("userEmail", formData.userEmail);
+          localStorage.setItem("userPassword", formData.userPassword);
+        } else {
+          localStorage.removeItem("userEmail");
+          localStorage.removeItem("userPassword");
+        }
       } catch (error) {
         console.error("Login failed:", error);
       }
