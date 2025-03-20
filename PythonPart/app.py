@@ -703,6 +703,10 @@ def getAuctionItem(auctionItem_id):
         auction_item = auctionItemConnection.getAuctionItemById(auctionItem_id)
         if not auction_item:
             return jsonify({"message": "Auction item not found"}), 404
+
+        # Add charityName and categoryName to the auction item
+        auction_item["charityName"] = charityConnection.getCharityById(auction_item["charityId"])["name"]
+        auction_item["categoryName"] = categoryConnection.getCategoryById(auction_item["categoryId"])["categoryName"]
         return jsonify(auction_item), 200
     except Exception as e:
         print(f"Error: {e}")

@@ -12,4 +12,7 @@ export interface AuctionItem {
   categoryId: string;
   charityId: string;
   status: AuctionStatus;
+  //Optional, not sure if they will be used elsewhere for now
+  charityName?: string;
+  categoryName?: string;
 }

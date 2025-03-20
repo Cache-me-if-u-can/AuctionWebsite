@@ -166,10 +166,10 @@ const Listing: React.FC = () => {
                 Status: {auctionItem.status}
               </div>
               <div className={styles.charityBadge}>
-                Charity ID: {auctionItem.charityId}
+                Charity: {auctionItem.charityName}
               </div>
               <div className={styles.categoryBadge}>
-                Category: {auctionItem.categoryId}
+                Category: {auctionItem.categoryName}
               </div>
               <div className={styles.descriptionSection}>
                 <p>{auctionItem.description}</p>
