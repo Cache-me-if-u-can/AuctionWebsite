@@ -15,10 +15,24 @@ const Listing: React.FC = () => {
   const { getCsrfToken } = useUser();
   const [isAnonymous, setIsAnonymous] = React.useState<boolean>(false);
   const [auctionItem, setAuctionItem] = React.useState<AuctionItem | null>(
-    location.state?.listing as AuctionItem,
+    null,
   );
   const [leaderboard, setLeaderboard] = useState<any[]>([]);
   useEffect(() => {
+    const fetchAuctionItem = async () => {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8080/getAuctionItem/${id}`,
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch auction item");
+        }
+        const data = await response.json();
+        setAuctionItem(data);
+      } catch (error) {
+        console.error("Error fetching auction item:", error);
+      }
+    };
     const fetchLeaderboard = async () => {
       try {
         const response = await fetch(`http://127.0.0.1:8080/getTopBids/${id}`);
@@ -31,6 +45,7 @@ const Listing: React.FC = () => {
 
     if (id) {
       fetchLeaderboard();
+      fetchAuctionItem();
     }
   }, [id]);
   // Add loading state

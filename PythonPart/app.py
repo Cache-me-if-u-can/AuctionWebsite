@@ -400,17 +400,24 @@ def getCharityAuctionItems():
     try:
         current_user = get_jwt_identity()
         if current_user["userType"] != "charity":
-            return jsonify({
-                "message": "Access forbidden: Only charity users can access this route"
-            }), 403
+            return (
+                jsonify(
+                    {
+                        "message": "Access forbidden: Only charity users can access this route"
+                    }
+                ),
+                403,
+            )
 
         charity_id = current_user["id"]
         auction_items = auctionItemConnection.getAuctionItemsByCharityId(charity_id)
-        
+
         # Convert category IDs to category names
         for item in auction_items:
-            item["categoryId"] = categoryConnection.getCategoryById(item["categoryId"])["categoryName"]
-            
+            item["categoryId"] = categoryConnection.getCategoryById(item["categoryId"])[
+                "categoryName"
+            ]
+
         return jsonify(auction_items), 200
     except Exception as e:
         print(f"Error: {e}")
@@ -537,9 +544,10 @@ def updateAuctionItem():
             500,
         )
 
+
 # Update price after a bid
 @app.route("/updateAuctionPrice", methods=["POST"])
-@jwt_required()  
+@jwt_required()
 def update_auction_price():
     try:
         content = request.json
@@ -548,27 +556,31 @@ def update_auction_price():
 
         auction_item_id = content["auctionItemId"]
         new_price = float(content["newPrice"])
-        
+
         # Get the item to check current price
         auction_item = auctionItemConnection.getAuctionItemById(auction_item_id)
         if not auction_item:
             return jsonify({"message": "Auction item not found"}), 404
-            
+
         # Ensure new price is higher
         if new_price <= auction_item["currentPrice"]:
-            return jsonify({"message": "New price must be higher than current price"}), 400
-            
+            return (
+                jsonify({"message": "New price must be higher than current price"}),
+                400,
+            )
+
         # Update only the price
         success = auctionItemConnection.updateAuctionPrice(auction_item_id, new_price)
-        
+
         if success:
             return jsonify({"message": "Price updated successfully"}), 200
         else:
             return jsonify({"message": "Failed to update price"}), 500
-            
+
     except Exception as e:
         print(f"Error in updateAuctionPrice: {e}")
         return jsonify({"message": "Unable to update price", "error": str(e)}), 500
+
 
 ##Delete Auction Item
 @app.route("/deleteAuctionItem", methods=["POST"])
@@ -621,7 +633,9 @@ def create_bid():
 
         # Create bid object with all required parameters including bidDate
         bid = Bid(
-            auctionId=content["auctionItemId"],  # Use auctionId instead of auctionItemId
+            auctionId=content[
+                "auctionItemId"
+            ],  # Use auctionId instead of auctionItemId
             bidAmount=float(content["bidAmount"]),
             customerId=content["customerId"],
             isAnonymous=content["isAnonymous"],
@@ -629,16 +643,21 @@ def create_bid():
         )
 
         # Validate bid amount against current price
-        auction_item = auctionItemConnection.getAuctionItemById(content["auctionItemId"])
+        auction_item = auctionItemConnection.getAuctionItemById(
+            content["auctionItemId"]
+        )
         if not auction_item:
             return jsonify({"message": "Auction item not found"}), 404
 
         if bid.bidAmount <= auction_item["currentPrice"]:
-            return jsonify({"message": "Bid amount must be higher than current price"}), 400
+            return (
+                jsonify({"message": "Bid amount must be higher than current price"}),
+                400,
+            )
 
         # Create the bid with the required connections
         result = bidConnection.createBid(bid, customerConnection, auctionItemConnection)
-        
+
         # If bid was created successfully, update the auction item's current price
         if result:
             # Update the auction item's current price
@@ -646,25 +665,48 @@ def create_bid():
             update_result = auctionItemConnection.update_auction_price(
                 content["auctionItemId"], bid.bidAmount
             )
-            
+
             if update_result:
-                return jsonify({"message": "Bid placed successfully and price updated"}), 201
+                return (
+                    jsonify({"message": "Bid placed successfully and price updated"}),
+                    201,
+                )
             else:
                 # Bid was created but price wasn't updated
-                return jsonify({"message": "Bid placed successfully but price update failed"}), 201
+                return (
+                    jsonify(
+                        {"message": "Bid placed successfully but price update failed"}
+                    ),
+                    201,
+                )
         else:
             return jsonify({"message": "Failed to create bid"}), 500
 
     except Exception as e:
         print(f"Error in createBid: {e}")
         return jsonify({"message": "Unable to create bid", "error": str(e)}), 500
+
+
 # server function for getting top 3 bids for an auction item
-@app.route('/getTopBids/<auctionId>', methods=['GET'])
+@app.route("/getTopBids/<auctionId>", methods=["GET"])
 def getTopBids(auctionId):
     top_bids = bidConnection.getTopThreeBids(auctionId, customerConnection)
     if not top_bids:
-            return jsonify({"message": "No bids found for this auction item."}), 200
+        return jsonify({"message": "No bids found for this auction item."}), 200
     return jsonify(top_bids), 200
+
+
+# Get Auction Item by ID
+@app.route("/getAuctionItem/<string:auctionItem_id>", methods=["GET"])
+def getAuctionItem(auctionItem_id):
+    try:
+        auction_item = auctionItemConnection.getAuctionItemById(auctionItem_id)
+        if not auction_item:
+            return jsonify({"message": "Auction item not found"}), 404
+        return jsonify(auction_item), 200
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"message": "Unable to fetch auction item"}), 500
 
 
 if __name__ == "__main__":
