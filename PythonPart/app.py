@@ -705,12 +705,61 @@ def getAuctionItem(auctionItem_id):
             return jsonify({"message": "Auction item not found"}), 404
 
         # Add charityName and categoryName to the auction item
-        auction_item["charityName"] = charityConnection.getCharityById(auction_item["charityId"])["name"]
-        auction_item["categoryName"] = categoryConnection.getCategoryById(auction_item["categoryId"])["categoryName"]
+        auction_item["charityName"] = charityConnection.getCharityById(
+            auction_item["charityId"]
+        )["name"]
+        auction_item["categoryName"] = categoryConnection.getCategoryById(
+            auction_item["categoryId"]
+        )["categoryName"]
         return jsonify(auction_item), 200
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"message": "Unable to fetch auction item"}), 500
+
+
+# Get all bids for the current user
+@app.route("/getUserBids", methods=["GET"])
+@jwt_required()
+def get_user_bids():
+    try:
+        # Get current user's ID from JWT token
+        user_data_response = get_jwt_identity()
+        user_id = ObjectId(user_data_response)
+
+        # Get all bids for this user with item details
+        bids = []
+        user_bids = bidConnection.getBidsByCustomerId(user_id)
+
+        for bid in user_bids:
+            auction_item = auctionItemConnection.getAuctionItemById(bid.auctionItemId)
+
+            # Get the highest bid for this auction to determine if user is winning
+            highest_bid = bidConnection.getCurrentBid(bid.auctionItemId)
+            is_highest_bidder = bid.bidAmount == highest_bid
+
+            bid_info = {
+                "bid_id": str(bid._id),
+                "auction_item_id": str(bid.auctionItemId),
+                "title": auction_item.title if auction_item else "Unknown Item",
+                "image": auction_item.image if auction_item else "",
+                "bid_amount": bid.bidAmount,
+                "current_highest_bid": highest_bid,
+                "is_highest_bidder": is_highest_bidder,
+                "bid_date": bid.bidDate,
+                "auction_end_date": (
+                    auction_item.auctionEndDate if auction_item else None
+                ),
+                "auction_status": auction_item.status if auction_item else "unknown",
+            }
+            bids.append(bid_info)
+
+        # Sort bids by date (most recent first)
+        bids.sort(key=lambda x: x["bid_date"], reverse=True)
+
+        return jsonify({"bids": bids})
+    except Exception as e:
+        print(f"Error retrieving user bids: {e}")
+        return jsonify({"error": "Failed to retrieve bids"}), 500
 
 
 if __name__ == "__main__":
