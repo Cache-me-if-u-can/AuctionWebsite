@@ -41,6 +41,9 @@ const SlideMenu: React.FC<SlideMenuProps> = ({
         <Link to="/Charities" className={styles.slide_nav_link}>
           Charities
         </Link>
+        <Link to="/SearchAuctions" className={styles.slide_nav_link}>
+          Auctions
+        </Link>
         <div className={styles.auth_buttons}>
           {!username && (
             <>
