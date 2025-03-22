@@ -1,0 +1,161 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+}
+
+.filterButton {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filterButton.active {
+  background: #007bff;
+  color: white;
+  border-color: #0056b3;
+}
+
+.sortSelect {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.bidsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.bidCard {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.bidCard:hover {
+  transform: translateY(-4px);
+}
+
+.bidImageContainer {
+  height: 200px;
+  overflow: hidden;
+}
+
+.bidImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bidInfo {
+  padding: 1rem;
+}
+
+.bidTitle {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.bidDetails {
+  margin-bottom: 1rem;
+}
+
+.bidStatus {
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.leading {
+  color: #28a745;
+}
+
+.outbid {
+  color: #dc3545;
+}
+
+.bidTimeInfo {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.viewButton {
+  width: 100%;
+  padding: 0.5rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.viewButton:hover {
+  background: #0056b3;
+}
+
+.loadingContainer,
+.errorContainer,
+.noBids {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.errorContainer {
+  color: #dc3545;
+}
+
+@media (max-width: 768px) {
+  .controls {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .filters {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sortSelect {
+    width: 100%;
+  }
+
+  .bidsGrid {
+    grid-template-columns: 1fr;
+  }
+}
