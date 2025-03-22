@@ -724,32 +724,34 @@ def get_user_bids():
     try:
         # Get current user's ID from JWT token
         user_data_response = get_jwt_identity()
-        user_id = ObjectId(user_data_response)
+        user_id = user_data_response["id"]
 
         # Get all bids for this user with item details
         bids = []
         user_bids = bidConnection.getBidsByCustomerId(user_id)
 
         for bid in user_bids:
-            auction_item = auctionItemConnection.getAuctionItemById(bid.auctionItemId)
+            auction_item = auctionItemConnection.getAuctionItemById(
+                bid["auctionItemId"]
+            )
 
             # Get the highest bid for this auction to determine if user is winning
-            highest_bid = bidConnection.getCurrentBid(bid.auctionItemId)
-            is_highest_bidder = bid.bidAmount == highest_bid
+            highest_bid = bidConnection.getCurrentBid(bid["auctionItemId"])
+            is_highest_bidder = bid["bidAmount"] == highest_bid
 
             bid_info = {
-                "bid_id": str(bid._id),
-                "auction_item_id": str(bid.auctionItemId),
-                "title": auction_item.title if auction_item else "Unknown Item",
-                "image": auction_item.image if auction_item else "",
-                "bid_amount": bid.bidAmount,
+                "bid_id": str(bid["_id"]),
+                "auction_item_id": str(bid["auctionItemId"]),
+                "title": auction_item["title"] if auction_item else "Unknown Item",
+                "image": auction_item["image"] if auction_item else "",
+                "bid_amount": bid["bidAmount"],
                 "current_highest_bid": highest_bid,
                 "is_highest_bidder": is_highest_bidder,
-                "bid_date": bid.bidDate,
+                "bid_date": bid["bidDate"],
                 "auction_end_date": (
-                    auction_item.auctionEndDate if auction_item else None
+                    auction_item["auctionEndDate"] if auction_item else None
                 ),
-                "auction_status": auction_item.status if auction_item else "unknown",
+                "auction_status": auction_item["status"] if auction_item else "unknown",
             }
             bids.append(bid_info)
 

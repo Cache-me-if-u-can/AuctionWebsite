@@ -91,12 +91,19 @@ class BidRepository:
 
     # get current highest bid amount for auction item
     def getCurrentBid(self, auctionId):
-        highest_bid = self.coll.find_one(
-            {"auctionItemId": ObjectId(auctionId)}, sort=[("bidAmount", -1)]
-        )
-        if highest_bid:
-            return highest_bid["bidAmount"]
-        return None
+        try:
+            print(f"Querying current highest bid for auction ID: {auctionId}")
+            highest_bid = self.coll.find_one(
+                {"auctionItemId": auctionId}, sort=[("bidAmount", -1)]
+            )
+            if highest_bid:
+                print(f"Highest bid found: {highest_bid['bidAmount']}")
+                return highest_bid["bidAmount"]
+            print("No bids found for this auction item.")
+            return None
+        except Exception as e:
+            print(f"Error querying current highest bid for auction ID {auctionId}: {e}")
+            return None
 
     # get top three bids with user info
     def getTopThreeBids(self, auctionId, customerConnection):
@@ -117,22 +124,10 @@ class BidRepository:
             results.append({"userName": user_name, "bidAmount": bid["bidAmount"]})
         return results
 
-    # Get all bids for a customer
-    def getBidsByCustomerId(self, customerId):
-        customer_bids = self.coll.find({"customerId": customerId})
-
-        list_bids = []
-        for bid in customer_bids:
-            _id = bid["_id"]
-            auctionId = bid["auctionItemId"]
-            customerId = bid["customerId"]
-            bidAmount = bid["bidAmount"]
-            bidDate = bid["bidDate"]
-            bidAnonymous = bid["isAnonymous"]
-
-            customer_bid = Bid(
-                _id, auctionId, customerId, bidAmount, bidDate, bidAnonymous
-            )
-            list_bids.append(customer_bid)
-
-        return list_bids
+    def getBidsByCustomerId(self, customer_id):
+        try:
+            bids = list(self.coll.find({"customerId": customer_id}))
+            return bids
+        except Exception as e:
+            print(f"Error querying bids for customer ID {customer_id}: {e}")
+            return []
