@@ -4,6 +4,7 @@ import {
   AuctionItem,
   AuctionStatus,
 } from "../../types/AuctionItem/AuctionItem";
+import { convertToBase64 } from "../../utils/imageUtils";
 import { useUser } from "../../context/UserProvider"; // Import from UserProvider directly
 
 interface OverlayFormProps {
@@ -37,7 +38,7 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
           "http://127.0.0.1:8080/getCategoryDropdownData",
           {
             credentials: "include",
-          }
+          },
         );
         if (response.ok) {
           const data = await response.json();
@@ -66,7 +67,7 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
       auctionStartDate: initialData?.auctionStartDate || "",
       auctionEndDate: initialData?.auctionEndDate || "",
       image: initialData?.image || null,
-    })
+    }),
   );
 
   useEffect(() => {
@@ -142,7 +143,8 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
 
       if (!response.ok) {
         throw new Error(
-          data.message || `Failed to ${isEditing ? "update" : "create"} listing`
+          data.message ||
+            `Failed to ${isEditing ? "update" : "create"} listing`,
         );
       }
 
@@ -152,28 +154,56 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
     } catch (error) {
       console.error("Error in submission:", error);
       alert(
-        error instanceof Error ? error.message : "An unexpected error occurred"
+        error instanceof Error ? error.message : "An unexpected error occurred",
       );
     }
   };
 
-  const handleChange = (
+  const handleChange = async (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value, files } = e.target as HTMLInputElement;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: files ? files[0] : value,
-    }));
-  };
 
+    if (files && files[0]) {
+      // Handle image file
+      const file = files[0];
+
+      // Validate file type
+      if (!file.type.match(/image\/(jpeg|png|jpg)/i)) {
+        alert("File type must be JPG, JPEG or PNG");
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert("File size must be less than 5MB");
+        return;
+      }
+
+      try {
+        const base64String = await convertToBase64(file);
+        setFormData((prev) => ({
+          ...prev,
+          [name]: base64String,
+        }));
+      } catch (error) {
+        console.error("Error converting image:", error);
+        alert("Error processing image. Please try again.");
+      }
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
   // Add a function to determine auction status
   const determineAuctionStatus = (
     startDate: Date,
     endDate: Date,
-    now: Date
+    now: Date,
   ): AuctionStatus => {
     if (endDate < now) {
       return "completed";
