@@ -16,11 +16,13 @@
   height: 20vh;
   padding: 0;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .charity_details {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .charity_name {
@@ -38,38 +40,28 @@
   font-size: 16px;
 }
 
-/* @media (max-width: 600px) {
+@media (max-width: 768px) {
   .charity_entry {
-    display: flex;
     flex-direction: column;
-    padding: 15px;
-    align-items: center;
+    padding: 1rem;
+    gap: 1rem;
   }
-  .charity_details {
-    margin: 0 auto;
-    padding-top: 10px;
-    text-align: center;
-  }
+
   .logo {
-    margin: 0 auto 10px auto;
-    padding: 0;
+    width: 15vh;
+    height: 15vh;
   }
-  .charity_entry_right {
-    display: flex;
-    flex-direction: column-reverse;
-    padding: 15px;
-    align-items: center;
-  }
-  .charity_details_right {
-    text-align: center;
-    margin: 0 auto;
-  }
-  .charity_name_right {
-    padding: 0;
+
+  .charity_details {
     text-align: center;
   }
-  .charity_location_right {
-    padding: 0;
-    text-align: center;
+
+  .charity_name {
+    font-size: 20px;
+    margin-bottom: 0.5rem;
   }
-} */
+
+  .charity_description {
+    font-size: 14px;
+  }
+}

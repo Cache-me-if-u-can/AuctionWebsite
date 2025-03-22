@@ -2,6 +2,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+  padding: 1rem;
 }
 
 .charityList > :nth-child(odd) {
@@ -24,4 +25,16 @@
     var(--periwinkle),
     var(--dark-periwinkle)
   );
+}
+
+@media (max-width: 768px) {
+  .charityList {
+    padding: 0.5rem;
+  }
+
+  .charityList > :nth-child(odd),
+  .charityList > :nth-child(even) {
+    flex-direction: column;
+    text-align: center;
+  }
 }
