@@ -1,4 +1,5 @@
 import React, { useState, useEffect, RefObject } from "react";
+import { useLocation } from "react-router-dom";
 
 interface Charity {
   _id: number;
@@ -20,6 +21,7 @@ const CharitiesForm: React.FC<CharitiesFormProps> = ({
   selectRef,
 }) => {
   const [charities, setCharities] = useState<string[]>([]);
+  const location = useLocation();
 
   useEffect(() => {
     const fetchCharities = async () => {
@@ -33,6 +35,14 @@ const CharitiesForm: React.FC<CharitiesFormProps> = ({
           .map((charity: Charity) => charity.name)
           .sort();
         setCharities(charityNames);
+        // Handle preselected charity from navigation
+        const state = location.state as { preselectedCharity?: string };
+        if (state?.preselectedCharity) {
+          onSelect(state.preselectedCharity);
+          if (selectRef?.current) {
+            selectRef.current.value = state.preselectedCharity;
+          }
+        }
       } catch (error) {
         console.error("Error fetching charities:", error);
         setCharities([]);
@@ -40,7 +50,7 @@ const CharitiesForm: React.FC<CharitiesFormProps> = ({
     };
 
     fetchCharities();
-  }, []);
+  }, [location, onSelect]);
 
   return (
     <div className="charity-select">

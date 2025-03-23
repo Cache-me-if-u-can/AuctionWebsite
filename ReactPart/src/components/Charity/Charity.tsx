@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./Charity.module.css";
+import { useNavigate } from "react-router-dom";
 
 interface CharityProps {
   name: string;
@@ -14,8 +15,17 @@ const Charity: React.FC<CharityProps> = ({
   description,
   logo,
 }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/SearchAuctions", {
+      state: {
+        preselectedCharity: name,
+      },
+    });
+  };
   return (
-    <div className={styles.charity_entry}>
+    <div className={styles.charity_entry} onClick={handleClick}>
       <img src={logo} alt="logo" className={styles.logo} />
       <div className={styles.charity_details}>
         <h1 className={styles.charity_name}>{name}</h1>

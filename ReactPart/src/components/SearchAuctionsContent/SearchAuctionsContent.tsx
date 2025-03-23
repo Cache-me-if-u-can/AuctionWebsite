@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import styles from "./SearchAuctionsContent.module.css";
 import AuctionListing from "../AuctionListing/AuctionListing";
 import ViewToggle from "../ViewToggle/ViewToggle";
@@ -18,11 +19,27 @@ const SearchAuctionsContent: React.FC<SearchAuctionsContentProps> = ({
   onFilterChange,
 }) => {
   const [view, setView] = useState("list");
+  const location = useLocation();
   const [auctions, setAuctions] = useState<AuctionItem[]>([]);
 
   useEffect(() => {
-    fetchAuctions(filters);
-  }, [filters]);
+    // Get preselectedCharity from location state
+    const state = location.state as { preselectedCharity?: string };
+
+    // If there's a preselectedCharity and it's different from current filter
+    if (
+      state?.preselectedCharity &&
+      filters.charity !== state.preselectedCharity
+    ) {
+      onFilterChange({
+        ...filters,
+        charity: state.preselectedCharity,
+      });
+    } else {
+      // If no preselectedCharity or filters changed normally, fetch auctions
+      fetchAuctions(filters);
+    }
+  }, [location, filters]);
 
   const fetchAuctions = async (filters: {
     category: string;
@@ -73,4 +90,3 @@ const SearchAuctionsContent: React.FC<SearchAuctionsContentProps> = ({
 };
 
 export default SearchAuctionsContent;
-
