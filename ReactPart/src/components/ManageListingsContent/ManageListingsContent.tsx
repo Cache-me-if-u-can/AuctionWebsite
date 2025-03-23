@@ -5,13 +5,14 @@ import OverlayForm from "./../OverlayForm/OverlayForm";
 import ManageableListing from "../ManageableListing/ManageableListing";
 import styles from "./ManageListingsContent.module.css";
 import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
+import { processAuctionStatuses } from "../../utils/auctionUtils";
 
 const ManageListingsContent: React.FC = () => {
   const [view, setView] = useState("list");
   const [isOverlayVisible, setOverlayVisible] = useState(false);
   const [isEditOverlayVisible, setIsEditOverlayVisible] = useState(false);
   const [editingListing, setEditingListing] = useState<AuctionItem | null>(
-    null
+    null,
   );
   const [listings, setListings] = useState<AuctionItem[]>([]);
 
@@ -23,7 +24,7 @@ const ManageListingsContent: React.FC = () => {
           {
             method: "GET",
             credentials: "include", // Include cookies for JWT authentication
-          }
+          },
         );
 
         if (response.ok) {
@@ -38,6 +39,16 @@ const ManageListingsContent: React.FC = () => {
     };
 
     fetchAuctionItems();
+  }, []);
+
+  useEffect(() => {
+    const statusCheckInterval = setInterval(() => {
+      setListings((prevListings) =>
+        prevListings ? processAuctionStatuses(prevListings) : prevListings,
+      );
+    }, 60000);
+
+    return () => clearInterval(statusCheckInterval);
   }, []);
 
   const handleViewChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

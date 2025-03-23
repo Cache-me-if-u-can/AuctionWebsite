@@ -4,6 +4,7 @@ import styles from "./SearchAuctionsContent.module.css";
 import AuctionListing from "../AuctionListing/AuctionListing";
 import ViewToggle from "../ViewToggle/ViewToggle";
 import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
+import { processAuctionStatuses } from "../../utils/auctionUtils";
 
 interface SearchAuctionsContentProps {
   filters: { category: string; conditions: string[]; charity: string };
@@ -41,6 +42,17 @@ const SearchAuctionsContent: React.FC<SearchAuctionsContentProps> = ({
     }
   }, [location, filters]);
 
+  useEffect(() => {
+    const statusCheckInterval = setInterval(() => {
+      setAuctions((prevAuctions) =>
+        prevAuctions ? processAuctionStatuses(prevAuctions) : prevAuctions,
+      );
+    }, 60000); // Check every minute
+
+    // Cleanup on component unmount
+    return () => clearInterval(statusCheckInterval);
+  }, []);
+
   const fetchAuctions = async (filters: {
     category: string;
     conditions: string[];
@@ -60,7 +72,9 @@ const SearchAuctionsContent: React.FC<SearchAuctionsContentProps> = ({
 
       if (response.ok) {
         const result: AuctionItem[] = await response.json();
-        setAuctions(result);
+        // Update status for each item based on auction end date
+        const processedAuctions = processAuctionStatuses(result);
+        setAuctions(processedAuctions);
       } else {
         console.error(`Unexpected error: ${response.statusText}`);
       }

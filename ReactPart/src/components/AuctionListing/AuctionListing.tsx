@@ -22,6 +22,9 @@ const AuctionListing: React.FC<AuctionListingProps> = ({
   image,
   view,
 }) => {
+  const isAuctionEnded =
+    new Date(auctionEndDate) < new Date() || status === "completed";
+
   const navigate = useNavigate();
 
   const viewListing = () => {
@@ -81,9 +84,13 @@ const AuctionListing: React.FC<AuctionListingProps> = ({
           <p>Auction Starts: {formatDateString(auctionStartDate)}</p>
           <p>Auction Ends: {formatDateString(auctionEndDate)}</p>
           <h1 className={styles.bid}>Current bid: £{currentPrice}</h1>
-          <button className={styles.bidButton} onClick={viewListing}>
-            Place Bid
-          </button>
+          {isAuctionEnded ? (
+            <p className={styles.auctionEnded}>Auction Ended</p>
+          ) : (
+            <button className={styles.bidButton} onClick={viewListing}>
+              Place Bid
+            </button>
+          )}
         </div>
       </div>
     </div>
