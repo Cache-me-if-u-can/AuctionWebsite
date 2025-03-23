@@ -24,11 +24,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const value = event.target.value;
-    setConditions((prevConditions) =>
-      prevConditions.includes(value)
-        ? prevConditions.filter((condition) => condition !== value)
-        : [...prevConditions, value],
-    );
+    setConditions([value]);
   };
 
   const handleFilterClick = () => {
@@ -67,13 +63,15 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
       {/* Status Checkboxes */}
       <div className={styles.filter_group}>
         <label>Status</label>
-        {["live", "complete", "hidden"].map((status) => (
+        {["active", "complete"].map((status) => (
           <label key={status}>
             <input
-              type="checkbox"
+              type="radio"
+              name="status"
+              id={status}
               value={status}
               className={styles.condition_filter}
-              checked={conditions.includes(status)}
+              checked={conditions[0] === status}
               onChange={handleConditionChange}
             />{" "}
             {status.charAt(0).toUpperCase() + status.slice(1)}
