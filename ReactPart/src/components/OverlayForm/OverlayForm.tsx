@@ -195,7 +195,7 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
     } else {
       setFormData((prev) => ({
         ...prev,
-        [name]: value,
+        [name]: name === "startingPrice" ? Number(value) : value,
       }));
     }
   };
