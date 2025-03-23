@@ -152,3 +152,15 @@ class AuctionItemRepository:
         except Exception as e:
             print(f"Error updating auction price: {e}")
             return False
+
+    def update_auction_status(self, auction_id: str, new_status: str) -> bool:
+        try:
+            result = self.coll.update_one(
+                {"_id": ObjectId(auction_id)},
+                {"$set": {"status": new_status}}
+            )
+            return result.modified_count > 0
+        except Exception as e:
+            print(f"Error updating auction status: {e}")
+            return False
+

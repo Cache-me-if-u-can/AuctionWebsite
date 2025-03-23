@@ -43,15 +43,16 @@ const SearchAuctionsContent: React.FC<SearchAuctionsContentProps> = ({
   }, [location, filters]);
 
   useEffect(() => {
-    const statusCheckInterval = setInterval(() => {
-      setAuctions((prevAuctions) =>
-        prevAuctions ? processAuctionStatuses(prevAuctions) : prevAuctions,
-      );
-    }, 60000); // Check every minute
+    const statusCheckInterval = setInterval(async () => {
+      if (!auctions) return;
+      const updatedAuctions = await processAuctionStatuses(auctions);
+      if (JSON.stringify(auctions) !== JSON.stringify(updatedAuctions)) {
+        setAuctions(updatedAuctions);
+      }
+    }, 60000);
 
-    // Cleanup on component unmount
     return () => clearInterval(statusCheckInterval);
-  }, []);
+  }, [auctions]);
 
   const fetchAuctions = async (filters: {
     category: string;
@@ -73,7 +74,7 @@ const SearchAuctionsContent: React.FC<SearchAuctionsContentProps> = ({
       if (response.ok) {
         const result: AuctionItem[] = await response.json();
         // Update status for each item based on auction end date
-        const processedAuctions = processAuctionStatuses(result);
+        const processedAuctions = await processAuctionStatuses(result);
         setAuctions(processedAuctions);
       } else {
         console.error(`Unexpected error: ${response.statusText}`);

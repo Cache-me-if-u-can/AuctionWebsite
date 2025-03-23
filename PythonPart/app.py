@@ -763,6 +763,31 @@ def get_user_bids():
         print(f"Error retrieving user bids: {e}")
         return jsonify({"error": "Failed to retrieve bids"}), 500
 
+@app.route('/updateAuctionStatus/<auction_id>', methods=['PATCH'])
+def update_auction_status(auction_id):
+    try:
+        data = request.get_json()
+        new_status = data.get('status')
+        
+        if not new_status:
+            return jsonify({'error': 'Status is required'}), 400
+            
+        if new_status not in ['hidden', 'live', 'completed']:
+            return jsonify({'error': 'Invalid status value. Must be one of: hidden, live, completed'}), 400
 
+        # Verify the auction item exists before attempting update
+        if not auctionItemConnection.auctionItemExistsById(auction_id):
+            return jsonify({'error': 'Auction item not found'}), 404
+
+        success = auctionItemConnection.update_auction_status(auction_id, new_status)
+        
+        if success:
+            return jsonify({'message': 'Status updated successfully'}), 200
+        else:
+            return jsonify({'error': 'Failed to update status'}), 500
+            
+    except Exception as e:
+        print("Error in update_auction_status:", str(e))
+        return jsonify({'error': 'Internal server error'}), 500
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)

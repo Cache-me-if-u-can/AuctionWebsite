@@ -63,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
       {/* Status Checkboxes */}
       <div className={styles.filter_group}>
         <label>Status</label>
-        {["active", "complete"].map((status) => (
+        {["active", "completed"].map((status) => (
           <label key={status}>
             <input
               type="radio"

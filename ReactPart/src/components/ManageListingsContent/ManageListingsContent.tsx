@@ -29,7 +29,8 @@ const ManageListingsContent: React.FC = () => {
 
         if (response.ok) {
           const result: AuctionItem[] = await response.json();
-          setListings(result);
+          const processedAuctions = await processAuctionStatuses(result);
+          setListings(processedAuctions);
         } else {
           console.error(`Unexpected error: ${response.statusText}`);
         }
@@ -42,14 +43,16 @@ const ManageListingsContent: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const statusCheckInterval = setInterval(() => {
-      setListings((prevListings) =>
-        prevListings ? processAuctionStatuses(prevListings) : prevListings,
-      );
+    const statusCheckInterval = setInterval(async () => {
+      if (!listings) return;
+      const updatedAuctions = await processAuctionStatuses(listings);
+      if (JSON.stringify(listings) !== JSON.stringify(updatedAuctions)) {
+        setListings(updatedAuctions);
+      }
     }, 60000);
 
     return () => clearInterval(statusCheckInterval);
-  }, []);
+  }, [listings]);
 
   const handleViewChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setView(event.target.value);
