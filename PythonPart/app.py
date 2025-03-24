@@ -772,8 +772,8 @@ def update_auction_status(auction_id):
         if not new_status:
             return jsonify({'error': 'Status is required'}), 400
             
-        if new_status not in ['hidden', 'live', 'completed']:
-            return jsonify({'error': 'Invalid status value. Must be one of: hidden, live, completed'}), 400
+        if new_status not in ['hidden', 'active', 'completed']:
+            return jsonify({'error': 'Invalid status value. Must be one of: hidden, active, completed'}), 400
 
         # Verify the auction item exists before attempting update
         if not auctionItemConnection.auctionItemExistsById(auction_id):
