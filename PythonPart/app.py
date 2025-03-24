@@ -376,7 +376,7 @@ def createAuctionItem():
             auctionEndDate=content["auctionEndDate"],
             categoryId=content["categoryId"],
             charityId=content["charityId"],
-            status="active",
+            status=content["status"],
         )
         newId = auctionItemConnection.createAuctionItem(auctionItem)
         if newId == None:

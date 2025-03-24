@@ -1,4 +1,4 @@
-export type AuctionStatus = "hidden" | "live" | "completed";
+export type AuctionStatus = "hidden" | "active" | "completed";
 
 export interface AuctionItem {
   _id?: string;
