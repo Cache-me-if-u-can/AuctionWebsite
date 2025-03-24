@@ -38,13 +38,26 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
           "http://127.0.0.1:8080/getCategoryDropdownData",
           {
             credentials: "include",
-          },
+          }
         );
         if (response.ok) {
           const data = await response.json();
           console.log("Categories data received:", data); // Add logging
           if (data.categories) {
             setCategories(data.categories);
+
+            // If editing and we have a categoryId, find and set the correct category
+            if (isEditing && initialData?.categoryId) {
+              const category = data.categories.find(
+                (cat: Category) => cat.categoryName === initialData.categoryId
+              );
+              if (category) {
+                setFormData((prev) => ({
+                  ...prev,
+                  categoryId: category._id,
+                }));
+              }
+            }
           }
         }
       } catch (error) {
@@ -53,7 +66,7 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
     };
 
     fetchCategories();
-  }, []);
+  }, [isEditing, initialData?.categoryId]);
 
   const [formData, setFormData] = useState<Omit<AuctionItem, "currentPrice">>(
     () => ({
@@ -67,7 +80,7 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
       auctionStartDate: initialData?.auctionStartDate || "",
       auctionEndDate: initialData?.auctionEndDate || "",
       image: initialData?.image || null,
-    }),
+    })
   );
 
   useEffect(() => {
@@ -143,8 +156,7 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
 
       if (!response.ok) {
         throw new Error(
-          data.message ||
-            `Failed to ${isEditing ? "update" : "create"} listing`,
+          data.message || `Failed to ${isEditing ? "update" : "create"} listing`
         );
       }
 
@@ -154,7 +166,7 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
     } catch (error) {
       console.error("Error in submission:", error);
       alert(
-        error instanceof Error ? error.message : "An unexpected error occurred",
+        error instanceof Error ? error.message : "An unexpected error occurred"
       );
     }
   };
@@ -162,7 +174,7 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
   const handleChange = async (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
+    >
   ) => {
     const { name, value, files } = e.target as HTMLInputElement;
 
@@ -203,7 +215,7 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
   const determineAuctionStatus = (
     startDate: Date,
     endDate: Date,
-    now: Date,
+    now: Date
   ): AuctionStatus => {
     if (endDate < now) {
       return "completed";
