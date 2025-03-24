@@ -85,7 +85,7 @@
   color: #dc3545;
 }
 
-.addListingForm input[name="status"][value="live"] {
+.addListingForm input[name="status"][value="active"] {
   color: #28a745;
 }
 

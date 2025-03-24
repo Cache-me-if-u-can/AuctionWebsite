@@ -62,7 +62,7 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
       charityId: initialData?.charityId || "",
       description: initialData?.description || "",
       startingPrice: initialData?.startingPrice || 0,
-      status: initialData?.status || "live",
+      status: initialData?.status || "active",
       categoryId: initialData?.categoryId || "",
       auctionStartDate: initialData?.auctionStartDate || "",
       auctionEndDate: initialData?.auctionEndDate || "",
@@ -211,7 +211,7 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
     if (startDate > now) {
       return "hidden";
     }
-    return "live";
+    return "active";
   };
 
   // Add date validation
@@ -303,7 +303,7 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
       auctionStartDate: formattedNow,
       status: (endDate
         ? determineAuctionStatus(now, endDate, now)
-        : "live") as AuctionStatus,
+        : "active") as AuctionStatus,
     }));
   };
 
@@ -415,7 +415,7 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
             disabled={isEditing && !canEditPrice()}
             title={
               isEditing && !canEditPrice()
-                ? "Cannot change price of a live auction"
+                ? "Cannot change price of an active auction"
                 : ""
             }
           />
@@ -429,7 +429,7 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
                 marginBottom: "10px",
               }}
             >
-              Starting price cannot be changed once auction is live
+              Starting price cannot be changed once auction is active
             </small>
           )}
 
