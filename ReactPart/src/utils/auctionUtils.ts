@@ -25,7 +25,7 @@ export const updateAuctionStatus = async (
       console.error("Failed to update auction status:", error);
       return false;
     }
-  } else if (startDate < now && auction.status !== "active") {
+  } else if (startDate < now && auction.status === "hidden") {
     try {
       const response = await fetch(
         `http://127.0.0.1:8080/updateAuctionStatus/${auction._id}`,
