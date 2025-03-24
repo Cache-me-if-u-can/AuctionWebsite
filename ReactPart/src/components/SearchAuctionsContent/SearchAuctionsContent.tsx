@@ -14,12 +14,14 @@ interface SearchAuctionsContentProps {
     charity: string;
   }) => void;
 }
+type SortType = "endDate" | "currentBid";
 
 const SearchAuctionsContent: React.FC<SearchAuctionsContentProps> = ({
   filters,
   onFilterChange,
 }) => {
   const [view, setView] = useState("list");
+  const [sortBy, setSortBy] = useState<sortType>("endDate");
   const location = useLocation();
   const [auctions, setAuctions] = useState<AuctionItem[]>([]);
 
@@ -53,6 +55,27 @@ const SearchAuctionsContent: React.FC<SearchAuctionsContentProps> = ({
 
     return () => clearInterval(statusCheckInterval);
   }, [auctions]);
+
+  const getSortedAuctions = (auctions: AuctionItem[]) => {
+    const visibleAuctions = auctions.filter(
+      (auction) => auction.status !== "hidden",
+    );
+
+    switch (sortBy) {
+      case "endDate":
+        return [...visibleAuctions].sort(
+          (a, b) =>
+            new Date(a.auctionEndDate).getTime() -
+            new Date(b.auctionEndDate).getTime(),
+        );
+      case "currentBid":
+        return [...visibleAuctions].sort(
+          (a, b) => b.currentPrice - a.currentPrice,
+        );
+      default:
+        return visibleAuctions;
+    }
+  };
 
   const fetchAuctions = async (filters: {
     category: string;
@@ -94,10 +117,20 @@ const SearchAuctionsContent: React.FC<SearchAuctionsContentProps> = ({
 
   return (
     <div className={styles.mainContent}>
-      <ViewToggle view={view} onViewChange={handleViewChange} />
+      <div className={styles.controls}>
+        <ViewToggle view={view} onViewChange={handleViewChange} />
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value as SortType)}
+          className={styles.sortSelect}
+        >
+          <option value="endDate">Sort by End Date</option>
+          <option value="currentBid">Sort by Current Bid</option>
+        </select>
+      </div>
       <div className={view === "grid" ? styles.gridView : styles.listView}>
-        {visibleAuctions.length > 0 ? (
-          visibleAuctions.map((auction) => (
+        {getSortedAuctions(auctions).length > 0 ? (
+          getSortedAuctions(auctions).map((auction) => (
             <AuctionListing key={auction._id} {...auction} view={view} />
           ))
         ) : (

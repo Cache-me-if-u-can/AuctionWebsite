@@ -25,7 +25,20 @@
   transition: all 0.5s ease;
   align-items: center;
 }
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
 
+.sortSelect {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 1rem;
+}
 /* Individual listing styling for both views */
 .listing {
   background-color: #fff;
