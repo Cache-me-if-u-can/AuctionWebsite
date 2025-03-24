@@ -88,12 +88,16 @@ const SearchAuctionsContent: React.FC<SearchAuctionsContentProps> = ({
     setView(event.target.value);
   };
 
+  const visibleAuctions = auctions.filter(
+    (auction) => auction.status !== "hidden",
+  );
+
   return (
     <div className={styles.mainContent}>
       <ViewToggle view={view} onViewChange={handleViewChange} />
       <div className={view === "grid" ? styles.gridView : styles.listView}>
-        {auctions.length > 0 ? (
-          auctions.map((auction) => (
+        {visibleAuctions.length > 0 ? (
+          visibleAuctions.map((auction) => (
             <AuctionListing key={auction._id} {...auction} view={view} />
           ))
         ) : (
