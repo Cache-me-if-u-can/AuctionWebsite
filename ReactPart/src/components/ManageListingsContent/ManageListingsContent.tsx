@@ -7,6 +7,9 @@ import styles from "./ManageListingsContent.module.css";
 import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
 import { processAuctionStatuses } from "../../utils/auctionUtils";
 
+type SortType = "endDate" | "currentBid";
+type SortDirection = "asc" | "desc";
+
 const ManageListingsContent: React.FC = () => {
   const [view, setView] = useState("list");
   const [isOverlayVisible, setOverlayVisible] = useState(false);
@@ -15,6 +18,8 @@ const ManageListingsContent: React.FC = () => {
     null,
   );
   const [listings, setListings] = useState<AuctionItem[]>([]);
+  const [sortBy, setSortBy] = useState<SortType>("endDate");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
 
   useEffect(() => {
     const fetchAuctionItems = async () => {
@@ -77,12 +82,51 @@ const ManageListingsContent: React.FC = () => {
     // Optionally update the listings state here instead of reloading the page
   };
 
+  const getSortedAuctions = (auctions: AuctionItem[]) => {
+    switch (sortBy) {
+      case "endDate":
+        return [...auctions].sort((a, b) => {
+          const comparison =
+            new Date(a.auctionEndDate).getTime() -
+            new Date(b.auctionEndDate).getTime();
+          return sortDirection === "asc" ? comparison : -comparison;
+        });
+      case "currentBid":
+        return [...auctions].sort((a, b) => {
+          const comparison = a.currentPrice - b.currentPrice;
+          return sortDirection === "asc" ? comparison : -comparison;
+        });
+      default:
+        return auctions;
+    }
+  };
+
   return (
     <div className={styles["listing-container"]}>
       <div className={styles.mainContent}>
         <div className={styles.listingControls}>
           <ViewToggle view={view} onViewChange={handleViewChange} />
           <AddListingButton onClick={toggleOverlay} />
+          <div className={styles.sortControls}>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as SortType)}
+              className={styles.sortSelect}
+            >
+              <option value="endDate">Sort by End Date</option>
+              <option value="currentBid">Sort by Current Bid</option>
+            </select>
+            <select
+              value={sortDirection}
+              onChange={(e) =>
+                setSortDirection(e.target.value as SortDirection)
+              }
+              className={styles.sortSelect}
+            >
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+          </div>
         </div>
 
         <div
@@ -90,7 +134,7 @@ const ManageListingsContent: React.FC = () => {
             view === "grid" ? styles.gridView : ""
           }`}
         >
-          {listings.map((listing) => (
+          {getSortedAuctions(listings).map((listing) => (
             <ManageableListing
               key={listing._id}
               view={view}
