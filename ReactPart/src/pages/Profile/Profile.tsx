@@ -3,10 +3,12 @@ import styles from "./Profile.module.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import { useUser } from "../../context/UserProvider";
+import BidDashboard from "./BidDashboard";
+type ActiveTab = "profile" | "bids";
 
 export default function Profile() {
   const { signOut, getCsrfToken } = useUser();
-
+  const [activeTab, setActiveTab] = useState<ActiveTab>("profile");
   const [formData, setFormData] = useState({
     userType: "",
 
@@ -93,7 +95,7 @@ export default function Profile() {
   }, []);
 
   const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = event.target;
     let processedValue = value;
@@ -135,7 +137,7 @@ export default function Profile() {
   };
 
   const handleImageChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (!file) {
@@ -290,7 +292,7 @@ export default function Profile() {
             },
             body: JSON.stringify(changes),
             credentials: "include",
-          }
+          },
         );
 
         if (!response.ok) {
@@ -325,7 +327,7 @@ export default function Profile() {
             },
             body: JSON.stringify(changes),
             credentials: "include",
-          }
+          },
         );
 
         if (!response.ok) {
@@ -346,405 +348,425 @@ export default function Profile() {
   return (
     <>
       <Header />
-
       <main className={styles.main}>
-        <div className={styles.user_info_container}>
-          <div className={styles.user_info_header}>
-            <img
-              src={
-                formData.charityImage ||
-                "./src/assets/images/profile_img_placeholder.png"
-              }
-              alt={`${formData.userType} image`}
-            />
-            {!editProfileMode ? (
-              <h2>
-                {formData.userType === "customer"
-                  ? formData.customerName
-                  : formData.charityName}
-              </h2>
-            ) : (
-              <h2>Edit Profile Mode</h2>
-            )}
-          </div>
-          {editProfileMode && (
-            <input
-              className={styles.input}
-              type="file"
-              name="profileImage"
-              id="profileImage"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
+        <div className={styles.tab_navigation}>
+          <button
+            className={`${styles.tab_button} ${activeTab === "profile" ? styles.active : ""}`}
+            onClick={() => setActiveTab("profile")}
+          >
+            Profile Information
+          </button>
+          {formData.userType === "customer" && (
+            <button
+              className={`${styles.tab_button} ${activeTab === "bids" ? styles.active : ""}`}
+              onClick={() => setActiveTab("bids")}
+            >
+              My Bids
+            </button>
           )}
-          <div className={styles.user_info_details}>
-            {formData.userType === "customer" && (
-              <>
-                {editProfileMode ? (
-                  <p>
-                    <strong>First name:</strong>
-                    <div className={styles.inputContainer}>
-                      <input
-                        className={styles.input}
-                        type="text"
-                        name="customerName"
-                        placeholder="First name"
-                        value={formData.customerName}
-                        onChange={handleChange}
-                      />
-                      {errors.customerName && (
-                        <div className={styles.errorContainer}>
-                          <div className={styles.error}>
-                            {errors.customerName}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </p>
-                ) : null}
-                <p>
-                  <strong>Last Name:</strong>
-                  {editProfileMode ? (
-                    <div className={styles.inputContainer}>
-                      <input
-                        className={styles.input}
-                        type="text"
-                        name="customerLastName"
-                        value={formData.customerLastName}
-                        placeholder="Last name"
-                        onChange={handleChange}
-                      />
-                      {errors.customerLastName && (
-                        <div className={styles.errorContainer}>
-                          <div className={styles.error}>
-                            {errors.customerLastName}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    formData.customerLastName
-                  )}
-                </p>
-                <p>
-                  <strong>Date Of Birth:</strong>
-                  {editProfileMode ? (
-                    <div className={styles.inputContainer}>
-                      <input
-                        className={styles.input}
-                        type="date"
-                        name="customerDOB"
-                        value={formData.customerDOB}
-                        onChange={handleChange}
-                      />
-                      {errors.customerDOB && (
-                        <div className={styles.errorContainer}>
-                          <div className={styles.error}>
-                            {errors.customerDOB}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    formData.customerDOB
-                  )}
-                </p>
-                <p>
-                  <strong>Email:</strong>
-                  {editProfileMode ? (
-                    <div className={styles.inputContainer}>
-                      <input
-                        className={styles.input}
-                        type="email"
-                        name="customerEmail"
-                        placeholder="youremail@domain.com"
-                        value={formData.customerEmail}
-                        onChange={handleChange}
-                      />
-                      {errors.customerEmail && (
-                        <div className={styles.errorContainer}>
-                          <div className={styles.error}>
-                            {errors.customerEmail}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    formData.customerEmail
-                  )}
-                </p>
-                <p>
-                  <strong>Phone:</strong>
-                  {editProfileMode ? (
-                    <div className={styles.inputContainer}>
-                      <input
-                        className={styles.input}
-                        type="tel"
-                        name="customerPhone"
-                        placeholder="123-456-7890"
-                        value={formData.customerPhone}
-                        onChange={handleChange}
-                      />
-                      {errors.customerPhone && (
-                        <div className={styles.errorContainer}>
-                          <div className={styles.error}>
-                            {errors.customerPhone}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    formData.customerPhone
-                  )}
-                </p>
-                <p>
-                  <strong>Address:</strong>
-                  {editProfileMode ? (
-                    <div className={styles.inputContainer}>
-                      <input
-                        className={styles.input}
-                        type="text"
-                        name="customerAddress"
-                        placeholder="Your address"
-                        value={formData.customerAddress}
-                        onChange={handleChange}
-                      />
-                      {errors.customerAddress && (
-                        <div className={styles.errorContainer}>
-                          <div className={styles.error}>
-                            {errors.customerAddress}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    formData.customerAddress
-                  )}
-                </p>
-              </>
+        </div>
+
+        {activeTab === "profile" || formData.userType === "charity" ? (
+          <div className={styles.user_info_container}>
+            <div className={styles.user_info_header}>
+              <img
+                src={
+                  formData.charityImage ||
+                  "./src/assets/images/profile_img_placeholder.png"
+                }
+                alt={`${formData.userType} image`}
+              />
+              {!editProfileMode ? (
+                <h2>
+                  {formData.userType === "customer"
+                    ? formData.customerName
+                    : formData.charityName}
+                </h2>
+              ) : (
+                <h2>Edit Profile Mode</h2>
+              )}
+            </div>
+            {editProfileMode && (
+              <input
+                className={styles.input}
+                type="file"
+                name="profileImage"
+                id="profileImage"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
             )}
-            {formData.userType === "charity" && (
-              <>
-                {editProfileMode ? (
+            <div className={styles.user_info_details}>
+              {formData.userType === "customer" && (
+                <>
+                  {editProfileMode ? (
+                    <p>
+                      <strong>First name:</strong>
+                      <div className={styles.inputContainer}>
+                        <input
+                          className={styles.input}
+                          type="text"
+                          name="customerName"
+                          placeholder="First name"
+                          value={formData.customerName}
+                          onChange={handleChange}
+                        />
+                        {errors.customerName && (
+                          <div className={styles.errorContainer}>
+                            <div className={styles.error}>
+                              {errors.customerName}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </p>
+                  ) : null}
                   <p>
-                    <strong>Charity Name:</strong>
-                    <div className={styles.inputContainer}>
-                      <input
-                        className={styles.input}
-                        type="text"
-                        name="charityName"
-                        placeholder="Charity name"
-                        value={formData.charityName}
-                        onChange={handleChange}
-                      />
-                      {errors.charityName && (
-                        <div className={styles.errorContainer}>
-                          <div className={styles.error}>
-                            {errors.charityName}
+                    <strong>Last Name:</strong>
+                    {editProfileMode ? (
+                      <div className={styles.inputContainer}>
+                        <input
+                          className={styles.input}
+                          type="text"
+                          name="customerLastName"
+                          value={formData.customerLastName}
+                          placeholder="Last name"
+                          onChange={handleChange}
+                        />
+                        {errors.customerLastName && (
+                          <div className={styles.errorContainer}>
+                            <div className={styles.error}>
+                              {errors.customerLastName}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    ) : (
+                      formData.customerLastName
+                    )}
                   </p>
-                ) : null}
-                <p>
-                  <strong>Email:</strong>
+                  <p>
+                    <strong>Date Of Birth:</strong>
+                    {editProfileMode ? (
+                      <div className={styles.inputContainer}>
+                        <input
+                          className={styles.input}
+                          type="date"
+                          name="customerDOB"
+                          value={formData.customerDOB}
+                          onChange={handleChange}
+                        />
+                        {errors.customerDOB && (
+                          <div className={styles.errorContainer}>
+                            <div className={styles.error}>
+                              {errors.customerDOB}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      formData.customerDOB
+                    )}
+                  </p>
+                  <p>
+                    <strong>Email:</strong>
+                    {editProfileMode ? (
+                      <div className={styles.inputContainer}>
+                        <input
+                          className={styles.input}
+                          type="email"
+                          name="customerEmail"
+                          placeholder="youremail@domain.com"
+                          value={formData.customerEmail}
+                          onChange={handleChange}
+                        />
+                        {errors.customerEmail && (
+                          <div className={styles.errorContainer}>
+                            <div className={styles.error}>
+                              {errors.customerEmail}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      formData.customerEmail
+                    )}
+                  </p>
+                  <p>
+                    <strong>Phone:</strong>
+                    {editProfileMode ? (
+                      <div className={styles.inputContainer}>
+                        <input
+                          className={styles.input}
+                          type="tel"
+                          name="customerPhone"
+                          placeholder="123-456-7890"
+                          value={formData.customerPhone}
+                          onChange={handleChange}
+                        />
+                        {errors.customerPhone && (
+                          <div className={styles.errorContainer}>
+                            <div className={styles.error}>
+                              {errors.customerPhone}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      formData.customerPhone
+                    )}
+                  </p>
+                  <p>
+                    <strong>Address:</strong>
+                    {editProfileMode ? (
+                      <div className={styles.inputContainer}>
+                        <input
+                          className={styles.input}
+                          type="text"
+                          name="customerAddress"
+                          placeholder="Your address"
+                          value={formData.customerAddress}
+                          onChange={handleChange}
+                        />
+                        {errors.customerAddress && (
+                          <div className={styles.errorContainer}>
+                            <div className={styles.error}>
+                              {errors.customerAddress}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      formData.customerAddress
+                    )}
+                  </p>
+                </>
+              )}
+              {formData.userType === "charity" && (
+                <>
                   {editProfileMode ? (
-                    <div className={styles.inputContainer}>
-                      <input
+                    <p>
+                      <strong>Charity Name:</strong>
+                      <div className={styles.inputContainer}>
+                        <input
+                          className={styles.input}
+                          type="text"
+                          name="charityName"
+                          placeholder="Charity name"
+                          value={formData.charityName}
+                          onChange={handleChange}
+                        />
+                        {errors.charityName && (
+                          <div className={styles.errorContainer}>
+                            <div className={styles.error}>
+                              {errors.charityName}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </p>
+                  ) : null}
+                  <p>
+                    <strong>Email:</strong>
+                    {editProfileMode ? (
+                      <div className={styles.inputContainer}>
+                        <input
+                          className={styles.input}
+                          type="email"
+                          name="charityEmail"
+                          placeholder="youremail@domain.com"
+                          value={formData.charityEmail}
+                          onChange={handleChange}
+                        />
+                        {errors.charityEmail && (
+                          <div className={styles.errorContainer}>
+                            <div className={styles.error}>
+                              {errors.charityEmail}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      formData.charityAddress
+                    )}
+                  </p>
+                  <p>
+                    <strong>Phone:</strong>
+                    {editProfileMode ? (
+                      <div className={styles.inputContainer}>
+                        <input
+                          className={styles.input}
+                          type="tel"
+                          name="charityPhone"
+                          placeholder="123-456-7890"
+                          value={formData.charityPhone}
+                          onChange={handleChange}
+                        />
+                        {errors.charityPhone && (
+                          <div className={styles.errorContainer}>
+                            <div className={styles.error}>
+                              {errors.charityPhone}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      formData.charityPhone
+                    )}
+                  </p>
+                  <p>
+                    <strong>Address:</strong>
+                    {editProfileMode ? (
+                      <div className={styles.inputContainer}>
+                        <input
+                          className={styles.input}
+                          type="text"
+                          name="charityAddress"
+                          placeholder="Charity address"
+                          value={formData.charityAddress}
+                          onChange={handleChange}
+                        />
+                        {errors.charityAddress && (
+                          <div className={styles.errorContainer}>
+                            <div className={styles.error}>
+                              {errors.charityAddress}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      formData.charityAddress
+                    )}
+                  </p>
+                  <p>
+                    <strong>Description:</strong>
+                    {editProfileMode ? (
+                      <textarea
                         className={styles.input}
-                        type="email"
-                        name="charityEmail"
-                        placeholder="youremail@domain.com"
-                        value={formData.charityEmail}
+                        name="charityDescription"
+                        value={formData.charityDescription}
+                        rows={5}
                         onChange={handleChange}
                       />
-                      {errors.charityEmail && (
-                        <div className={styles.errorContainer}>
-                          <div className={styles.error}>
-                            {errors.charityEmail}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    formData.charityAddress
-                  )}
-                </p>
+                    ) : (
+                      formData.charityDescription
+                    )}
+                  </p>
+                </>
+              )}
+            </div>
+
+            {editPasswordMode && (
+              <div className={styles.password_section}>
                 <p>
-                  <strong>Phone:</strong>
-                  {editProfileMode ? (
-                    <div className={styles.inputContainer}>
-                      <input
-                        className={styles.input}
-                        type="tel"
-                        name="charityPhone"
-                        placeholder="123-456-7890"
-                        value={formData.charityPhone}
-                        onChange={handleChange}
-                      />
-                      {errors.charityPhone && (
-                        <div className={styles.errorContainer}>
-                          <div className={styles.error}>
-                            {errors.charityPhone}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    formData.charityPhone
-                  )}
-                </p>
-                <p>
-                  <strong>Address:</strong>
-                  {editProfileMode ? (
-                    <div className={styles.inputContainer}>
-                      <input
-                        className={styles.input}
-                        type="text"
-                        name="charityAddress"
-                        placeholder="Charity address"
-                        value={formData.charityAddress}
-                        onChange={handleChange}
-                      />
-                      {errors.charityAddress && (
-                        <div className={styles.errorContainer}>
-                          <div className={styles.error}>
-                            {errors.charityAddress}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    formData.charityAddress
-                  )}
-                </p>
-                <p>
-                  <strong>Description:</strong>
-                  {editProfileMode ? (
-                    <textarea
+                  <strong>New Password:</strong>
+                  <div className={styles.inputContainer}>
+                    <input
                       className={styles.input}
-                      name="charityDescription"
-                      value={formData.charityDescription}
-                      rows={5}
+                      type="password"
+                      name="newPassword"
+                      value={formData.newPassword}
                       onChange={handleChange}
                     />
-                  ) : (
-                    formData.charityDescription
-                  )}
-                </p>
-              </>
-            )}
-          </div>
-
-          {editPasswordMode && (
-            <div className={styles.password_section}>
-              <p>
-                <strong>New Password:</strong>
-                <div className={styles.inputContainer}>
-                  <input
-                    className={styles.input}
-                    type="password"
-                    name="newPassword"
-                    value={formData.newPassword}
-                    onChange={handleChange}
-                  />
-                  {errors.newPassword && (
-                    <div className={styles.errorContainer}>
-                      <div className={styles.error}>{errors.newPassword}</div>
-                    </div>
-                  )}
-                </div>
-              </p>
-              <p>
-                <strong>Repeat Password:</strong>
-                <div className={styles.inputContainer}>
-                  <input
-                    className={styles.input}
-                    type="password"
-                    name="repeatNewPassword"
-                    value={formData.repeatNewPassword}
-                    onChange={handleChange}
-                  />
-                  {errors.repeatNewPassword && (
-                    <div className={styles.errorContainer}>
-                      <div className={styles.error}>
-                        {errors.repeatNewPassword}
+                    {errors.newPassword && (
+                      <div className={styles.errorContainer}>
+                        <div className={styles.error}>{errors.newPassword}</div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </p>
-            </div>
-          )}
-
-          <div className={styles.form_buttons}>
-            {editProfileMode ? (
-              <>
-                <button
-                  className={styles.button}
-                  type="button"
-                  onClick={handleSave}
-                >
-                  Save Profile
-                </button>
-                <button
-                  className={styles.button}
-                  type="button"
-                  onClick={() => {
-                    jwtLogIn();
-                    setEditProfileMode(false);
-                  }}
-                >
-                  Cancel
-                </button>
-              </>
-            ) : !editPasswordMode ? (
-              <button
-                className={styles.button}
-                type="button"
-                onClick={() => setEditProfileMode(true)}
-              >
-                Edit Profile
-              </button>
-            ) : null}
-            {editPasswordMode ? (
-              <>
-                <button
-                  className={styles.button}
-                  type="button"
-                  onClick={handleSave}
-                >
-                  Save Password
-                </button>
-                <button
-                  className={styles.button}
-                  type="button"
-                  onClick={() => {
-                    formData.newPassword = "";
-                    formData.repeatNewPassword = "";
-                    setEditPasswordMode(false);
-                  }}
-                >
-                  Cancel
-                </button>
-              </>
-            ) : !editProfileMode ? (
-              <button
-                className={styles.button}
-                type="button"
-                onClick={() => setEditPasswordMode(true)}
-              >
-                Change Password
-              </button>
-            ) : null}
-            {!editPasswordMode && !editProfileMode && (
-              <button onClick={signOut} className={styles.button}>
-                Sign out
-              </button>
+                    )}
+                  </div>
+                </p>
+                <p>
+                  <strong>Repeat Password:</strong>
+                  <div className={styles.inputContainer}>
+                    <input
+                      className={styles.input}
+                      type="password"
+                      name="repeatNewPassword"
+                      value={formData.repeatNewPassword}
+                      onChange={handleChange}
+                    />
+                    {errors.repeatNewPassword && (
+                      <div className={styles.errorContainer}>
+                        <div className={styles.error}>
+                          {errors.repeatNewPassword}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </p>
+              </div>
             )}
+
+            <div className={styles.form_buttons}>
+              {editProfileMode ? (
+                <>
+                  <button
+                    className={styles.button}
+                    type="button"
+                    onClick={handleSave}
+                  >
+                    Save Profile
+                  </button>
+                  <button
+                    className={styles.button}
+                    type="button"
+                    onClick={() => {
+                      jwtLogIn();
+                      setEditProfileMode(false);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : !editPasswordMode ? (
+                <button
+                  className={styles.button}
+                  type="button"
+                  onClick={() => setEditProfileMode(true)}
+                >
+                  Edit Profile
+                </button>
+              ) : null}
+              {editPasswordMode ? (
+                <>
+                  <button
+                    className={styles.button}
+                    type="button"
+                    onClick={handleSave}
+                  >
+                    Save Password
+                  </button>
+                  <button
+                    className={styles.button}
+                    type="button"
+                    onClick={() => {
+                      formData.newPassword = "";
+                      formData.repeatNewPassword = "";
+                      setEditPasswordMode(false);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : !editProfileMode ? (
+                <button
+                  className={styles.button}
+                  type="button"
+                  onClick={() => setEditPasswordMode(true)}
+                >
+                  Change Password
+                </button>
+              ) : null}
+              {!editPasswordMode && !editProfileMode && (
+                <button onClick={signOut} className={styles.button}>
+                  Sign out
+                </button>
+              )}
+            </div>
           </div>
-        </div>
+        ) : (
+          <BidDashboard />
+        )}
       </main>
 
       <Footer />

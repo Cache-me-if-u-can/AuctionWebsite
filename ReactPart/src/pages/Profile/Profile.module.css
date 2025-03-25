@@ -6,11 +6,11 @@
   flex-direction: column;
 
   align-items: center;
-  justify-content: center;
-
+  justify-content: flex-start;
+  padding: 1rem;
   overflow: hidden;
-
-  background: var(--dark-periwinkle);
+  min-height: 100vh;
+  background: linear-gradient(to bottom, var(--periwinkle), var(--light-blue));
   /* position: relative; */
 
   /* gap: 1rem; */
@@ -18,15 +18,18 @@
 
 .user_info_container {
   padding: 20px;
-  margin: auto 1rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 1rem auto;
+  border: none;
+  border-radius: var(--border-radius-large);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: white;
   display: flex;
   flex-direction: column;
   gap: 24px;
   max-width: 75%;
+  margin-top: 3rem;
 }
 
 .user_info_header {
@@ -41,6 +44,58 @@
   border-radius: 50%;
 }
 
+.tab_navigation {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+  padding: 0 2rem;
+}
+.tab_navigation:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--light-blue); /* Using your light blue for subtle line */
+  opacity: 0.5; /* Make it subtle */
+}
+
+.tab_button {
+  padding: 1rem 2rem;
+  border: none;
+  background: var(--white);
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--dark-periwinkle);
+  border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.tab_button.active {
+  background: var(--white);
+  color: var(--periwinkle);
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+.tab_button.active:after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--white);
+}
+.tab_button:hover:not(.active) {
+  background: var(--light-blue);
+}
 .user_info_details {
   display: flex;
   flex-direction: column;
@@ -113,11 +168,28 @@
   justify-content: center;
   color: var(--sds-color-text-on-brand);
   height: fit-content;
+  transition: all 0.2s ease;
   /* margin-top: 24px; */
 }
-
+.button:hover {
+  background: #0056b3;
+}
 @media (max-width: 480px) {
   .password {
     display: none;
+  }
+}
+@media (max-width: 768px) {
+  .main {
+    padding: 1rem;
+  }
+
+  .user_info_container {
+    margin: 0.5rem;
+  }
+
+  .tab_navigation {
+    padding: 0 0.5rem;
+    gap: 1rem;
   }
 }

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./BidDashboard.module.css";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
 import { useUser } from "../../context/UserProvider";
 
 interface Bid {
@@ -111,7 +109,6 @@ const BidDashboard: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <Header />
       <div className={styles.content}>
         <h2 className={styles.title}>My Bids</h2>
 
@@ -200,7 +197,6 @@ const BidDashboard: React.FC = () => {
           )}
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
