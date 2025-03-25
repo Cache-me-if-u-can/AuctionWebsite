@@ -15,7 +15,11 @@
   transition: all 0.5s ease;
   align-items: center;
 }
-
+.sortControls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
 /* List View Layout */
 .listView {
   display: flex;
@@ -31,13 +35,23 @@
   align-items: center;
   margin-bottom: 1rem;
 }
-
+.sortSelect:hover {
+  border-color: #007bff;
+}
+.sortSelect:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
 .sortSelect {
   padding: 0.5rem;
   border-radius: 4px;
   border: 1px solid #ccc;
   background-color: white;
   font-size: 1rem;
+  min-width: 150px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 /* Individual listing styling for both views */
 .listing {

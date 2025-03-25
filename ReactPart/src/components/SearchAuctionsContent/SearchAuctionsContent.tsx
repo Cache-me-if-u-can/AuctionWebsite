@@ -15,13 +15,15 @@ interface SearchAuctionsContentProps {
   }) => void;
 }
 type SortType = "endDate" | "currentBid";
+type SortDirection = "asc" | "desc";
 
 const SearchAuctionsContent: React.FC<SearchAuctionsContentProps> = ({
   filters,
   onFilterChange,
 }) => {
   const [view, setView] = useState("list");
-  const [sortBy, setSortBy] = useState<sortType>("endDate");
+  const [sortBy, setSortBy] = useState<SortType>("endDate");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
   const location = useLocation();
   const [auctions, setAuctions] = useState<AuctionItem[]>([]);
 
@@ -63,20 +65,21 @@ const SearchAuctionsContent: React.FC<SearchAuctionsContentProps> = ({
 
     switch (sortBy) {
       case "endDate":
-        return [...visibleAuctions].sort(
-          (a, b) =>
+        return [...visibleAuctions].sort((a, b) => {
+          const comparison =
             new Date(a.auctionEndDate).getTime() -
-            new Date(b.auctionEndDate).getTime(),
-        );
+            new Date(b.auctionEndDate).getTime();
+          return sortDirection === "asc" ? comparison : -comparison;
+        });
       case "currentBid":
-        return [...visibleAuctions].sort(
-          (a, b) => b.currentPrice - a.currentPrice,
-        );
+        return [...visibleAuctions].sort((a, b) => {
+          const comparison = a.currentPrice - b.currentPrice;
+          return sortDirection === "asc" ? comparison : -comparison;
+        });
       default:
         return visibleAuctions;
     }
   };
-
   const fetchAuctions = async (filters: {
     category: string;
     conditions: string[];
@@ -119,14 +122,24 @@ const SearchAuctionsContent: React.FC<SearchAuctionsContentProps> = ({
     <div className={styles.mainContent}>
       <div className={styles.controls}>
         <ViewToggle view={view} onViewChange={handleViewChange} />
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value as SortType)}
-          className={styles.sortSelect}
-        >
-          <option value="endDate">Sort by End Date</option>
-          <option value="currentBid">Sort by Current Bid</option>
-        </select>
+        <div className={styles.sortControls}>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as SortType)}
+            className={styles.sortSelect}
+          >
+            <option value="endDate">Sort by End Date</option>
+            <option value="currentBid">Sort by Current Bid</option>
+          </select>
+          <select
+            value={sortDirection}
+            onChange={(e) => setSortDirection(e.target.value as SortDirection)}
+            className={styles.sortSelect}
+          >
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </div>
       </div>
       <div className={view === "grid" ? styles.gridView : styles.listView}>
         {getSortedAuctions(auctions).length > 0 ? (
