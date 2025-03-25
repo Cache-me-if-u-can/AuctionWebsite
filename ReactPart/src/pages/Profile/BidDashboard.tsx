@@ -188,7 +188,7 @@ const BidDashboard: React.FC = () => {
                     <button
                       className={styles.viewButton}
                       onClick={() =>
-                        navigate(`/auction/${bid.auction_item_id}`)
+                        navigate(`/listing/${bid.auction_item_id}`)
                       }
                     >
                       View Auction
