@@ -20,6 +20,18 @@ const Listing: React.FC = () => {
   );
   const [leaderboard, setLeaderboard] = useState<any[]>([]);
   const [timeRemaining, setTimeRemaining] = useState<string>("");
+  const [totalBids, setTotalBids] = useState<number>(0);
+
+  const fetchTotalBids = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8080/getTotalBids/${id}`);
+      const data = await response.json();
+      setTotalBids(data.count);
+    } catch (error) {
+      console.error("Error fetching total bids:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchAuctionItem = async () => {
       try {
@@ -40,6 +52,7 @@ const Listing: React.FC = () => {
     if (id) {
       fetchLeaderboard();
       fetchAuctionItem();
+      fetchTotalBids();
     }
     const interval = setInterval(() => {
       if (auctionItem) {
@@ -140,6 +153,7 @@ const Listing: React.FC = () => {
       const bidResult = await bidResponse.json();
       alert(bidResult.message || "Bid placed successfully!");
       fetchLeaderboard();
+      fetchTotalBids();
     } catch (error) {
       console.error("Error placing bid:", error);
       alert(
@@ -263,7 +277,7 @@ const Listing: React.FC = () => {
 
                 <div className={styles.additionalInfo}>
                   <div className={styles.infoCard}>
-                    <span>People bidding on this item: 3</span>
+                    <span>Total Bids: {totalBids}</span>
                   </div>
                   <div className={styles.infoCard}>
                     <span>Ends in: {timeRemaining}</span>

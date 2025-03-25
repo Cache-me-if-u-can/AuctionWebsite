@@ -789,5 +789,16 @@ def update_auction_status(auction_id):
     except Exception as e:
         print("Error in update_auction_status:", str(e))
         return jsonify({'error': 'Internal server error'}), 500
+
+@app.route('/getTotalBids/<auctionId>', methods=['GET'])
+def get_total_bids(auctionId):
+    try:
+        bids = bidConnection.getListOfBids(auctionId)
+        return jsonify({'count': len(bids)})
+    except Exception as e:
+        print(f"Error getting total bids: {e}")
+        return jsonify({'message': 'Unable to fetch bid count'}), 500
+
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)

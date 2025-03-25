@@ -9,7 +9,7 @@ class BidRepository:
 
     # get all bids for auction item
     def getListOfBids(self, auctionId):
-        auctionItem_bids = self.coll.find({"auctionItemId": ObjectId(auctionId)})
+        auctionItem_bids = self.coll.find({"auctionItemId": auctionId})
 
         list_bids = []
         for bid in auctionItem_bids:
