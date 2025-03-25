@@ -7,8 +7,8 @@ import Profile from "./pages/Profile/Profile";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Charities from "./pages/Charities/Charities";
 import Listing from "./pages/Listing/Listing";
-import ManageListings from "./pages/ManageListings/ManageListings";
 import SearchAuctions from "./pages/SearchAuctions/SearchAuctions";
+import FAQ from "./pages/FAQ/FAQ";
 import { UserProvider } from "./context/UserProvider";
 
 const App: React.FC = () => {
@@ -28,6 +28,7 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="/faq" element={<FAQ />} />
           <Route
             path="/Register"
             element={
