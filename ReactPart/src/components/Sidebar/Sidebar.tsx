@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useUser } from "../../context/UserProvider";
 import styles from "./Sidebar.module.css";
 import CategoriesForm from "./DisplayingCategories";
 import CharitiesForm from "./DisplayingCharityNames";
@@ -12,6 +13,8 @@ type SidebarProps = {
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
+  const { getUserType } = useUser();
+  const userType = getUserType();
   const [category, setCategory] = useState("all");
   const [conditions, setConditions] = useState<string[]>([]);
   const [charity, setCharity] = useState("all");
@@ -21,7 +24,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
   const charitySelectRef = useRef<HTMLSelectElement>(null);
 
   const handleConditionChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const value = event.target.value;
     setConditions([value]);
@@ -80,10 +83,14 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
       </div>
 
       {/* Dynamic Charity Selector */}
-      <div className={styles.filter_group}>
-        <label htmlFor="charity-filter">Charity</label>
-        <CharitiesForm onSelect={setCharity} selectRef={charitySelectRef} />
-      </div>
+      {userType === "charity" ? (
+        <div></div>
+      ) : (
+        <div className={styles.filter_group}>
+          <label htmlFor="charity-filter">Charity</label>
+          <CharitiesForm onSelect={setCharity} selectRef={charitySelectRef} />
+        </div>
+      )}
 
       {/* Filter Buttons */}
       <div className={styles.filter_buttons}>
