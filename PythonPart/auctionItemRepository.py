@@ -164,3 +164,16 @@ class AuctionItemRepository:
             print(f"Error updating auction status: {e}")
             return False
 
+    def get_active_auctions(self):
+        try:
+            query = {"status": "active"}
+            active_items = self.coll.find(query)
+            list_active_items = []
+            for item in active_items:
+                item["_id"] = str(item["_id"])
+                list_active_items.append(item)
+            return list_active_items
+        except Exception as e:
+            print(f"Error getting active auctions: {e}")
+            return []
+

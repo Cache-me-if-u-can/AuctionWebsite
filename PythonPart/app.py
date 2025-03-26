@@ -31,6 +31,8 @@ from answerRepository import *
 from categoryRepository import *
 from bidRepository import *
 from pprint import pprint
+from apscheduler.schedulers.background import BackgroundScheduler
+import atexit
 
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = "thisisthesecretkey"  # change , make more secure
@@ -66,7 +68,6 @@ quizConnection = QuizRepository(db)
 questionConnection = QuestionRepository(db)
 answerConnection = AnswerRepository(db)
 bidConnection = BidRepository(db)
-
 
 # server function for customer registration
 @app.route("/customerRegistration", methods=["POST"])
@@ -799,6 +800,60 @@ def get_total_bids(auctionId):
         print(f"Error getting total bids: {e}")
         return jsonify({'message': 'Unable to fetch bid count'}), 500
 
+def check_auction_end_dates():
+    try:
+        # Get all active auction items
+        active_items = auctionItemConnection.get_active_auctions()
+        current_time = datetime.now(timezone.utc)
+        
+        for item in active_items:
+            try:
+                # Convert the string date to datetime and make it timezone-aware
+                end_date = datetime.strptime(item['auctionEndDate'], '%Y-%m-%dT%H:%M')
+                # Make it timezone-aware (UTC)
+                end_date = end_date.replace(tzinfo=timezone.utc)
+                
+                if current_time >= end_date:
+                    success = auctionItemConnection.update_auction_status(str(item['_id']), 'completed')
+                    if success:
+                        print(f"Auction {item['title']} (ID: {item['_id']}) marked as completed")
+                    else:
+                        print(f"Failed to update auction {item['_id']}")
+            except Exception as e:
+                print(f"Error processing auction {item['_id']}: {e}")
+                continue
+    except Exception as e:
+        print(f"Error in check_auction_end_dates: {e}")
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=check_auction_end_dates,
+    trigger="interval",
+    minutes=1,
+    id='check_auctions_job',
+    name='Check auction end dates and update status'
+)
+scheduler.start()
+atexit.register(lambda: scheduler.shutdown())
+
+@app.route("/scheduler/run-now", methods=["POST"])
+@jwt_required()
+def run_check_now():
+    try:
+        current_user = get_jwt_identity()
+        if current_user["userType"] != "charity":
+            return jsonify({"message": "Unauthorized access"}), 403
+            
+        check_auction_end_dates()
+        return jsonify({"message": "Auction check completed successfully"}), 200
+    except Exception as e:
+        print(f"Error running auction check: {e}")
+        return jsonify({"message": "Error running auction check"}), 500
+
+def shutdown_scheduler():
+    scheduler.shutdown()
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=8080)
+    try:
+        app.run(debug=True, host="0.0.0.0", port=8080)
+    finally:
+        shutdown_scheduler()
