@@ -26,14 +26,20 @@ const SearchAuctions: React.FC = () => {
       <AuctionBanner />
       <div className={styles.content}>
         <Sidebar onFilterChange={handleFilterChange} />
-        {userType === "charity" && <ManageListingsContent />}
-        {userType === "customer" && (
-          <SearchAuctionsContent
-            filters={filters}
-            onFilterChange={handleFilterChange}
+        {userType === "charity" ? (
+          <ManageListingsContent
+            filters={{
+              category: filters.category,
+              conditions: filters.conditions,
+            }}
+            onFilterChange={(newFilters) =>
+              handleFilterChange({
+                ...filters,
+                ...newFilters,
+              })
+            }
           />
-        )}
-        {!userType && (
+        ) : (
           <SearchAuctionsContent
             filters={filters}
             onFilterChange={handleFilterChange}

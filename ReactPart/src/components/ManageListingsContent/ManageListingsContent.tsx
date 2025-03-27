@@ -6,69 +6,166 @@ import ManageableListing from "../ManageableListing/ManageableListing";
 import styles from "./ManageListingsContent.module.css";
 import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
 import { processAuctionStatuses } from "../../utils/auctionUtils";
+import { useUser } from "../../context/UserProvider";
 
 type SortType = "endDate" | "currentBid";
 type SortDirection = "asc" | "desc";
 
-const ManageListingsContent: React.FC = () => {
+interface ManageListingsContentProps {
+  filters?: {
+    category: string;
+    conditions: string[];
+  };
+  onFilterChange?: (filters: {
+    category: string;
+    conditions: string[];
+  }) => void;
+}
+
+const ManageListingsContent: React.FC<ManageListingsContentProps> = ({
+  filters = { category: "all", conditions: [] },
+  onFilterChange = () => {},
+}) => {
   const [view, setView] = useState("list");
   const [isOverlayVisible, setOverlayVisible] = useState(false);
   const [isEditOverlayVisible, setIsEditOverlayVisible] = useState(false);
   const [editingListing, setEditingListing] = useState<AuctionItem | null>(
-    null,
+    null
   );
   const [listings, setListings] = useState<AuctionItem[]>([]);
   const [sortBy, setSortBy] = useState<SortType>("endDate");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [charityName, setCharityName] = useState<string | null>(null);
 
+  // Get user data from context
+  const { getUserType } = useUser();
+  const userType = getUserType();
+
+  // First, fetch the user data to get the charity name
   useEffect(() => {
-    const fetchAuctionItems = async () => {
+    const fetchUserData = async () => {
       try {
-        const response = await fetch(
-          "http://127.0.0.1:8080/getCharityAuctionItems",
-          {
-            method: "GET",
-            credentials: "include", // Include cookies for JWT authentication
-          },
-        );
+        setIsLoading(true);
+        const response = await fetch("http://127.0.0.1:8080/getUserData", {
+          method: "GET",
+          credentials: "include",
+        });
 
         if (response.ok) {
-          const result: AuctionItem[] = await response.json();
-          const processedAuctions = await processAuctionStatuses(result);
-          setListings(processedAuctions);
+          const result = await response.json();
+          console.log("User data received:", result);
+
+          if (result.userType === "charity") {
+            // Save the charity name for filtering
+            setCharityName(result.name);
+
+            // Now fetch the auction items
+            fetchAuctionItems({
+              ...filters,
+              charity: result.name,
+            });
+          } else {
+            setError("Access restricted to charity users");
+            setIsLoading(false);
+          }
         } else {
-          console.error(`Unexpected error: ${response.statusText}`);
+          setError("Failed to authenticate");
+          setIsLoading(false);
         }
       } catch (error) {
-        console.error("Error fetching auction items:", error);
+        console.error("Error fetching user data:", error);
+        setError("Error retrieving user information");
+        setIsLoading(false);
       }
     };
 
-    fetchAuctionItems();
+    fetchUserData();
   }, []);
 
+  // When filters change, refetch auction items with charity name included
   useEffect(() => {
-    const statusCheckInterval = setInterval(async () => {
-      if (!listings) return;
-      const updatedAuctions = await processAuctionStatuses(listings);
-      if (JSON.stringify(listings) !== JSON.stringify(updatedAuctions)) {
-        setListings(updatedAuctions);
+    if (charityName) {
+      fetchAuctionItems({
+        ...filters,
+        charity: charityName,
+      });
+    }
+  }, [filters, charityName]);
+
+  // Fetch auction items - similar to SearchAuctionsContent
+  const fetchAuctionItems = async (filterParams: {
+    category: string;
+    conditions: string[];
+    charity: string;
+  }) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      console.log("Fetching auction items with filters:", filterParams);
+
+      const response = await fetch(
+        "http://127.0.0.1:8080/getSearchedAuctionItems",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(filterParams),
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Received listings:", result);
+
+        // Process auction statuses
+        const processedAuctions = await processAuctionStatuses(result);
+        setListings(processedAuctions);
+      } else {
+        const errorStatus = response.status;
+        let errorText = "Failed to fetch listings";
+
+        try {
+          const errorData = await response.json();
+          errorText = errorData.message || errorText;
+        } catch (e) {
+          // If response is not JSON, use status text
+          errorText = response.statusText || errorText;
+        }
+
+        console.error(`Error ${errorStatus}: ${errorText}`);
+        setError(`Error: ${errorText}`);
       }
-    }, 60000);
+    } catch (error) {
+      console.error("Error fetching auction items:", error);
+      setError("Error connecting to server");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    return () => clearInterval(statusCheckInterval);
-  }, [listings]);
-
+  // Handle view toggle
   const handleViewChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setView(event.target.value);
   };
 
+  // Handle overlay toggles
   const toggleOverlay = () => {
     setOverlayVisible(!isOverlayVisible);
   };
 
   const handleAddListing = (newListing: AuctionItem) => {
     setListings((prevListings) => [...prevListings, newListing]);
+    setOverlayVisible(false);
+    // Refresh listings
+    if (charityName) {
+      fetchAuctionItems({
+        ...filters,
+        charity: charityName,
+      });
+    }
   };
 
   const handleEditStart = (listing: AuctionItem) => {
@@ -79,27 +176,52 @@ const ManageListingsContent: React.FC = () => {
   const handleEditComplete = (updatedListing: AuctionItem) => {
     setIsEditOverlayVisible(false);
     setEditingListing(null);
-    // Optionally update the listings state here instead of reloading the page
+    // Refresh listings
+    if (charityName) {
+      fetchAuctionItems({
+        ...filters,
+        charity: charityName,
+      });
+    }
   };
 
+  // Function to sort auction items
   const getSortedAuctions = (auctions: AuctionItem[]) => {
+    if (!auctions || auctions.length === 0) return [];
+
+    const auctionsCopy = [...auctions];
+
     switch (sortBy) {
       case "endDate":
-        return [...auctions].sort((a, b) => {
+        return auctionsCopy.sort((a, b) => {
           const comparison =
             new Date(a.auctionEndDate).getTime() -
             new Date(b.auctionEndDate).getTime();
           return sortDirection === "asc" ? comparison : -comparison;
         });
       case "currentBid":
-        return [...auctions].sort((a, b) => {
+        return auctionsCopy.sort((a, b) => {
           const comparison = a.currentPrice - b.currentPrice;
           return sortDirection === "asc" ? comparison : -comparison;
         });
       default:
-        return auctions;
+        return auctionsCopy;
     }
   };
+
+  // Get the sorted auctions to display
+  const displayAuctions = getSortedAuctions(listings);
+
+  // Prevent non-charity users from viewing this component
+  if (userType !== "charity") {
+    return (
+      <div className={styles["listing-container"]}>
+        <p className={styles.errorMessage}>
+          Only charity accounts can access this page.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className={styles["listing-container"]}>
@@ -134,14 +256,36 @@ const ManageListingsContent: React.FC = () => {
             view === "grid" ? styles.gridView : ""
           }`}
         >
-          {getSortedAuctions(listings).map((listing) => (
-            <ManageableListing
-              key={listing._id}
-              view={view}
-              {...listing}
-              onEditClick={() => handleEditStart(listing)}
-            />
-          ))}
+          {isLoading ? (
+            <p>Loading listings...</p>
+          ) : error ? (
+            <p className={styles.errorMessage}>
+              {error}
+              <button
+                className={styles.retryButton}
+                onClick={() =>
+                  charityName &&
+                  fetchAuctionItems({
+                    ...filters,
+                    charity: charityName,
+                  })
+                }
+              >
+                Retry
+              </button>
+            </p>
+          ) : displayAuctions.length > 0 ? (
+            displayAuctions.map((listing) => (
+              <ManageableListing
+                key={listing._id}
+                view={view}
+                {...listing}
+                onEditClick={() => handleEditStart(listing)}
+              />
+            ))
+          ) : (
+            <p>No listings match your filters.</p>
+          )}
         </div>
 
         {isOverlayVisible && (
