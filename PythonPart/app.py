@@ -157,7 +157,8 @@ def charityRegistration():
             password=content["userPassword"],
             phoneNum=content["userPhone"],
             address=content["userAddress"],
-            image=content["image"],
+            image=content["imageData"],
+            description=content["description"],
         )
         newId = charityConnection.createCharity(charity)
         if newId == None:

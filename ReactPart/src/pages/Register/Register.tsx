@@ -28,6 +28,7 @@ export default function Register() {
     charityPassword: "",
     charityRepeatPassword: "",
     charityImage: "",
+    charityDescription: "",
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -214,6 +215,7 @@ export default function Register() {
           userEmail: formData.charityEmail,
           userPassword: formData.charityPassword,
           imageData: formData.charityImage,
+          description: formData.charityDescription,
         };
         userEmail = formData.charityEmail;
         userPassword = formData.charityPassword;
@@ -474,6 +476,20 @@ export default function Register() {
                     </div>
                   )}
                 </div>
+              </div>
+              <div className={styles.input_field}>
+                <label htmlFor="charityDescription" className={styles.label}>
+                  Input charity description
+                </label>
+                <input
+                  type="text"
+                  id="charityDescription"
+                  name="charityDescription"
+                  className={styles.input}
+                  placeholder="Charity description"
+                  value={formData.charityDescription}
+                  onChange={handleInputChange}
+                />
               </div>
               <div className={styles.input_field}>
                 <label htmlFor="charityPhone" className={styles.label}>
