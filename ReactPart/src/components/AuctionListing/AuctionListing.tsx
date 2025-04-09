@@ -78,7 +78,9 @@ const AuctionListing: React.FC<AuctionListingProps> = ({
         <h3>{title}</h3>
         <p>Charity: {charityId}</p>
         <p className={styles.status}>Status: {status}</p>
-        <p>Description: {description}</p>
+        <p className={view === "grid" ? styles.truncated : undefined}>
+          Description: {description}
+        </p>
         <p>Category: {categoryId}</p>
         <div className={styles.auctionDetails}>
           <p>Auction Starts: {formatDateString(auctionStartDate)}</p>
