@@ -24,7 +24,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
   const charitySelectRef = useRef<HTMLSelectElement>(null);
 
   const handleConditionChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const value = event.target.value;
     setConditions([value]);
@@ -83,9 +83,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
       </div>
 
       {/* Dynamic Charity Selector */}
-      {userType === "charity" ? (
-        <div></div>
-      ) : (
+      {userType !== "charity" && (
         <div className={styles.filter_group}>
           <label htmlFor="charity-filter">Charity</label>
           <CharitiesForm onSelect={setCharity} selectRef={charitySelectRef} />
