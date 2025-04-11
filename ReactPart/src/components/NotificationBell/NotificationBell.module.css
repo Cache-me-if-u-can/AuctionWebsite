@@ -1,0 +1,120 @@
+.notificationBell {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.bellButton {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #333333;
+  display: flex;
+  align-items: center;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.bellButton:hover {
+  color: #007bff;
+}
+
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #dc3545;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  margin-top: 8px;
+}
+
+.notification {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.notification:hover {
+  background-color: #f8f9fa;
+}
+
+.notification p {
+  margin: 0 0 4px 0;
+  color: #333333;
+  font-size: 14px;
+}
+
+.notification small {
+  color: #666666;
+  font-size: 12px;
+}
+
+.unread {
+  background-color: #f8f9fa;
+  border-left: 3px solid #007bff;
+}
+
+.noNotifications {
+  padding: 16px;
+  text-align: center;
+  color: #666666;
+}
+
+/* Animation for the bell on new notifications */
+@keyframes bellShake {
+  0% {
+    transform: rotate(0);
+  }
+  15% {
+    transform: rotate(5deg);
+  }
+  30% {
+    transform: rotate(-5deg);
+  }
+  45% {
+    transform: rotate(4deg);
+  }
+  60% {
+    transform: rotate(-4deg);
+  }
+  75% {
+    transform: rotate(2deg);
+  }
+  85% {
+    transform: rotate(-2deg);
+  }
+  92% {
+    transform: rotate(1deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}
+
+.bellButton:has(+ .badge) svg {
+  animation: bellShake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}

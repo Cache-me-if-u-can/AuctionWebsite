@@ -132,6 +132,16 @@
   height: 40px;
   fill: none;
 }
+.auth_section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.notificationWrapper {
+  display: flex;
+  align-items: center;
+}
 
 @media (max-width: 1000px) {
   .header {

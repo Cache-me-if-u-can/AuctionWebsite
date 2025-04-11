@@ -4,6 +4,7 @@ import styles from "./Header.module.css";
 import gavelLogo from "../../assets/images/gavel_V1.png";
 import SlideMenu from "../SlideMenu/SlideMenu";
 import { useUser } from "../../context/UserProvider";
+import NotificationBell from "../NotificationBell/NotificationBell";
 
 export default function Header() {
   const [slideMenu, setSlideMenu] = useState<boolean>(false);
@@ -57,7 +58,10 @@ export default function Header() {
               </>
             )}
             {isLoggedIn && (
-              <>
+              <div className={styles.auth_section}>
+                <div className={styles.notificationWrapper}>
+                  <NotificationBell />
+                </div>
                 <Link
                   to="/Profile"
                   className={`${styles.button} ${styles.account}`}
@@ -94,7 +98,7 @@ export default function Header() {
                     </>
                   )}
                 </Link>
-              </>
+              </div>
             )}
           </div>
         </nav>
