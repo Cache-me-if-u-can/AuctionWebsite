@@ -3,7 +3,10 @@
   display: flex;
   flex-direction: column;
 }
-
+.completed {
+  color: #6b7280;
+  font-weight: bold;
+}
 .content {
   flex: 1;
   max-width: 1200px;

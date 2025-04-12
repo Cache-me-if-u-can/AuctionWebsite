@@ -168,9 +168,19 @@ const BidDashboard: React.FC = () => {
                       Current highest: £{bid.current_highest_bid.toFixed(2)}
                     </p>
                     <p
-                      className={`${styles.bidStatus} ${bid.is_highest_bidder ? styles.leading : styles.outbid}`}
+                      className={`${styles.bidStatus} ${
+                        bid.auction_status === "completed"
+                          ? styles.completed
+                          : bid.is_highest_bidder
+                            ? styles.leading
+                            : styles.outbid
+                      }`}
                     >
-                      {bid.is_highest_bidder ? "✅ Leading" : "❌ Outbid"}
+                      {bid.auction_status === "completed"
+                        ? "✔️ Completed"
+                        : bid.is_highest_bidder
+                          ? "✅ Leading"
+                          : "❌ Outbid"}
                     </p>
                   </div>
                   <div className={styles.bidTimeInfo}>
