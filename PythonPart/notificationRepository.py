@@ -31,7 +31,11 @@ class NotificationRepository:
         return list(notifications)
 
     def mark_as_read(self, notification_id):
-        result = self.collection.update_one(
-            {"_id": ObjectId(notification_id)}, {"$set": {"read": True}}
-        )
-        return result.modified_count > 0
+        try:
+            result = self.collection.update_one(
+                {"_id": ObjectId(notification_id)}, {"$set": {"read": True}}
+            )
+            return result.modified_count > 0
+        except Exception as e:
+            print(f"Error marking notification as read: {e}")
+            return False

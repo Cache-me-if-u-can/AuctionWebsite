@@ -57,11 +57,9 @@ CORS(
     resources={r"/*": {"origins": ["http://localhost:5173"]}},
 )
 
-print("Initializing database connections...")
 customerConnection = CustomerRepository(db)
 charityConnection = CharityRepository(db)
 notificationConnection = NotificationRepository(db)
-print(f"NotificationRepository initialized with database: {db.name}")
 quizConnection = QuizRepository(db)
 questionConnection = QuestionRepository(db)
 answerConnection = AnswerRepository(db)
@@ -914,6 +912,70 @@ scheduler.add_job(
 )
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
+
+
+@app.route("/notifications", methods=["GET"])
+@jwt_required()
+def get_notifications():
+    try:
+        # Get current user's ID from JWT token
+        current_user = get_jwt_identity()
+        user_id = current_user["id"]
+
+        # Get notifications for the user
+        notifications = notificationConnection.get_user_notifications(user_id)
+
+        # Convert ObjectId to string for JSON serialization
+        formatted_notifications = []
+        for notification in notifications:
+            notification["_id"] = str(notification["_id"])
+            formatted_notifications.append(notification)
+
+        return jsonify(formatted_notifications), 200
+    except Exception as e:
+        print(f"Error fetching notifications: {e}")
+        return jsonify({"message": "Unable to fetch notifications"}), 500
+
+
+@app.route("/notifications/<notification_id>/read", methods=["PUT"])
+@jwt_required()
+def mark_notification_read(notification_id):
+    try:
+        # Get current user's ID from JWT token
+        current_user = get_jwt_identity()
+        print(f"Current user from JWT: {current_user}")  # Debug log
+
+        if not current_user:
+            print("No user found in JWT token")  # Debug log
+            return jsonify({"message": "Authentication required"}), 401
+
+        user_id = current_user["id"]
+        print(f"User ID: {user_id}")  # Debug log
+
+        try:
+            notification = notificationConnection.collection.find_one(
+                {"_id": ObjectId(notification_id)}
+            )
+            print(f"Found notification: {notification}")  # Debug log
+        except Exception as e:
+            print(f"Error finding notification: {e}")
+            return jsonify({"message": "Invalid notification ID"}), 400
+
+        if not notification:
+            return jsonify({"message": "Notification not found"}), 404
+
+        if notification["userId"] != user_id:
+            return jsonify({"message": "Unauthorized"}), 403
+
+        # Mark notification as read
+        success = notificationConnection.mark_as_read(notification_id)
+
+        if success:
+            return jsonify({"message": "Notification marked as read"}), 200
+        return jsonify({"message": "Failed to mark notification as read"}), 500
+    except Exception as e:
+        print(f"Error in mark_notification_read: {e}")  # Debug log
+        return jsonify({"message": "Unable to process request"}), 500
 
 
 @app.route("/scheduler/run-now", methods=["POST"])

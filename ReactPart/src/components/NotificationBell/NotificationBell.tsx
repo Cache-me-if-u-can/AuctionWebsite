@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styles from "./NotificationBell.module.css";
+import { useUser } from "../../context/UserProvider";
 import { Notification } from "../../types/Notification/Notification";
 
 const NotificationBell: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const { getCsrfToken } = useUser();
   //!TODO: Implement endpoints in the backend
   const fetchNotifications = async () => {
     try {
@@ -29,10 +31,16 @@ const NotificationBell: React.FC = () => {
         {
           method: "PUT",
           credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": getCsrfToken() || "", // Add CSRF token
+          },
         },
       );
       if (response.ok) {
         fetchNotifications();
+      } else {
+        console.error("Error response:", await response.json());
       }
     } catch (error) {
       console.error("Error marking notification as read:", error);
