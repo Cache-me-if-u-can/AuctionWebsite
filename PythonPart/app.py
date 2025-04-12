@@ -20,6 +20,8 @@ from datetime import datetime, timezone, timedelta
 from bdConnection import *
 from charity import *
 from charityRepository import *
+from notification import Notification
+from notificationRepository import NotificationRepository
 from auctionItemRepository import *
 from quizRepository import *
 from questionRepository import *
@@ -55,9 +57,11 @@ CORS(
     resources={r"/*": {"origins": ["http://localhost:5173"]}},
 )
 
+print("Initializing database connections...")
 customerConnection = CustomerRepository(db)
 charityConnection = CharityRepository(db)
-
+notificationConnection = NotificationRepository(db)
+print(f"NotificationRepository initialized with database: {db.name}")
 quizConnection = QuizRepository(db)
 questionConnection = QuestionRepository(db)
 answerConnection = AnswerRepository(db)
@@ -68,6 +72,7 @@ quizConnection = QuizRepository(db)
 questionConnection = QuestionRepository(db)
 answerConnection = AnswerRepository(db)
 bidConnection = BidRepository(db)
+
 
 # server function for customer registration
 @app.route("/customerRegistration", methods=["POST"])
@@ -765,59 +770,131 @@ def get_user_bids():
         print(f"Error retrieving user bids: {e}")
         return jsonify({"error": "Failed to retrieve bids"}), 500
 
-@app.route('/updateAuctionStatus/<auction_id>', methods=['PATCH'])
+
+@app.route("/updateAuctionStatus/<auction_id>", methods=["PATCH"])
 def update_auction_status(auction_id):
     try:
         data = request.get_json()
-        new_status = data.get('status')
-        
+        new_status = data.get("status")
+
         if not new_status:
-            return jsonify({'error': 'Status is required'}), 400
-            
-        if new_status not in ['hidden', 'active', 'completed']:
-            return jsonify({'error': 'Invalid status value. Must be one of: hidden, active, completed'}), 400
+            return jsonify({"error": "Status is required"}), 400
+
+        if new_status not in ["hidden", "active", "completed"]:
+            return (
+                jsonify(
+                    {
+                        "error": "Invalid status value. Must be one of: hidden, active, completed"
+                    }
+                ),
+                400,
+            )
 
         # Verify the auction item exists before attempting update
         if not auctionItemConnection.auctionItemExistsById(auction_id):
-            return jsonify({'error': 'Auction item not found'}), 404
+            return jsonify({"error": "Auction item not found"}), 404
 
         success = auctionItemConnection.update_auction_status(auction_id, new_status)
-        
+
         if success:
-            return jsonify({'message': 'Status updated successfully'}), 200
+            return jsonify({"message": "Status updated successfully"}), 200
         else:
-            return jsonify({'error': 'Failed to update status'}), 500
-            
+            return jsonify({"error": "Failed to update status"}), 500
+
     except Exception as e:
         print("Error in update_auction_status:", str(e))
-        return jsonify({'error': 'Internal server error'}), 500
+        return jsonify({"error": "Internal server error"}), 500
 
-@app.route('/getTotalBids/<auctionId>', methods=['GET'])
+
+@app.route("/getTotalBids/<auctionId>", methods=["GET"])
 def get_total_bids(auctionId):
     try:
         bids = bidConnection.getListOfBids(auctionId)
-        return jsonify({'count': len(bids)})
+        return jsonify({"count": len(bids)})
     except Exception as e:
         print(f"Error getting total bids: {e}")
-        return jsonify({'message': 'Unable to fetch bid count'}), 500
+        return jsonify({"message": "Unable to fetch bid count"}), 500
+
 
 def check_auction_end_dates():
     try:
         # Get all active auction items
         active_items = auctionItemConnection.get_active_auctions()
         current_time = datetime.now(timezone.utc)
-        
+
         for item in active_items:
             try:
                 # Convert the string date to datetime and make it timezone-aware
-                end_date = datetime.strptime(item['auctionEndDate'], '%Y-%m-%dT%H:%M')
+                end_date = datetime.strptime(item["auctionEndDate"], "%Y-%m-%dT%H:%M")
                 # Make it timezone-aware (UTC)
                 end_date = end_date.replace(tzinfo=timezone.utc)
-                
+
                 if current_time >= end_date:
-                    success = auctionItemConnection.update_auction_status(str(item['_id']), 'completed')
+                    success = auctionItemConnection.update_auction_status(
+                        str(item["_id"]), "completed"
+                    )
                     if success:
-                        print(f"Auction {item['title']} (ID: {item['_id']}) marked as completed")
+                        print(
+                            f"Auction {item['title']} (ID: {item['_id']}) marked as completed"
+                        )
+
+                        # Get highest bid and winner
+                        highest_bid = bidConnection.getCurrentBid(str(item["_id"]))
+                        print(f"Highest bid found for auction: {highest_bid}")
+
+                        if highest_bid:
+                            # Find the winning bid to get the customer ID
+                            print(f"Looking for winning bid with amount: {highest_bid}")
+                            winning_bid = bidConnection.coll.find_one(
+                                {
+                                    "auctionItemId": str(item["_id"]),
+                                    "bidAmount": highest_bid,
+                                }
+                            )
+                            print(f"Winning bid found: {winning_bid}")
+
+                            if winning_bid:
+                                print("Creating winner notification...")
+                                try:
+                                    winner_notification = Notification(
+                                        userId=str(winning_bid["customerId"]),
+                                        message=f"Congratulations! You won the auction for {item['title']} with a bid of ${highest_bid}",
+                                        type="auction_won",
+                                        auctionId=str(item["_id"]),
+                                    )
+                                    notif_id = (
+                                        notificationConnection.create_notification(
+                                            winner_notification
+                                        )
+                                    )
+                                    if notif_id:
+                                        print(
+                                            f"Winner notification created with ID: {notif_id}"
+                                        )
+                                    else:
+                                        print("Failed to create winner notification")
+                                except Exception as e:
+                                    print(f"Error creating winner notification: {e}")
+
+                        print("Creating charity notification...")
+                        try:
+                            charity_notification = Notification(
+                                userId=str(item["charityId"]),
+                                message=f"Your auction for {item['title']} has ended{' with a winning bid of $' + str(highest_bid) if highest_bid else ' with no bids'}",
+                                type="auction_ended",
+                                auctionId=str(item["_id"]),
+                            )
+                            notif_id = notificationConnection.create_notification(
+                                charity_notification
+                            )
+                            if notif_id:
+                                print(
+                                    f"Charity notification created with ID: {notif_id}"
+                                )
+                            else:
+                                print("Failed to create charity notification")
+                        except Exception as e:
+                            print(f"Error creating charity notification: {e}")
                     else:
                         print(f"Failed to update auction {item['_id']}")
             except Exception as e:
@@ -826,15 +903,18 @@ def check_auction_end_dates():
     except Exception as e:
         print(f"Error in check_auction_end_dates: {e}")
 
+
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=check_auction_end_dates,
+scheduler.add_job(
+    func=check_auction_end_dates,
     trigger="interval",
     minutes=1,
-    id='check_auctions_job',
-    name='Check auction end dates and update status'
+    id="check_auctions_job",
+    name="Check auction end dates and update status",
 )
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
+
 
 @app.route("/scheduler/run-now", methods=["POST"])
 @jwt_required()
@@ -843,15 +923,17 @@ def run_check_now():
         current_user = get_jwt_identity()
         if current_user["userType"] != "charity":
             return jsonify({"message": "Unauthorized access"}), 403
-            
+
         check_auction_end_dates()
         return jsonify({"message": "Auction check completed successfully"}), 200
     except Exception as e:
         print(f"Error running auction check: {e}")
         return jsonify({"message": "Error running auction check"}), 500
 
+
 def shutdown_scheduler():
     scheduler.shutdown()
+
 
 if __name__ == "__main__":
     try:

@@ -1,3 +1,6 @@
+from datetime import datetime, timezone
+
+
 class Notification:
     def __init__(self, userId, message, type, auctionId, read=False, _id=None):
         self.__id = _id
@@ -35,4 +38,3 @@ class Notification:
     @property
     def createdAt(self):
         return self.__createdAt
-
