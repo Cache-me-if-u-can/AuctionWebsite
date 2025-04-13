@@ -9,6 +9,7 @@ type SidebarProps = {
     category: string;
     conditions: string[];
     charity: string;
+    searchTerm?: string;
   }) => void;
 };
 
@@ -18,6 +19,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
   const [category, setCategory] = useState("all");
   const [conditions, setConditions] = useState<string[]>([]);
   const [charity, setCharity] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Create refs for the select elements
   const categorySelectRef = useRef<HTMLSelectElement>(null);
@@ -31,7 +33,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
   };
 
   const handleFilterClick = () => {
-    onFilterChange({ category, conditions, charity });
+    onFilterChange({ category, conditions, charity, searchTerm });
   };
 
   const handleClearFilters = () => {
@@ -39,6 +41,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
     setCategory("all");
     setConditions([]);
     setCharity("all");
+    setSearchTerm("");
 
     // Reset the select elements to their default values
     if (categorySelectRef.current) {
@@ -50,12 +53,29 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
     }
 
     // Trigger filter change with default values
-    onFilterChange({ category: "all", conditions: [], charity: "all" });
+    onFilterChange({
+      category: "all",
+      conditions: [],
+      charity: "all",
+      searchTerm: "",
+    });
   };
 
   return (
     <div className={styles.sidebar}>
       <h2>Filters</h2>
+      {/* Search Input */}
+      <div className={styles.filter_group}>
+        <label htmlFor="search-filter">Search</label>
+        <input
+          type="text"
+          id="search-filter"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search by name..."
+          className={styles.search_input}
+        />
+      </div>
 
       {/* Dynamic Category Selector */}
       <div className={styles.filter_group}>

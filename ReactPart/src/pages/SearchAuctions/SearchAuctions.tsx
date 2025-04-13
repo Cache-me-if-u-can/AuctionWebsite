@@ -14,9 +14,15 @@ const SearchAuctions: React.FC = () => {
     category: "all",
     conditions: [],
     charity: "all",
+    searchTerm: "",
   });
 
-  const handleFilterChange = (newFilters) => {
+  const handleFilterChange = (newFilters: {
+    category: string;
+    conditions: string[];
+    charity: string;
+    searchTerm: string;
+  }) => {
     setFilters(newFilters);
   };
 

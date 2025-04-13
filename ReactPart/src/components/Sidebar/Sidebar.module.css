@@ -38,6 +38,20 @@
   background-color: #f9f9f9;
   color: #333;
 }
+.search_input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.search_input:focus {
+  outline: none;
+  border-color: #0066cc;
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+}
 
 button {
   border-radius: var(--border-radius-small);

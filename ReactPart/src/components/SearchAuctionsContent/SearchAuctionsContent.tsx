@@ -7,11 +7,17 @@ import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
 import { processAuctionStatuses } from "../../utils/auctionUtils";
 
 interface SearchAuctionsContentProps {
-  filters: { category: string; conditions: string[]; charity: string };
+  filters: {
+    category: string;
+    conditions: string[];
+    charity: string;
+    searchTerm?: string;
+  };
   onFilterChange: (filters: {
     category: string;
     conditions: string[];
     charity: string;
+    searchTerm?: string;
   }) => void;
 }
 type SortType = "endDate" | "currentBid";

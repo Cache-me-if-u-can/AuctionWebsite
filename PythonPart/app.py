@@ -448,8 +448,15 @@ def getSearchedAuctionItems():
         category = data.get("category", "all")
         conditions = data.get("conditions", [])
         charity = data.get("charity", "all")
+        search_term = data.get("searchTerm", "").strip().lower()
 
         auction_items = auctionItemConnection.getListOfAuctionItems()
+
+        # Filter by search term if provided
+        if search_term:
+            auction_items = [
+                item for item in auction_items if search_term in item["title"].lower()
+            ]
 
         if category != "all":
             auction_items = [
@@ -471,7 +478,6 @@ def getSearchedAuctionItems():
                 if item["charityId"]
                 == str(charityConnection.getCharityByName(charity)["_id"])
             ]
-        print(auction_items)
         for item in auction_items:
             item["charityId"] = charityConnection.getCharityById(item["charityId"])[
                 "name"
