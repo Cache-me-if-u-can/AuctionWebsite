@@ -15,22 +15,24 @@ interface ManageListingsContentProps {
   filters?: {
     category: string;
     conditions: string[];
+    searchTerm?: string;
   };
   onFilterChange?: (filters: {
     category: string;
     conditions: string[];
+    searchTerm?: string;
   }) => void;
 }
 
 const ManageListingsContent: React.FC<ManageListingsContentProps> = ({
-  filters = { category: "all", conditions: [] },
+  filters = { category: "all", conditions: [], searchTerm: "" },
   onFilterChange = () => {},
 }) => {
   const [view, setView] = useState("list");
   const [isOverlayVisible, setOverlayVisible] = useState(false);
   const [isEditOverlayVisible, setIsEditOverlayVisible] = useState(false);
   const [editingListing, setEditingListing] = useState<AuctionItem | null>(
-    null
+    null,
   );
   const [listings, setListings] = useState<AuctionItem[]>([]);
   const [sortBy, setSortBy] = useState<SortType>("endDate");
@@ -65,6 +67,7 @@ const ManageListingsContent: React.FC<ManageListingsContentProps> = ({
             fetchAuctionItems({
               ...filters,
               charity: result.name,
+              searchTerm: filters.searchTerm,
             });
           } else {
             setError("Access restricted to charity users");
@@ -90,6 +93,7 @@ const ManageListingsContent: React.FC<ManageListingsContentProps> = ({
       fetchAuctionItems({
         ...filters,
         charity: charityName,
+        searchTerm: filters.searchTerm,
       });
     }
   }, [filters, charityName]);
@@ -99,6 +103,7 @@ const ManageListingsContent: React.FC<ManageListingsContentProps> = ({
     category: string;
     conditions: string[];
     charity: string;
+    searchTerm?: string;
   }) => {
     try {
       setIsLoading(true);
@@ -113,7 +118,7 @@ const ManageListingsContent: React.FC<ManageListingsContentProps> = ({
             "Content-Type": "application/json",
           },
           body: JSON.stringify(filterParams),
-        }
+        },
       );
 
       if (response.ok) {

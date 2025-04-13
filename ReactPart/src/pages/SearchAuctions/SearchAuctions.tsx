@@ -37,6 +37,7 @@ const SearchAuctions: React.FC = () => {
             filters={{
               category: filters.category,
               conditions: filters.conditions,
+              searchTerm: filters.searchTerm,
             }}
             onFilterChange={(newFilters) =>
               handleFilterChange({
