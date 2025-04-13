@@ -21,6 +21,7 @@ class CharityRepository:
             "image": charity.image,
             "address": charity.address,
             "description": charity.description,
+            "website": charity.website,
         }
         result = self.coll.insert_one(new_charity)
         return result.inserted_id
@@ -120,6 +121,7 @@ class CharityRepository:
                     "image": charity.image,
                     "address": charity.address,
                     "description": charity.description,
+                    "website": charity.website,
                 }
             },
         )

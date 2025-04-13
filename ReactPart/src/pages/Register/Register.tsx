@@ -29,13 +29,14 @@ export default function Register() {
     charityRepeatPassword: "",
     charityImage: "",
     charityDescription: "",
+    charityWebsite: "",
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   // Update form data
   const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = event.target;
     let processedValue = value;
@@ -77,7 +78,7 @@ export default function Register() {
   };
 
   const handleImageChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (!file) {
@@ -216,6 +217,7 @@ export default function Register() {
           userPassword: formData.charityPassword,
           imageData: formData.charityImage,
           description: formData.charityDescription,
+          website: formData.charityWebsite,
         };
         userEmail = formData.charityEmail;
         userPassword = formData.charityPassword;
@@ -223,7 +225,7 @@ export default function Register() {
 
       console.log(
         "Form submitted successfully (userData):",
-        JSON.stringify(userData)
+        JSON.stringify(userData),
       );
 
       try {
@@ -231,7 +233,7 @@ export default function Register() {
           userEmail,
           userPassword,
           userType,
-          JSON.stringify(userData)
+          JSON.stringify(userData),
         );
         console.log("Registered!");
       } catch (error) {
@@ -456,6 +458,20 @@ export default function Register() {
 
           {userType === "charity" && (
             <div id="charityFields" className={styles.userFields}>
+              <div className={styles.input_field}>
+                <label htmlFor="charityWebsite" className={styles.label}>
+                  Website URL
+                </label>
+                <input
+                  type="url"
+                  id="charityWebsite"
+                  name="charityWebsite"
+                  className={styles.input}
+                  placeholder="https://www.yourcharity.org"
+                  value={formData.charityWebsite}
+                  onChange={handleInputChange}
+                />
+              </div>
               <div className={styles.input_field}>
                 <label htmlFor="charityName" className={styles.label}>
                   Charity Name

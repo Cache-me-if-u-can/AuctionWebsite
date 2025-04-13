@@ -15,7 +15,12 @@
     var(--dark-periwinkle)
   );
 }
-
+.charityList > :nth-child(odd) .charity_links {
+  align-self: flex-start;
+}
+.charityList > :nth-child(even) .charity_links {
+  align-self: flex-end;
+}
 .charityList > :nth-child(even) {
   flex-direction: row-reverse;
   justify-content: right;

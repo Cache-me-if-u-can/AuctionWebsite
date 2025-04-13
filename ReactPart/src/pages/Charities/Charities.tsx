@@ -13,6 +13,7 @@ interface CharityData {
   email: string;
   password: string;
   image: string;
+  website?: string; // Optional for charities that have a website
 }
 
 export default function Charities() {
@@ -33,6 +34,7 @@ export default function Charities() {
           phone: charity.phoneNum,
           address: charity.address,
           email: charity.email,
+          website: charity.website,
           password: charity.password,
           image: charity.image,
         }));
@@ -62,6 +64,7 @@ export default function Charities() {
             location={charity.address}
             description={charity.description}
             logo={charity.image}
+            website={charity.website}
           />
         ))}
       </div>

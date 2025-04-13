@@ -7,6 +7,7 @@ interface CharityProps {
   location: string;
   description: string;
   logo: string;
+  website?: string; // Optional for charities that have a website
 }
 
 const Charity: React.FC<CharityProps> = ({
@@ -14,6 +15,7 @@ const Charity: React.FC<CharityProps> = ({
   location,
   description,
   logo,
+  website,
 }) => {
   const navigate = useNavigate();
 
@@ -25,12 +27,25 @@ const Charity: React.FC<CharityProps> = ({
     });
   };
   return (
-    <div className={styles.charity_entry} onClick={handleClick}>
+    <div className={styles.charity_entry}>
       <img src={logo} alt="logo" className={styles.logo} />
       <div className={styles.charity_details}>
         <h1 className={styles.charity_name}>{name}</h1>
         <p className={styles.charity_location}>{location}</p>
         <p className={styles.charity_description}>{description}</p>
+        {website && (
+          <a
+            href={website}
+            className={styles.charity_link}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Visit Website
+          </a>
+        )}
+        <a href="#" className={styles.charity_link} onClick={handleClick}>
+          View Auctions
+        </a>
       </div>
     </div>
   );

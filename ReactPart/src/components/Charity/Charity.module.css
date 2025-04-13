@@ -30,14 +30,49 @@
   font-weight: bold;
   margin-bottom: 1rem;
 }
+.charity_links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  align-items: center;
+}
 
 .charity_location {
   font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
   margin-bottom: 0.5rem;
+}
+.charity_link {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 0.9em;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  background: none;
+  border: none;
+  position: relative;
+  padding-bottom: 2px;
+}
+.charity_link:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  transform: scaleX(0);
+  transition: transform 0.2s ease-in-out;
+}
+
+.charity_link:hover:after {
+  transform: scaleX(1);
 }
 
 .charity_description {
   font-size: 16px;
+  margin-bottom: 1rem;
+  line-height: 1.4;
 }
 
 @media (max-width: 768px) {

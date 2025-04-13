@@ -13,6 +13,7 @@ class Charity(object):
         image,
         address,
         description="Default description placeholder that charity will change in the profile later on",
+        website="",
         _id=0,
         hashed_password=False,
     ):
@@ -23,6 +24,7 @@ class Charity(object):
         self.__image = image
         self.__address = address
         self.__description = description
+        self.__website = website
         if not hashed_password:
             self.__password = self._passwordHashing(password)
         else:
@@ -83,6 +85,14 @@ class Charity(object):
     @description.setter
     def description(self, description):
         self.__description = description
+
+    @property
+    def website(self):
+        return self.__website
+
+    @website.setter
+    def website(self, website):
+        self.__website = website
 
     @property
     def password(self):

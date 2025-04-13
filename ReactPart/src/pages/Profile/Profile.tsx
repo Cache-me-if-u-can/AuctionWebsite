@@ -30,6 +30,7 @@ export default function Profile() {
     charityEmail: "",
     charityPassword: "",
     charityImage: "",
+    charityWebsite: "",
 
     newPassword: "",
     repeatNewPassword: "",
@@ -79,6 +80,7 @@ export default function Profile() {
             charityImage: result.image,
             charityAddress: result.address,
             charityDescription: result.description,
+            charityWebsite: result.website,
           }));
         }
       } else if (response.status === 401) {
@@ -272,6 +274,7 @@ export default function Profile() {
           charityPhone: formData.charityPhone,
           charityAddress: formData.charityAddress,
           charityDescription: formData.charityDescription,
+          charityWebsite: formData.charityWebsite,
           charityPassword: formData.charityPassword,
         };
       }
@@ -590,6 +593,29 @@ export default function Profile() {
                       formData.charityAddress
                     )}
                   </p>
+                  <p>
+                    <div className={styles.input_field}>
+                      <label htmlFor="charityWebsite" className={styles.label}>
+                        <strong>Website URL</strong>
+                      </label>
+                      {editProfileMode ? (
+                        <input
+                          type="url"
+                          id="charityWebsite"
+                          name="charityWebsite"
+                          className={styles.input}
+                          placeholder="https://www.yourcharity.org"
+                          value={formData.charityWebsite}
+                          onChange={handleChange}
+                        />
+                      ) : (
+                        <p>
+                          {formData.charityWebsite || "No website provided"}
+                        </p>
+                      )}
+                    </div>
+                  </p>
+
                   <p>
                     <strong>Phone:</strong>
                     {editProfileMode ? (

@@ -162,6 +162,7 @@ def charityRegistration():
             address=content["userAddress"],
             image=content["imageData"],
             description=content["description"],
+            website=content.get("website", ""),
         )
         newId = charityConnection.createCharity(charity)
         if newId == None:
@@ -187,6 +188,7 @@ def updateCharityProfile():
             image=content["charityImage"],
             address=content["charityAddress"],
             description=content["charityDescription"],
+            website=content.get("charityWebsite", ""),
             _id=content["charityId"],
             hashed_password=True,
         ),
@@ -214,6 +216,7 @@ def updateCharityPassword():
             image=charity["image"],
             address=charity["address"],
             description=charity["description"],
+            website=charity.get("website", ""),
             _id=charity["_id"],
         ),
         charity["_id"],
