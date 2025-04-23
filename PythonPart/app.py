@@ -332,25 +332,98 @@ def getCharitiesList():
     return charityConnection.getListOfCharities()
 
 
+@app.route("/createQuiz", methods=["POST"])
+@jwt_required()
+def createQuiz():
+    data = request.json
+    charity_id = data["charityId"]
+    title = data["title"]
+    questions = data["questions"]
+
+    # Create Quiz
+    new_quiz = Quiz(_id=None, quizName=title, charityId=ObjectId(charity_id))
+    quiz_id = quizConnection.createQuiz(new_quiz, charityConnection)
+
+    if not quiz_id:
+        return jsonify({"error": "Failed to create quiz"}), 400
+
+    # Create Questions and Answers
+    for q in questions:
+        question_obj = Question(_id=None, quizId=quiz_id, text=q["text"])
+        question_id = questionConnection.createQuestion(question_obj, quizConnection)
+
+        for a in q["answers"]:
+            answer_obj = Answer(
+                _id=None, questionId=question_id, text=a["text"], correct=a["correct"]
+            )
+            answerConnection.createAnswer(answer_obj, questionConnection)
+
+    return jsonify({"message": "Quiz created", "quizId": str(quiz_id)}), 201
+
+
+@app.route("/updateQuiz", methods=["POST"])
+@jwt_required()
+def updateQuiz():
+    data = request.json
+    charity_id = data["charityId"]
+    title = data["title"]
+    questions = data["questions"]
+
+    quiz = quizConnection.getQuizByCharityId(str(charity_id))
+    if not quiz:
+        return jsonify({"error": "No quiz found to update"}), 404
+
+    quiz_id = quiz["_id"]
+
+    # Update quiz title
+    updated_quiz = Quiz(_id=quiz_id, quizName=title, charityId=charity_id)
+    quizConnection.updateQuiz(updated_quiz, quiz_id)
+
+    # Delete all old questions + answers
+    old_questions = questionConnection.getListOfQuizQuestions(str(quiz_id))
+    for q in old_questions:
+        answerConnection.deleteAllQuestionAnswers(q["_id"])
+    questionConnection.deleteAllQuizQuesstions(str(quiz_id))
+
+    # Create new questions and answers
+    for q in questions:
+        question_obj = Question(_id=None, quizId=quiz_id, text=q["text"])
+        question_id = questionConnection.createQuestion(question_obj, quizConnection)
+
+        for a in q["answers"]:
+            answer_obj = Answer(
+                _id=None, questionId=question_id, text=a["text"], correct=a["correct"]
+            )
+            answerConnection.createAnswer(answer_obj, questionConnection)
+
+    return jsonify({"message": "Quiz updated"}), 200
+
+
 @app.route("/getQuiz", methods=["GET"])
 def getQuiz():
-    response = []
-    quiz = quizConnection.getQuizById("67be43ebe8bfbd867e188cfa")
+    charity_id = request.args.get("charityId")
+    charity_name = request.args.get("charityName")
+    charity = (
+        charityConnection.getCharityById(charity_id)
+        if charity_id
+        else charityConnection.getCharityByName(charity_name)
+    )
+    quiz = quizConnection.getQuizByCharityId(charity["_id"])
+    if not quiz:
+        return jsonify({"message": "No quiz found"}), 204
     questions = questionConnection.getListOfQuizQuestions(quizId=str(quiz["_id"]))
-    # print(quiz)
+    response = {"title": quiz["name"], "questions": []}
     for question in questions:
-        # print(question)
         questionJson = {"question": question["text"]}
         questionAnswers = answerConnection.getListOfQuestionAnswers(
             questionId=str(question["_id"])
         )
         questionJson["answers"] = []
         for answer in questionAnswers:
-            # print(answer)
             questionJson["answers"].append(
                 {"text": answer["text"], "correct": answer["correct"]}
             )
-        response.append(questionJson)
+        response["questions"].append(questionJson)
     return response
 
 

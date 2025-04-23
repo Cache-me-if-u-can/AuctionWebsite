@@ -12,7 +12,6 @@ export default function Home() {
 
       <main className={styles.main}>
         <BackgroundParallax />
-        <Quiz />
       </main>
 
       <Footer />

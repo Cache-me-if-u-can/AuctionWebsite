@@ -4,7 +4,8 @@ import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import { useUser } from "../../context/UserProvider";
 import BidDashboard from "./BidDashboard";
-type ActiveTab = "profile" | "bids";
+import QuizEditor from "../../components/QuizEditor/QuizEditor";
+type ActiveTab = "profile" | "bids" | "editQuiz";
 
 export default function Profile() {
   const { signOut, getCsrfToken } = useUser();
@@ -97,7 +98,7 @@ export default function Profile() {
   }, []);
 
   const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = event.target;
     let processedValue = value;
@@ -139,7 +140,7 @@ export default function Profile() {
   };
 
   const handleImageChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
     if (!file) {
@@ -295,7 +296,7 @@ export default function Profile() {
             },
             body: JSON.stringify(changes),
             credentials: "include",
-          },
+          }
         );
 
         if (!response.ok) {
@@ -330,7 +331,7 @@ export default function Profile() {
             },
             body: JSON.stringify(changes),
             credentials: "include",
-          },
+          }
         );
 
         if (!response.ok) {
@@ -354,22 +355,34 @@ export default function Profile() {
       <main className={styles.main}>
         <div className={styles.tab_navigation}>
           <button
-            className={`${styles.tab_button} ${activeTab === "profile" ? styles.active : ""}`}
+            className={`${styles.tab_button} ${
+              activeTab === "profile" ? styles.active : ""
+            }`}
             onClick={() => setActiveTab("profile")}
           >
             Profile Information
           </button>
           {formData.userType === "customer" && (
             <button
-              className={`${styles.tab_button} ${activeTab === "bids" ? styles.active : ""}`}
+              className={`${styles.tab_button} ${
+                activeTab === "bids" ? styles.active : ""
+              }`}
               onClick={() => setActiveTab("bids")}
             >
               My Bids
             </button>
           )}
+          {formData.userType === "charity" && (
+            <button
+              className={styles.tab_button}
+              onClick={() => setActiveTab("editQuiz")}
+            >
+              Edit Quiz
+            </button>
+          )}
         </div>
 
-        {activeTab === "profile" || formData.userType === "charity" ? (
+        {activeTab === "profile" ? (
           <div className={styles.user_info_container}>
             <div className={styles.user_info_header}>
               <img
@@ -790,8 +803,10 @@ export default function Profile() {
               )}
             </div>
           </div>
-        ) : (
+        ) : activeTab === "bids" ? (
           <BidDashboard />
+        ) : (
+          <QuizEditor charityId={formData.charityId} />
         )}
       </main>
 

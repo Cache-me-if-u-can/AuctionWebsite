@@ -14,22 +14,38 @@ interface QuestionData {
   answers: Answer[];
 }
 
-export default function Quiz() {
+interface QuizResponse {
+  title: string;
+  questions: QuestionData[];
+}
+
+interface QuizProps {
+  charityName: string;
+}
+
+export default function Quiz({ charityName }: QuizProps) {
+  const [title, setTitle] = useState("Loading Quiz...");
   const [questions, setQuestions] = useState<QuestionData[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [score, setScore] = useState(0);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8080/getQuiz", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      `http://127.0.0.1:8080/getQuiz?charityName=${encodeURIComponent(
+        charityName
+      )}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((res) => res.json())
-      .then((data: QuestionData[]) => {
-        setQuestions(data);
+      .then((data: QuizResponse) => {
+        setTitle(data.title || "Quiz Challenge");
+        setQuestions(data.questions);
       });
   }, []);
 
@@ -52,7 +68,7 @@ export default function Quiz() {
 
   return (
     <div className={styles.quizContainer}>
-      <h1>Quiz Challenge</h1>
+      <h1>{title}</h1>
 
       {questions.length > 0 && currentQuestionIndex < questions.length ? (
         <>
@@ -64,12 +80,12 @@ export default function Quiz() {
           />
           <Timer
             key={currentQuestionIndex}
-            totalTime={15}
+            totalTime={20}
             onTimeout={moveToNextQuestion}
           />
         </>
       ) : (
-        <h2>Quiz Completed your score: {score}</h2>
+        <h2>Quiz Completed, your score: {score}</h2>
       )}
     </div>
   );

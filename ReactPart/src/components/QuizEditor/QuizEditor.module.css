@@ -1,0 +1,117 @@
+.editorContainer {
+  background-color: #fff;
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 20px;
+  background-color: #e2e8f0;
+  border: none;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.tab:hover {
+  background-color: #cbd5e0;
+}
+
+.tab.active {
+  background-color: white;
+  border-bottom: 3px solid #4299e1;
+}
+
+.createTab input[type="text"],
+.createTab textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #cbd5e0;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.questionBlock {
+  background-color: #ebf8ff;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border-left: 4px solid #4299e1;
+}
+
+.optionRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.optionRow input[type="text"] {
+  flex-grow: 1;
+}
+
+.optionRow button {
+  background-color: #e53e3e;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.optionRow button:hover {
+  background-color: #c53030;
+}
+
+.removeQuestion {
+  background-color: #e53e3e;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.removeQuestion:hover {
+  background-color: #c53030;
+}
+
+.createTab button,
+.previewTab button {
+  background-color: #4299e1;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.createTab button:hover,
+.previewTab button:hover {
+  background-color: #3182ce;
+}
+
+.previewTab {
+  padding: 10px 0;
+}
+
+.previewTab ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.previewTab li {
+  padding: 5px 0;
+}

@@ -79,3 +79,8 @@ class QuizRepository:
         query = {"_id": ObjectId(quizId)}
         quiz = self.coll.find_one(query)
         return quiz
+
+    def getQuizByCharityId(self, charityId):
+        query = {"charityId": charityId}
+        quiz = self.coll.find_one(query)
+        return quiz

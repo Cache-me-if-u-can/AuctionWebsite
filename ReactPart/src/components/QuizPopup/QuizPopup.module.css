@@ -1,0 +1,40 @@
+.popupOverlay {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.popupContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.small {
+  width: 500px;
+  height: 120px;
+  padding: 15px;
+}
+
+.expanded {
+  width: fit-content;
+  height: auto;
+  padding: 20px;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  z-index: 9999;
+  background: transparent;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+}

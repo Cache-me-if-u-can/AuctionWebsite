@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "../../context/UserProvider";
 import styles from "./SearchAuctions.module.css";
 import Header from "../../components/Header/Header";
@@ -6,6 +6,8 @@ import AuctionBanner from "../../components/auctionBanner/auctionBanner";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import SearchAuctionsContent from "../../components/SearchAuctionsContent/SearchAuctionsContent";
 import ManageListingsContent from "../../components/ManageListingsContent/ManageListingsContent";
+import QuizPopup from "../../components/QuizPopup/QuizPopup";
+import { useLocation } from "react-router-dom";
 
 const SearchAuctions: React.FC = () => {
   const { getUserType } = useUser();
@@ -25,6 +27,24 @@ const SearchAuctions: React.FC = () => {
   }) => {
     setFilters(newFilters);
   };
+
+  const [showQuizPopup, setShowQuizPopup] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const preselected = location.state?.preselectedCharity;
+    if (preselected && preselected !== "all") {
+      setFilters((prev) => ({ ...prev, charity: preselected }));
+      setShowQuizPopup(true); // show popup from charity click
+    }
+  }, [location.state]);
+
+  // When user applies filters via sidebar
+  useEffect(() => {
+    if (filters.charity !== "all") {
+      setShowQuizPopup(true);
+    }
+  }, [filters.charity]);
 
   return (
     <div className={styles.container}>
@@ -53,6 +73,12 @@ const SearchAuctions: React.FC = () => {
           />
         )}
       </div>
+      {showQuizPopup && filters.charity !== "all" && (
+        <QuizPopup
+          charityName={filters.charity}
+          onClose={() => setShowQuizPopup(false)}
+        />
+      )}
     </div>
   );
 };
