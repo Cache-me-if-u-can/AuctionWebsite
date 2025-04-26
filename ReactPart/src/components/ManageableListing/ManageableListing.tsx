@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./ManageableListing.module.css";
 import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
 import ConfirmDelete from "../ConfirmDelete/ConfirmDelete";
+import BidderOverlay from "../BidderOverlay/BidderOverlay";
 
 interface ManageableListingProps extends AuctionItem {
   view: string;
@@ -25,6 +26,7 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
   onEditClick,
 }) => {
   const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
+  const [isBidderOverlayVisible, setIsBidderOverlayVisible] = useState(false);
   const navigate = useNavigate();
   const imageUrl = image ? URL.createObjectURL(new Blob([image])) : "";
 
@@ -97,11 +99,21 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
           window.location.reload();
         }}
       />
+      <BidderOverlay
+        isVisible={isBidderOverlayVisible}
+        onClose={() => setIsBidderOverlayVisible(false)}
+        auctionId={_id || ""}
+      />
       <div className={styles.managementTools}>
         <a className={styles.viewListing} onClick={viewListing}>
           Listing
         </a>
-        <a className={styles.viewBidders}>Bidders</a>
+        <a
+          className={styles.viewBidders}
+          onClick={() => setIsBidderOverlayVisible(true)}
+        >
+          Bidders
+        </a>
         <a className={styles.editListing} onClick={onEditClick}>
           Edit
         </a>
