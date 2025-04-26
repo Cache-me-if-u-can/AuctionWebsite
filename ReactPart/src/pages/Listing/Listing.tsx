@@ -220,12 +220,6 @@ const Listing: React.FC = () => {
                       £{auctionItem.currentPrice}
                     </span>
                   </div>
-                  <div className={styles.priceCard}>
-                    <span className={styles.priceLabel}>Buy Now</span>
-                    <span className={styles.priceValue}>
-                      £{auctionItem.startingPrice * 10}
-                    </span>
-                  </div>
                 </div>
 
                 <div className={styles.bidInputContainer}>
