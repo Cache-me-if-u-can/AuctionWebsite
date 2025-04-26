@@ -1,11 +1,9 @@
 .viewToggle {
-  /*margin-bottom: 20px;*/
   display: flex;
   align-items: center;
   gap: 10px;
-  align-self: flex-start;
-  /*margin-top: 10px;*/
   height: 38px;
+  justify-content: center;
 }
 
 .viewToggle select {
