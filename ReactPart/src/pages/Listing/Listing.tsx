@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import styles from "./Listing.module.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
@@ -10,6 +10,7 @@ import { getTimeRemaining, formatTimeRemaining } from "../../utils/timeUtils";
 
 const Listing: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const location = useLocation();
   const [maxBid, setMaxBid] = React.useState<number | string>("");
   const [warningVisible, setWarningVisible] = React.useState(false);
@@ -98,7 +99,9 @@ const Listing: React.FC = () => {
     try {
       const csrfToken = getCsrfToken();
       if (!csrfToken) {
-        throw new Error("No authentication token found");
+        alert("You must be logged in to place a bid");
+        navigate("/login");
+        return;
       }
 
       // Get the current user data to extract customerId

@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../context/UserProvider";
 import styles from "./AuctionListing.module.css";
 import { AuctionItem } from "../../types/AuctionItem/AuctionItem";
 import { formatDateString } from "../../utils/timeUtils";
@@ -26,8 +27,15 @@ const AuctionListing: React.FC<AuctionListingProps> = ({
     new Date(auctionEndDate) < new Date() || status === "completed";
 
   const navigate = useNavigate();
+  const { getCsrfToken } = useUser();
 
   const viewListing = () => {
+    const csrfToken = getCsrfToken();
+    if (!csrfToken) {
+      alert("You must be logged in to place a bid");
+      navigate("/login");
+      return;
+    }
     navigate(`/listing/${_id}`, {
       state: {
         listing: {
