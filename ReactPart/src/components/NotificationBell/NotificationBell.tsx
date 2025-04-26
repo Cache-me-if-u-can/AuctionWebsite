@@ -3,7 +3,9 @@ import styles from "./NotificationBell.module.css";
 import { useUser } from "../../context/UserProvider";
 import { Notification } from "../../types/Notification/Notification";
 
-const NotificationBell: React.FC = () => {
+const NotificationBell: React.FC<{ dropdownPosition?: "bottom" | "left" }> = ({
+  dropdownPosition = "bottom",
+}) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -77,7 +79,7 @@ const NotificationBell: React.FC = () => {
       </button>
 
       {showDropdown && (
-        <div className={styles.dropdown}>
+        <div className={`${styles.dropdown} ${styles[dropdownPosition]}`}>
           {notifications.length > 0 ? (
             notifications.map((notification) => (
               <div

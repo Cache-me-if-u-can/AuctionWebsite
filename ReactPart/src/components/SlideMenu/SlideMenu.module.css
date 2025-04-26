@@ -29,12 +29,16 @@
 }
 
 .auth_buttons {
+  margin-top: auto;
   display: flex;
-  gap: var(--gap-small);
-  align-items: center;
-  padding: var(--padding) 0 0 0;
+  flex-direction: column;
+  gap: 0.5rem;
 }
-
+.notifications {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+}
 .slide_nav_link,
 .slide_button {
   text-decoration: none;
@@ -81,7 +85,11 @@
   align-items: center;
   justify-content: center;
 }
-
+.user_section {
+  display: flex;
+  align-items: space-between;
+  width: 100%;
+}
 .account svg {
   margin-right: 0.25rem;
 }

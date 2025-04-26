@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import styles from "./SlideMenu.module.css";
 import { Link } from "react-router-dom";
+import NotificationBell from "../NotificationBell/NotificationBell";
 
 interface SlideMenuProps {
   username: String | null;
@@ -47,6 +48,7 @@ const SlideMenu: React.FC<SlideMenuProps> = ({
         <div className={styles.auth_buttons}>
           {!username && (
             <>
+              {" "}
               <Link to="/LogIn" className={`${styles.button} ${styles.log_in}`}>
                 Log in
               </Link>
@@ -59,7 +61,8 @@ const SlideMenu: React.FC<SlideMenuProps> = ({
             </>
           )}
           {username && (
-            <>
+            <div className={styles.user_section}>
+              {" "}
               <Link
                 to="/Profile"
                 className={`${styles.button} ${styles.account}`}
@@ -76,7 +79,10 @@ const SlideMenu: React.FC<SlideMenuProps> = ({
                 </svg>
                 Hi, {username}
               </Link>
-            </>
+              <div className={styles.notifications}>
+                <NotificationBell dropdownPosition="left" />
+              </div>
+            </div>
           )}
         </div>
       </div>
