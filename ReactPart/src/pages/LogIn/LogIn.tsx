@@ -176,9 +176,6 @@ export default function LogIn() {
               Log In
             </button>
           </div>
-          <div className={styles.text_link}>
-            <a href="#">Forgot password?</a>
-          </div>
         </form>
       </main>
 
