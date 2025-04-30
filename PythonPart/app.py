@@ -741,7 +741,10 @@ def create_bid():
                 jsonify({"message": "Bid amount must be higher than current price"}),
                 400,
             )
+        MAX_BID_AMOUNT = 999999999
 
+        if bid.bidAmount > MAX_BID_AMOUNT:
+            return jsonify({"message": "Bid amount exceeds maximum allowed value"}), 400
         # Create the bid with the required connections
         result = bidConnection.createBid(bid, customerConnection, auctionItemConnection)
 

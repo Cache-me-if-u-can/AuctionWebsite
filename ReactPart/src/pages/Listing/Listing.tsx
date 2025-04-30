@@ -9,6 +9,7 @@ import { useUser } from "../../context/UserProvider";
 import { getTimeRemaining, formatTimeRemaining } from "../../utils/timeUtils";
 
 const Listing: React.FC = () => {
+  const MAX_BID_AMOUNT = 999999999;
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
@@ -89,9 +90,20 @@ const Listing: React.FC = () => {
     return new Date(dateString).toLocaleString();
   };
 
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP",
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
   const handleBid = async () => {
     // Validate bid amount
-    if (typeof maxBid !== "number" || maxBid <= auctionItem.currentPrice) {
+    if (
+      typeof maxBid !== "number" ||
+      maxBid <= auctionItem.currentPrice ||
+      maxBid > MAX_BID_AMOUNT
+    ) {
       setWarningVisible(true);
       return;
     }
@@ -213,13 +225,13 @@ const Listing: React.FC = () => {
                   <div className={styles.priceCard}>
                     <span className={styles.priceLabel}>Starting Bid</span>
                     <span className={styles.priceValue}>
-                      £{auctionItem.startingPrice}
+                      {formatCurrency(auctionItem.startingPrice)}
                     </span>
                   </div>
                   <div className={styles.priceCard}>
                     <span className={styles.priceLabel}>Current Bid</span>
                     <span className={styles.priceValue}>
-                      £{auctionItem.currentPrice}
+                      {formatCurrency(auctionItem.currentPrice)}
                     </span>
                   </div>
                 </div>
@@ -229,22 +241,28 @@ const Listing: React.FC = () => {
                     <div className={styles.auctionEndedMessage}>
                       This auction has ended
                       {auctionItem.currentPrice > auctionItem.startingPrice && (
-                        <span>Final price: £{auctionItem.currentPrice}</span>
+                        <span>
+                          Final price:{" "}
+                          {formatCurrency(auctionItem.currentPrice)}
+                        </span>
                       )}
                     </div>
                   ) : (
                     <>
-                      <label htmlFor="maxBid">Enter your max bid:</label>
+                      <label htmlFor="maxBid">Enter your bid:</label>
                       <input
                         type="number"
                         id="maxBid"
                         name="maxBid"
                         value={maxBid}
-                        onChange={(e) =>
-                          setMaxBid(
-                            e.target.value ? parseInt(e.target.value) : "",
-                          )
-                        }
+                        max={MAX_BID_AMOUNT}
+                        min={auctionItem.currentPrice + 1}
+                        onChange={(e) => {
+                          const value = parseInt(e.target.value);
+                          if (!isNaN(value) && value <= MAX_BID_AMOUNT) {
+                            setMaxBid(value);
+                          }
+                        }}
                         className={styles.bidInput}
                       />
 
@@ -310,7 +328,7 @@ const Listing: React.FC = () => {
                   <h4>
                     {index + 1}. {bid.userName}
                   </h4>
-                  <h4>£{bid.bidAmount}</h4>
+                  <h4>{formatCurrency(bid.bidAmount)}</h4>
                 </div>
               ))
             ) : (
