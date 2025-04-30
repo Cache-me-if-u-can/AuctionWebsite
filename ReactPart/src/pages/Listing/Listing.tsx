@@ -223,40 +223,52 @@ const Listing: React.FC = () => {
                 </div>
 
                 <div className={styles.bidInputContainer}>
-                  <label htmlFor="maxBid">Enter your max bid:</label>
-                  <input
-                    type="number"
-                    id="maxBid"
-                    name="maxBid"
-                    value={maxBid}
-                    onChange={(e) =>
-                      setMaxBid(e.target.value ? parseInt(e.target.value) : "")
-                    }
-                    className={styles.bidInput}
-                  />
-
-                  {warningVisible && (
-                    <div className={styles.warningText}>
-                      Your bid must be higher than the current bid.
+                  {auctionItem.status === "completed" ? (
+                    <div className={styles.auctionEndedMessage}>
+                      This auction has ended
+                      {auctionItem.currentPrice > auctionItem.startingPrice && (
+                        <span>Final price: £{auctionItem.currentPrice}</span>
+                      )}
                     </div>
-                  )}
-                  <div className={styles.anonymousBidOption}>
-                    <label className={styles.anonymousCheckbox}>
+                  ) : (
+                    <>
+                      <label htmlFor="maxBid">Enter your max bid:</label>
                       <input
-                        type="checkbox"
-                        checked={isAnonymous}
-                        onChange={(e) => setIsAnonymous(e.target.checked)}
+                        type="number"
+                        id="maxBid"
+                        name="maxBid"
+                        value={maxBid}
+                        onChange={(e) =>
+                          setMaxBid(
+                            e.target.value ? parseInt(e.target.value) : "",
+                          )
+                        }
+                        className={styles.bidInput}
                       />
-                      <span className={styles.checkmark}></span>
-                      Bid anonymously
-                    </label>
-                  </div>
 
-                  <button className={styles.bidButton} onClick={handleBid}>
-                    Place Bid
-                  </button>
+                      {warningVisible && (
+                        <div className={styles.warningText}>
+                          Your bid must be higher than the current bid.
+                        </div>
+                      )}
+                      <div className={styles.anonymousBidOption}>
+                        <label className={styles.anonymousCheckbox}>
+                          <input
+                            type="checkbox"
+                            checked={isAnonymous}
+                            onChange={(e) => setIsAnonymous(e.target.checked)}
+                          />
+                          <span className={styles.checkmark}></span>
+                          Bid anonymously
+                        </label>
+                      </div>
+
+                      <button className={styles.bidButton} onClick={handleBid}>
+                        Place Bid
+                      </button>
+                    </>
+                  )}
                 </div>
-
                 <div className={styles.timeSection}>
                   <div className={styles.timeCard}>
                     <span className={styles.timeLabel}>Start</span>
