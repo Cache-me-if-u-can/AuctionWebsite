@@ -29,12 +29,12 @@ export default function LogIn() {
         rememberMe: true,
       });
     }
-    return () => {
-      if (!formData.rememberMe) {
-        localStorage.removeItem("userEmail");
-        localStorage.removeItem("userPassword");
-      }
-    };
+    // return () => {
+    //   if (!formData.rememberMe) {
+    //     localStorage.removeItem("userEmail");
+    //     localStorage.removeItem("userPassword");
+    //   }
+    // };
   }, []);
 
   const handleInputChange = (
