@@ -76,7 +76,9 @@ const Listing: React.FC = () => {
 
   const updateTimeRemaining = (endDate: string) => {
     const time = getTimeRemaining(endDate);
-    setTimeRemaining(formatTimeRemaining(time));
+    const formattedTime =
+      time.total <= 0 ? "Auction has ended" : formatTimeRemaining(time);
+    setTimeRemaining(formattedTime);
   };
   // Add loading state
   if (!auctionItem) {
@@ -289,7 +291,11 @@ const Listing: React.FC = () => {
                     <span>Total Bids: {totalBids}</span>
                   </div>
                   <div className={styles.infoCard}>
-                    <span>Ends in: {timeRemaining}</span>
+                    <span>
+                      {timeRemaining === "Auction has ended"
+                        ? "Ended"
+                        : `Ends in: ${timeRemaining}`}
+                    </span>
                   </div>
                 </div>
               </div>
