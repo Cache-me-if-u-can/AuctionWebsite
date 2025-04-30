@@ -16,6 +16,7 @@ export default function LogIn() {
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [authError, setAuthError] = useState<string>("");
 
   useEffect(() => {
     const savedEmail = localStorage.getItem("userEmail");
@@ -28,6 +29,12 @@ export default function LogIn() {
         rememberMe: true,
       });
     }
+    return () => {
+      if (!formData.rememberMe) {
+        localStorage.removeItem("userEmail");
+        localStorage.removeItem("userPassword");
+      }
+    };
   }, []);
 
   const handleInputChange = (
@@ -79,6 +86,7 @@ export default function LogIn() {
       try {
         await logIn(formData.userEmail, formData.userPassword);
         console.log("Logged in!");
+        setAuthError(""); // Clear any previous auth errors on successful login
 
         // Storing credential for remember me feature
         if (formData.rememberMe) {
@@ -90,6 +98,7 @@ export default function LogIn() {
         }
       } catch (error) {
         console.error("Login failed:", error);
+        setAuthError("Invalid email or password. Please try again.");
       }
     }
   };
@@ -153,8 +162,9 @@ export default function LogIn() {
               <input
                 type="checkbox"
                 id="rememberMeCheckBox"
-                name="rememberMeCheckBox"
+                name="rememberMe"
                 className={styles.checkbox}
+                checked={formData.rememberMe}
                 onChange={(event) =>
                   setFormData((prevData) => ({
                     ...prevData,
@@ -162,7 +172,7 @@ export default function LogIn() {
                   }))
                 }
               />
-              <label htmlFor="checkbox" className={styles.label}>
+              <label htmlFor="rememberMeCheckbox" className={styles.label}>
                 Remember me
               </label>
             </div>
@@ -172,6 +182,8 @@ export default function LogIn() {
             </div> */}
           </div>
           <div className={styles.button_group}>
+            {authError && <div className={styles.authError}>{authError}</div>}
+
             <button type="submit" className={styles.form_button}>
               Log In
             </button>
