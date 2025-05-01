@@ -204,6 +204,7 @@ export default function Register() {
           userAddress: formData.customerAddress,
           userEmail: formData.customerEmail,
           userPassword: formData.customerPassword,
+          customerImage: formData.customerImage || "",
         };
         userEmail = formData.customerEmail;
         userPassword = formData.customerPassword;

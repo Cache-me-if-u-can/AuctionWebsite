@@ -6,6 +6,7 @@ import { useUser } from "../../context/UserProvider";
 import BidDashboard from "./BidDashboard";
 import QuizEditor from "../../components/QuizEditor/QuizEditor";
 type ActiveTab = "profile" | "bids" | "editQuiz";
+import placeholderImage from "../../assets/images/profile_img_placeholder.png";
 
 export default function Profile() {
   const { signOut, getCsrfToken } = useUser();
@@ -146,17 +147,18 @@ export default function Profile() {
     if (!file) {
       setFormData((prevData) => ({
         ...prevData,
-        charityImage: "",
+        [formData.userType === "charity" ? "charityImage" : "customerImage"]:
+          "",
       }));
       setErrors((prevErrors) => ({
         ...prevErrors,
-        charityImage: "Image is required",
+        profileImage: "Image is required",
       }));
       return;
     }
 
     setErrors((prevErrors) => {
-      const { charityImage, ...remainingErrors } = prevErrors;
+      const { profileImage, ...remainingErrors } = prevErrors;
       return remainingErrors;
     });
 
@@ -172,15 +174,13 @@ export default function Profile() {
         ctx.drawImage(img, 0, 0, 128, 128);
         const base64Image = canvas.toDataURL("image/png");
 
-        console.log(base64Image);
-
         setFormData((prevData) => ({
           ...prevData,
-          charityImage: base64Image,
+          [formData.userType === "charity" ? "charityImage" : "customerImage"]:
+            base64Image,
         }));
       };
       img.src = URL.createObjectURL(file);
-      console.log(img);
     } catch (error) {
       console.error("Failed to process image:", error);
     }
@@ -352,6 +352,7 @@ export default function Profile() {
       console.log(changes);
     }
   }; //TODO: sent request to Flask and save changes
+  console.log("Customer Image:", formData.customerImage);
 
   return (
     <>
@@ -391,10 +392,11 @@ export default function Profile() {
             <div className={styles.user_info_header}>
               <img
                 src={
-                  formData.charityImage ||
-                  "./src/assets/images/profile_img_placeholder.png"
+                  formData.userType === "charity"
+                    ? formData.charityImage || placeholderImage
+                    : formData.customerImage || placeholderImage
                 }
-                alt={`${formData.userType} image`}
+                alt={`${formData.userType} profile image`}
               />
               {!editProfileMode ? (
                 <h2>

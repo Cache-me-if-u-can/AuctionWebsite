@@ -85,7 +85,7 @@ def customerRegistration():
             password=content["userPassword"],
             phoneNum=content["userPhone"],
             address=content["userAddress"],
-            image="-",
+            image="",
         )
         newId = customerConnection.createCustomer(customer)
         if newId == None:
