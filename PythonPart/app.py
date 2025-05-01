@@ -369,7 +369,7 @@ def updateQuiz():
     title = data["title"]
     questions = data["questions"]
 
-    quiz = quizConnection.getQuizByCharityId(str(charity_id))
+    quiz = quizConnection.getQuizByCharityId(charity_id)
     if not quiz:
         return jsonify({"error": "No quiz found to update"}), 404
 
