@@ -65,7 +65,7 @@ class QuizRepository:
             {
                 "$set": {
                     "name": quiz.quizName,
-                    "charityId": quiz.charityId,
+                    "charityId": ObjectId(quiz.charityId),
                 }
             },
         )
