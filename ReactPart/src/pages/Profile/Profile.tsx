@@ -98,7 +98,7 @@ export default function Profile() {
   }, []);
 
   const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = event.target;
     let processedValue = value;
@@ -140,7 +140,7 @@ export default function Profile() {
   };
 
   const handleImageChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (!file) {
@@ -190,6 +190,7 @@ export default function Profile() {
     let newErrors: { [key: string]: string } = {};
 
     const today = new Date().toISOString().split("T")[0];
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     // Check for customer fields
     if (formData.userType === "customer") {
@@ -209,8 +210,11 @@ export default function Profile() {
       }
       if (!formData.customerAddress)
         newErrors.customerAddress = "Address is required";
-      if (!formData.customerEmail)
+      if (!formData.customerEmail) {
         newErrors.customerEmail = "Email is required";
+      } else if (!emailRegex.test(formData.customerEmail)) {
+        newErrors.customerEmail = "Please enter a valid email address";
+      }
     }
 
     // Check for charity fields
@@ -296,7 +300,7 @@ export default function Profile() {
             },
             body: JSON.stringify(changes),
             credentials: "include",
-          }
+          },
         );
 
         if (!response.ok) {
@@ -331,7 +335,7 @@ export default function Profile() {
             },
             body: JSON.stringify(changes),
             credentials: "include",
-          }
+          },
         );
 
         if (!response.ok) {

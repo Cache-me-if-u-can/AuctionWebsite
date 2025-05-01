@@ -65,8 +65,14 @@ export default function LogIn() {
 
   const validateForm = () => {
     let newErrors: { [key: string]: string } = {};
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    if (!formData.userEmail) newErrors.userEmail = "Email is required";
+    if (!formData.userEmail) {
+      newErrors.userEmail = "Email is required";
+    } else if (!emailRegex.test(formData.userEmail)) {
+      newErrors.userEmail = "Please enter a valid email address";
+    }
+
     if (!formData.userPassword) {
       newErrors.userPassword = "Password is required";
     } else if (formData.userPassword.length < 8) {
