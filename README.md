@@ -1,7 +1,7 @@
 # Gavel XYZ - Online Charity Auction Platform
 
 ## Project Overview
-Gavel XYZ is an online auction platform dedicated to charity fundraising. The platform allows users to list items for auction, place bids, and connect with charitable causes. This project was developed as part of a group assignment for a Software Development HND course.
+Gavel XYZ is a fully-featured online auction platform dedicated to charity fundraising. The platform connects donors with charitable causes through a secure, real-time bidding system. Built with TypeScript and Python, it features a modern React frontend and a robust Flask backend, with real-time notifications and automated auction management.
 
 ## Technology Stack
 - **Frontend**: React with TypeScript, built using Vite
@@ -9,14 +9,35 @@ Gavel XYZ is an online auction platform dedicated to charity fundraising. The pl
 - **Database**: MongoDB Atlas
 
 ## Features
-- User registration and authentication
-- Auction item listing and management
-- Bidding system
-- Charity profiles and integration
-- Review system for auction items
-- Question and answer functionality
+### User Management
+- User registration and authentication with JWT-based security
+- Separate customer and charity account types
+- Profile management with image upload
+- Remember-me functionality for login
+- CSRF protection implemented
+
+### Auction System
+- Real-time bidding with immediate price updates
+- Anonymous bidding option
+- Automated auction status management
+- Scheduled checks for auction end dates
+- Top bidders tracking
+- Multiple sorting options (end date, current bid)
+- Auction status tracking (active, completed, hidden)
+
+### Charity Integration
+- Dedicated charity profiles
+- Custom charity dashboards
+- Auction management for charities
+- Integrated notification system
+
+### Additional Features
+- Advanced search and filtering
 - Category-based browsing
-- Search functionality
+- Review system
+- Q&A functionality
+- Real-time notifications
+- Image handling for items and profiles
 
 ## Project Structure
 The project is organized into two main directories:
