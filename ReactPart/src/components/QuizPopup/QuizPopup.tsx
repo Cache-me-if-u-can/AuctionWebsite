@@ -38,6 +38,9 @@ export default function QuizPopup({ charityName, onClose }: QuizPopupProps) {
           started ? styles.expanded : styles.small
         }`}
       >
+        <button className={styles.closeBtn} onClick={onClose}>
+          X
+        </button>
         {!started ? (
           <>
             <h3>Take Part in Charity Quiz</h3>
@@ -45,9 +48,6 @@ export default function QuizPopup({ charityName, onClose }: QuizPopupProps) {
           </>
         ) : (
           <>
-            <button className={styles.closeBtn} onClick={onClose}>
-              X
-            </button>
             <Quiz charityName={charityName} />
           </>
         )}
