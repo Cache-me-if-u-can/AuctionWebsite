@@ -32,6 +32,13 @@
   font-size: 1.4rem;
   color: #2c3e50;
   line-height: 1.3;
+  /* Ensure title doesn't cause height issues in grid view */
+  height: 55px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 }
 
 .details p {
@@ -39,6 +46,11 @@
   color: #666;
   font-size: 0.95rem;
   line-height: 1.5;
+  /* Ensure description is truncated after one line */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .auctionDetails {
@@ -75,11 +87,13 @@
   width: 100%;
   max-width: 800px;
   margin: 12px 0;
+  height: auto;
 }
 
 .listView .listingImage {
   width: 200px;
   height: 200px;
+  min-width: 200px; /* Ensure image doesn't shrink */
   margin-right: 20px;
   border-radius: 10px;
   object-fit: cover;
@@ -88,6 +102,11 @@
 .listView .details {
   flex: 1;
   padding: 16px;
+  /* Control width to prevent pushing buttons off screen */
+  max-width: calc(
+    100% - 240px
+  ); /* Account for image width (200px) + margin (20px) + padding */
+  overflow: hidden;
 }
 
 .listView .managementTools {
@@ -98,12 +117,14 @@
   display: flex;
   gap: 8px;
   flex-direction: column;
+  min-width: 150px; /* Ensure buttons have minimum width */
+  width: auto;
 }
 
 /* Grid View Styles */
 .gridView {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 20px;
   width: 100%;
 }
@@ -111,36 +132,42 @@
 .gridView .listing {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 750px; /* Fixed height */
+  width: 350px;
   padding: 0;
-  margin: 0;
-  max-width: 350px;
+  margin: 0 auto;
 }
 
 .gridView .listingImage {
   width: 100%;
-  height: 200px;
+  height: 300px;
   object-fit: cover;
   border-radius: 12px 12px 0 0;
 }
 
 .gridView .details {
   flex: 1;
-  padding: 5px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  /* Ensure content doesn't overflow */
+  overflow: hidden;
 }
 
 .gridView .auctionDetails {
-  gap: 8px;
+  gap: 12px;
   border-top: 1px solid #eee;
+  padding-top: 15px;
+  margin-top: auto;
 }
 
 .gridView .managementTools {
   width: 100%;
-  padding: 4px;
+  padding: 15px;
   border-top: 1px solid #eee;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  gap: 10px;
   margin-top: auto;
   justify-content: center;
 }
@@ -191,6 +218,34 @@
   background-color: #c82333;
 }
 
+/* Image placeholder for missing images */
+.imagePlaceholder {
+  width: 100%;
+  background-color: #f2f2f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #757575;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border: 1px dashed #ccc;
+}
+
+/* Ensure placeholder has same dimensions as images */
+.listView .imagePlaceholder {
+  width: 200px;
+  height: 200px;
+  min-width: 200px;
+  margin-right: 20px;
+  border-radius: 10px;
+}
+
+.gridView .imagePlaceholder {
+  width: 100%;
+  height: 300px;
+  border-radius: 12px 12px 0 0;
+}
+
 /* Responsive Design */
 @media (max-width: 800px) {
   .listing {
@@ -204,15 +259,26 @@
     align-items: center;
   }
 
+  .listView .details {
+    max-width: 100%; /* Reset max-width for mobile */
+  }
+
   .listingImage {
     width: 100%;
     height: 200px;
   }
+
   .details {
     width: 100%;
     display: column;
     align-items: center;
   }
+
+  .details h3 {
+    height: auto;
+    -webkit-line-clamp: 3;
+  }
+
   .auctionDetails {
     display: flex;
     flex-direction: column;
@@ -231,6 +297,8 @@
     gap: 8px;
     margin-top: auto;
     justify-content: center;
+    min-width: 100%;
+    border-left: none;
   }
 
   .managementTools a {
@@ -238,14 +306,13 @@
   }
 
   .gridView {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
+
   .gridView .listing {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    max-width: 250px;
+    height: auto;
+    min-height: 650px;
+    width: 100%;
+    max-width: 350px;
   }
 }

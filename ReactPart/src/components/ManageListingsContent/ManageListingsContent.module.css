@@ -57,28 +57,29 @@
 .listingsWrapper {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 15px;
   background: white;
   border-radius: 8px;
   width: 100%;
   align-items: center;
   justify-items: space-between;
+  padding: 15px;
 }
 
 /* Fix the grid view layout */
 .listingsWrapper.gridView {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 20px;
+  gap: 25px;
   transition: all 0.5s ease;
-  align-items: center;
+  align-items: start;
   max-width: 100%;
 }
 
 .gridView .listingsWrapper {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 25px;
   padding: 20px;
   width: 100%;
 }
@@ -94,8 +95,8 @@
 /* Remove conflicting styles */
 .gridView {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 25px;
   width: 100%;
 }
 
@@ -113,6 +114,10 @@
   .listingControls {
     flex-direction: column;
     gap: 10px;
+  }
+
+  .listingsWrapper.gridView {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
 }
 

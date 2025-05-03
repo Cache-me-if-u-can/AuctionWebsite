@@ -50,23 +50,41 @@ const ManageableListing: React.FC<ManageableListingProps> = ({
     });
   };
 
+  // Function to render image or placeholder
   const renderImage = () => {
     try {
-      if (image instanceof Blob) {
+      if (image) {
+        if (image instanceof Blob) {
+          return (
+            <img
+              className={styles.listingImage}
+              src={URL.createObjectURL(image)}
+              alt={title}
+            />
+          );
+        }
         return (
           <img
-            src={URL.createObjectURL(image)}
-            alt={title}
             className={styles.listingImage}
+            src={image as string}
+            alt={title}
           />
         );
-      } else if (typeof image === "string") {
-        return <img src={image} alt={title} className={styles.listingImage} />;
+      } else {
+        // Return placeholder for missing images
+        return (
+          <div className={styles.imagePlaceholder}>
+            <span>No Image Available</span>
+          </div>
+        );
       }
-      return null;
     } catch (error) {
       console.error("Error rendering image:", error);
-      return null;
+      return (
+        <div className={styles.imagePlaceholder}>
+          <span>No Image Available</span>
+        </div>
+      );
     }
   };
 
