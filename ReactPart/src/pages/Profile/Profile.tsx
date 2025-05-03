@@ -41,6 +41,7 @@ export default function Profile() {
   const [editProfileMode, setEditProfileMode] = useState(false);
   const [editPasswordMode, setEditPasswordMode] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [successMessage, setSuccessMessage] = useState<string>("");
 
   //TODO: maybe implement placeholder while user info in fetching
 
@@ -243,7 +244,16 @@ export default function Profile() {
         newErrors.newPassword = "Password is required";
       } else if (formData.newPassword.length < 8) {
         newErrors.newPassword = "Password is too weak";
+      } else if (
+        formData.newPassword ===
+        (formData.userType === "customer"
+          ? formData.customerPassword
+          : formData.charityPassword)
+      ) {
+        newErrors.newPassword =
+          "New password must be different from current password";
       }
+
       if (formData.newPassword !== formData.repeatNewPassword) {
         newErrors.repeatNewPassword = "Passwords do not match";
       }
@@ -316,7 +326,6 @@ export default function Profile() {
       }
     }
     if (editPasswordMode && validatePassword()) {
-      setEditPasswordMode(false);
       changes = {
         newPassword: formData.newPassword,
       };
@@ -703,6 +712,9 @@ export default function Profile() {
 
             {editPasswordMode && (
               <div className={styles.password_section}>
+                {successMessage && (
+                  <div className={styles.success_message}>{successMessage}</div>
+                )}
                 <p>
                   <strong>New Password:</strong>
                   <div className={styles.inputContainer}>
@@ -777,7 +789,24 @@ export default function Profile() {
                   <button
                     className={styles.button}
                     type="button"
-                    onClick={handleSave}
+                    onClick={async () => {
+                      try {
+                        await handleSave();
+                        setSuccessMessage("Password updated successfully!");
+                        // Clear password fields
+                        setFormData((prev) => ({
+                          ...prev,
+                          newPassword: "",
+                          repeatNewPassword: "",
+                        }));
+                        // Clear success message after 3 seconds
+                        setTimeout(() => {
+                          setSuccessMessage("");
+                        }, 3000);
+                      } catch (error) {
+                        console.error("Failed to update password:", error);
+                      }
+                    }}
                   >
                     Save Password
                   </button>
@@ -785,8 +814,13 @@ export default function Profile() {
                     className={styles.button}
                     type="button"
                     onClick={() => {
-                      formData.newPassword = "";
-                      formData.repeatNewPassword = "";
+                      setFormData((prev) => ({
+                        ...prev,
+                        newPassword: "",
+                        repeatNewPassword: "",
+                      }));
+                      setErrors({});
+                      setSuccessMessage("");
                       setEditPasswordMode(false);
                     }}
                   >

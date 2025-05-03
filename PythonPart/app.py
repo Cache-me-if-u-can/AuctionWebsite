@@ -125,28 +125,45 @@ def updateCustomerProfile():
 @app.route("/updateCustomerPassword", methods=["POST"])
 @jwt_required()
 def updateCustomerPassword():
-    content = request.json
-    current_user = get_jwt_identity()
-    existCustomer = customerConnection.getCustomerById(current_user["id"])
-    customer = existCustomer
-    customer["_id"] = str(existCustomer["_id"])
-    status = customerConnection.updateCustomer(
-        Customer(
-            name=customer["name"],
-            surname=customer["surname"],
-            dateOfBirth=customer["dateOfBirth"],
-            email=customer["email"],
-            phoneNum=customer["phoneNum"],
+    try:
+        content = request.json
+        current_user = get_jwt_identity()
+        existCustomer = customerConnection.getCustomerById(current_user["id"])
+
+        # Create temporary customer to use its password hashing method
+        tempCustomer = Customer(
+            name=existCustomer["name"],
+            surname=existCustomer["surname"],
+            dateOfBirth=existCustomer["dateOfBirth"],
+            email=existCustomer["email"],
+            phoneNum=existCustomer["phoneNum"],
             password=content["newPassword"],
-            image=customer["image"],
-            address=customer["address"],
-            _id=customer["_id"],
-        ),
-        customer["_id"],
-    )
-    if status:
-        return jsonify({"message": "Customer password updated"}), 200
-    return jsonify({"message": "Failed to updated customer password"}), 404
+            image=existCustomer["image"],
+            address=existCustomer["address"],
+            _id=existCustomer["_id"],
+        )
+
+        # Compare hashed passwords
+        if (
+            tempCustomer._passwordHashing(content["newPassword"])
+            == existCustomer["password"]
+        ):
+            return (
+                jsonify(
+                    {"message": "New password must be different from current password"}
+                ),
+                400,
+            )
+
+        status = customerConnection.updateCustomer(tempCustomer, existCustomer["_id"])
+
+        if status:
+            return jsonify({"message": "Customer password updated"}), 200
+        return jsonify({"message": "Failed to update customer password"}), 404
+
+    except Exception as e:
+        print(f"Error in updateCustomerPassword: {e}")
+        return jsonify({"message": "Unable to update password"}), 500
 
 
 # server function for charity registration
