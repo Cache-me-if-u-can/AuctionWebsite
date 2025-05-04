@@ -287,6 +287,7 @@ export default function Register() {
                     placeholder="First name"
                     value={formData.customerName}
                     onChange={handleInputChange}
+                    maxLength={30}
                   />
                   {errors.customerName && (
                     <div className={styles.errorContainer}>
@@ -308,6 +309,7 @@ export default function Register() {
                     placeholder="Last name"
                     value={formData.customerLastName}
                     onChange={handleInputChange}
+                    maxLength={30}
                   />
                   {errors.customerLastName && (
                     <div className={styles.errorContainer}>
@@ -487,6 +489,7 @@ export default function Register() {
                     placeholder="Charity name"
                     value={formData.charityName}
                     onChange={handleInputChange}
+                    maxLength={30}
                   />
                   {errors.charityName && (
                     <div className={styles.errorContainer}>
