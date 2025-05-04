@@ -119,6 +119,16 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
     return startDate > now;
   };
 
+  // New function to check if start date can be edited
+  const canEditStartDate = () => {
+    if (!isEditing) return true; // Always allow editing for new items
+
+    // Check if auction has already started
+    const startDate = new Date(formData.auctionStartDate);
+    const now = new Date();
+    return startDate > now || formData.status === "hidden";
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -387,11 +397,35 @@ const OverlayForm: React.FC<OverlayFormProps> = ({
             value={formData.auctionStartDate}
             onChange={handleStartDateChange}
             required
+            disabled={isEditing && !canEditStartDate()}
+            title={
+              isEditing && !canEditStartDate()
+                ? "Cannot change start date of an active auction"
+                : ""
+            }
           />
-          <label>
-            <input type="checkbox" name="startNow" onChange={handleStartNow} />
-            Start Now
-          </label>
+          {isEditing && !canEditStartDate() ? (
+            <small
+              style={{
+                color: "red",
+                display: "block",
+                marginTop: "-10px",
+                marginBottom: "10px",
+              }}
+            >
+              Start date cannot be changed once auction is active
+            </small>
+          ) : (
+            <label>
+              <input
+                type="checkbox"
+                name="startNow"
+                onChange={handleStartNow}
+                disabled={isEditing && !canEditStartDate()}
+              />
+              Start Now
+            </label>
+          )}
 
           <label htmlFor="auctionEndDate">Auction Ends:</label>
           <input
