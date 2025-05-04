@@ -441,6 +441,7 @@ export default function Profile() {
                           placeholder="First name"
                           value={formData.customerName}
                           onChange={handleChange}
+                          maxLength={30}
                         />
                         {errors.customerName && (
                           <div className={styles.errorContainer}>
@@ -463,6 +464,7 @@ export default function Profile() {
                           value={formData.customerLastName}
                           placeholder="Last name"
                           onChange={handleChange}
+                          maxLength={30}
                         />
                         {errors.customerLastName && (
                           <div className={styles.errorContainer}>
@@ -510,6 +512,7 @@ export default function Profile() {
                           placeholder="youremail@domain.com"
                           value={formData.customerEmail}
                           onChange={handleChange}
+                          maxLength={50}
                         />
                         {errors.customerEmail && (
                           <div className={styles.errorContainer}>
@@ -586,6 +589,7 @@ export default function Profile() {
                           placeholder="Charity name"
                           value={formData.charityName}
                           onChange={handleChange}
+                          maxLength={30}
                         />
                         {errors.charityName && (
                           <div className={styles.errorContainer}>
