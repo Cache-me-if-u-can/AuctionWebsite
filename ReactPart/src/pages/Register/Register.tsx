@@ -397,6 +397,7 @@ export default function Register() {
                     placeholder="youremail@domain.com"
                     value={formData.customerEmail}
                     onChange={handleInputChange}
+                    maxLength={50}
                   />
                   {errors.customerEmail && (
                     <div className={styles.errorContainer}>
@@ -566,6 +567,7 @@ export default function Register() {
                     placeholder="youremail@domain.com"
                     value={formData.charityEmail}
                     onChange={handleInputChange}
+                    maxLength={50}
                   />
                   {errors.charityEmail && (
                     <div className={styles.errorContainer}>
