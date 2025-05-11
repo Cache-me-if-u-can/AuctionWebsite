@@ -5,12 +5,15 @@ import FAQComponent from "../../components/FAQ/FAQ";
 import Footer from "../../components/Footer/Footer";
 
 const FAQPage: React.FC = () => {
-  return (
-    <div className={styles.container}>
-      <Header />
-      <FAQComponent />
-    </div>
-  );
+    return (
+        <>
+            <div className={styles.container}>
+                <Header />
+                <FAQComponent />
+            </div>
+            <Footer />
+        </>
+    );
 };
 
 export default FAQPage;
