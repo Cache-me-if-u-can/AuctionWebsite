@@ -1,105 +1,94 @@
-# Gavel XYZ - Online Charity Auction Platform
+# Gavel XYZ - Setup and Installation Guide
 
-## Project Overview
-Gavel XYZ is a fully-featured online auction platform dedicated to charity fundraising. The platform connects donors with charitable causes through a secure, real-time bidding system. Built with TypeScript and Python, it features a modern React frontend and a robust Flask backend, with real-time notifications and automated auction management.
+## Hardware Requirements
 
-## Technology Stack
-- **Frontend**: React with TypeScript, built using Vite
-- **Backend**: Python with Flask
-- **Database**: MongoDB Atlas
+### Minimum Requirements
+- **Processor**: Dual-core 2.0 GHz or higher
+- **RAM**: 4GB (8GB recommended for development)
+- **Storage**: 1GB free disk space for application code and dependencies
+- **Internet Connection**: Broadband connection required for MongoDB Atlas access
 
-## Features
-### User Management
-- User registration and authentication with JWT-based security
-- Separate customer and charity account types
-- Profile management with image upload
-- Remember-me functionality for login
-- CSRF protection implemented
+### Recommended Requirements
+- **Processor**: Quad-core 2.5 GHz or higher
+- **RAM**: 8GB or more
+- **Storage**: 2GB+ free disk space
+- **Internet Connection**: High-speed broadband connection
 
-### Auction System
-- Real-time bidding with immediate price updates
-- Anonymous bidding option
-- Automated auction status management
-- Scheduled checks for auction end dates
-- Top bidders tracking
-- Multiple sorting options (end date, current bid)
-- Auction status tracking (active, completed, hidden)
+## Software Requirements
 
-### Charity Integration
-- Dedicated charity profiles
-- Custom charity dashboards
-- Auction management for charities
-- Integrated notification system
+### Development Environment
+- **Operating System**: Windows 10/11, macOS 10.15+, or Linux (Ubuntu 20.04+ recommended)
+- **Code Editor**: Visual Studio Code, WebStorm, or any preferred IDE
+- **Version Control**: Git 2.30.0+
+- **Web Browser**: Chrome 90+, Firefox 88+, Safari 14+, or Edge 90+ (for testing and development)
 
-### Additional Features
-- Advanced search and filtering
-- Category-based browsing
-- Review system
-- Q&A functionality
-- Real-time notifications
-- Image handling for items and profiles
+### Backend Requirements
+- **Python**: Version 3.8 or higher
+- **pip**: Latest version
+- **Virtual Environment**: virtualenv or venv recommended
 
-## Project Structure
-The project is organized into two main directories:
+### Frontend Requirements
+- **Node.js**: Version 16.0 or higher
+- **npm**: Version 7.0 or higher (included with Node.js)
 
-### ReactPart
-Contains the frontend React application with the following structure:
-- `src/components`: Reusable UI components
-- `src/pages`: Page-level components
-- `src/types`: TypeScript type definitions
-- `src/context`: React context providers
-- `src/routes`: Routing configuration
-- `src/assets`: Static resources like images
+### Database
+- **MongoDB Atlas**: Free tier account or higher
+- **MongoDB Compass**: (Optional) For visual database management
 
-### PythonPart
-Contains the backend Python application with the following structure:
-- Data models (customer.py, auctionItem.py, etc.)
-- Repository classes for database operations
-- API endpoints in app.py
-- Database connection management
 
-## Setup and Installation
+## Installation Guide
 
-### Prerequisites
-- Node.js (v16+)
-- Python (v3.8+)
-- MongoDB Atlas account
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/Cache-me-if-u-can/AuctionWebsite.git
+cd AuctionWebsite
+```
 
-### Backend Setup
-1. Navigate to the PythonPart directory:
-   ```
+### Step 2: Backend Setup
+1. Navigate to the Python directory:
+   ```bash
    cd PythonPart
    ```
-2. Install required Python packages:
+
+2. Create and activate a virtual environment:
+   ```bash
+   # For Windows
+   python -m venv venv
+   venv\Scripts\activate
+
+   # For macOS/Linux
+   python3 -m venv venv
+   source venv/bin/activate
    ```
+
+3. Install required Python packages:
+   ```bash
    pip install -r requirements.txt
    ```
-3. Configure your MongoDB connection in bdConnection.py
-4. Start the Flask server:
-   ```
+
+4. Configure your MongoDB connection in `bdConnection.py` using the MongoDB URI from your Atlas account
+
+5. Start the Flask server:
+   ```bash
    python app.py
    ```
+   The backend server should now be running at http://localhost:5000
 
-### Frontend Setup
-1. Navigate to the ReactPart directory:
-   ```
+### Step 3: Frontend Setup
+1. Open a new terminal window
+   
+2. Navigate to the React directory:
+   ```bash
    cd ReactPart
    ```
-2. Install dependencies:
-   ```
+
+3. Install dependencies:
+   ```bash
    npm install
    ```
-3. Start the development server:
-   ```
+
+4. Start the development server:
+   ```bash
    npm run dev
    ```
-
-## Team Members
-- Stefanos
-- Dominic
-- Oliver
-- Viktoriia
-- Roman
-
-## License
-This project is intended for academic purposes only.
+   The frontend application should now be running at http://localhost:3000
