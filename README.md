@@ -66,13 +66,11 @@ cd AuctionWebsite
    pip install -r requirements.txt
    ```
 
-4. Configure your MongoDB connection in `bdConnection.py` using the MongoDB URI from your Atlas account
-
 5. Start the Flask server:
    ```bash
    python app.py
    ```
-   The backend server should now be running at http://localhost:5000
+   The backend server should now be running at http://localhost:8080
 
 ### Step 3: Frontend Setup
 1. Open a new terminal window
@@ -91,4 +89,4 @@ cd AuctionWebsite
    ```bash
    npm run dev
    ```
-   The frontend application should now be running at http://localhost:3000
+   The frontend application should now be running at http://localhost:5173
